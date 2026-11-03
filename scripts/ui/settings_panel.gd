@@ -29,6 +29,12 @@ func _ready() -> void:
 	sync_from_settings()
 	hide()
 
+## Lets Escape close settings from either the title or pause menu.
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("ui_cancel"):
+		close()
+		get_viewport().set_input_as_handled()
+
 ## Opens the panel with its controls matching the saved mix.
 func open() -> void:
 	sync_from_settings()
