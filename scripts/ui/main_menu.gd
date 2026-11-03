@@ -9,6 +9,7 @@ const GAME_SCENE := "res://main.tscn"
 ## Gives keyboard focus to Play when the menu opens.
 func _ready() -> void:
 	get_tree().paused = false
+	Audio.play_music(Audio.MusicState.MENU)
 	play_button.grab_focus()
 
 ## Starts a new game.

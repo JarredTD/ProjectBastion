@@ -14,6 +14,7 @@ var state := GameState.new()
 
 ## Wires the scene together once every child is ready.
 func _ready() -> void:
+	Audio.play_music(Audio.MusicState.BUILD)
 	player.configure(world.arena_rect())
 	hud.configure(state, build_manager.definitions)
 	hud.build_selected.connect(select_building)
@@ -71,6 +72,7 @@ func select_building(index: int) -> void:
 ## Ends building and releases the first enemy wave.
 func start_defense() -> void:
 	state.phase = GameState.Phase.DEFEND
+	Audio.play_music(Audio.MusicState.DEFENSE)
 	player.combat_enabled = true
 	wave_director.start_wave()
 	state.show_message("They're here! Left-click to fight. Hold right-click near damage to repair.", 5.0)
@@ -95,6 +97,7 @@ func reset_game() -> void:
 	build_manager.reset()
 	state.reset()
 	player.reset()
+	Audio.play_music(Audio.MusicState.BUILD)
 
 ## Freezes active play and presents the final result.
 func finish_run(result: GameState.Phase, message: String) -> void:
@@ -103,6 +106,7 @@ func finish_run(result: GameState.Phase, message: String) -> void:
 	player.controls_enabled = false
 	player.combat_enabled = false
 	wave_director.stop_wave()
+	Audio.play_music(Audio.MusicState.VICTORY if result == GameState.Phase.VICTORY else Audio.MusicState.DEFEAT)
 
 ## Awards scrap and updates the defeated-enemy count.
 func _on_enemy_defeated(reward: float) -> void:
