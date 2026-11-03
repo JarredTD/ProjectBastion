@@ -5,6 +5,7 @@
 !/.gitattributes
 !/.editorconfig
 !/project.godot
+!/default_bus_layout.tres
 !/main.tscn
 !/icon.svg
 !/README.md
