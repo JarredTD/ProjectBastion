@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="AudioCatalog" load_steps=19 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/audio_catalog.gd" id="1_catalog"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/menu.wav" id="2_menu"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/build.wav" id="3_build"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/defense.wav" id="4_defense"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/victory.wav" id="5_victory"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/defeat.wav" id="6_defeat"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/ui_click.wav" id="7_ui"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/place.wav" id="8_place"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/remove.wav" id="9_remove"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/invalid.wav" id="10_invalid"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/wave_start.wav" id="11_wave"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/player_attack.wav" id="12_player"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/repair.wav" id="13_repair"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/turret_fire.wav" id="14_turret"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/hit.wav" id="15_hit"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/raider_death.wav" id="16_death"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/structure_break.wav" id="17_break"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/core_hit.wav" id="18_core"]
+
+[resource]
+script = ExtResource("1_catalog")
+menu_music = ExtResource("2_menu")
+build_music = ExtResource("3_build")
+defense_music = ExtResource("4_defense")
+victory_music = ExtResource("5_victory")
+defeat_music = ExtResource("6_defeat")
+ui_click = ExtResource("7_ui")
+place = ExtResource("8_place")
+remove = ExtResource("9_remove")
+invalid = ExtResource("10_invalid")
+wave_start = ExtResource("11_wave")
+player_attack = ExtResource("12_player")
+repair = ExtResource("13_repair")
+turret_fire = ExtResource("14_turret")
+hit = ExtResource("15_hit")
+raider_death = ExtResource("16_death")
+structure_break = ExtResource("17_break")
+core_hit = ExtResource("18_core")

@@ -50,12 +50,15 @@ func try_place(mouse_position: Vector2) -> void:
 	var place_pos := cell_center(cell)
 	var definition: BuildDefinition = current_definition(state)
 	if state.occupied.has(cell):
+		Audio.play_sfx(&"invalid", -3.0)
 		state.show_message("There's already something there.", 2.0)
 		return
 	if place_pos.distance_to(world.core_position()) < 74.0:
+		Audio.play_sfx(&"invalid", -3.0)
 		state.show_message("That's too close to the core.", 2.0)
 		return
 	if state.scrap < definition.cost:
+		Audio.play_sfx(&"invalid", -3.0)
 		state.show_message("Not enough scrap.", 2.0)
 		return
 	var structure: StaticBody2D = definition.scene.instantiate()
@@ -66,6 +69,7 @@ func try_place(mouse_position: Vector2) -> void:
 	state.occupied[cell] = true
 	placed_definitions[cell] = definition
 	state.scrap -= definition.cost
+	Audio.play_sfx(&"place", -1.0, randf_range(0.96, 1.04))
 
 ## Removes a placed structure during building and refunds its full cost.
 func try_remove(mouse_position: Vector2) -> void:
@@ -83,6 +87,7 @@ func try_remove(mouse_position: Vector2) -> void:
 				state.show_message("%s removed  •  +%d scrap" % [definition.display_name.capitalize(), definition.cost], 2.0)
 			state.occupied.erase(cell)
 			placed_definitions.erase(cell)
+			Audio.play_sfx(&"remove", -1.0, randf_range(0.96, 1.04))
 			structure.queue_free()
 			return
 

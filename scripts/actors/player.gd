@@ -50,6 +50,7 @@ func try_attack(mouse_position: Vector2) -> void:
 			target = enemy
 			best_mouse_distance = mouse_distance
 	if target != null:
+		Audio.play_sfx(&"player_attack", -1.0, randf_range(0.97, 1.04))
 		target.take_damage(attack_damage)
 		attack_flash.points = PackedVector2Array([Vector2.ZERO, to_local(target.global_position)])
 		attack_flash.visible = true

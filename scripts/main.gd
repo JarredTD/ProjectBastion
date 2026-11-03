@@ -4,6 +4,7 @@ const GameConfig = preload("res://scripts/game_config.gd")
 const GameState = preload("res://scripts/game_state.gd")
 
 var state := GameState.new()
+var repair_sound_cooldown := 0.0
 
 @onready var player: CharacterBody2D = $Actors/Player
 @onready var world: Node2D = $World
@@ -29,6 +30,7 @@ func _ready() -> void:
 
 ## Advances the build timer and handles held repair input.
 func _process(delta: float) -> void:
+	repair_sound_cooldown = maxf(0.0, repair_sound_cooldown - delta)
 	state.message_time = maxf(0.0, state.message_time - delta)
 	if state.phase == GameState.Phase.BUILD:
 		state.phase_time -= delta
@@ -73,6 +75,7 @@ func select_building(index: int) -> void:
 func start_defense() -> void:
 	state.phase = GameState.Phase.DEFEND
 	Audio.play_music(Audio.MusicState.DEFENSE)
+	Audio.play_sfx(&"wave_start")
 	player.combat_enabled = true
 	wave_director.start_wave()
 	state.show_message("They're here! Left-click to fight. Hold right-click near damage to repair.", 5.0)
@@ -90,6 +93,9 @@ func repair_nearby(delta: float) -> void:
 		repaired = true
 	if repaired:
 		state.scrap = maxf(0.0, state.scrap - 6.0 * delta)
+		if repair_sound_cooldown <= 0.0:
+			Audio.play_sfx(&"repair", -5.0, randf_range(0.96, 1.04))
+			repair_sound_cooldown = 0.24
 
 ## Clears the arena and starts a fresh build phase.
 func reset_game() -> void:
@@ -97,6 +103,7 @@ func reset_game() -> void:
 	build_manager.reset()
 	state.reset()
 	player.reset()
+	repair_sound_cooldown = 0.0
 	Audio.play_music(Audio.MusicState.BUILD)
 
 ## Freezes active play and presents the final result.
@@ -118,6 +125,7 @@ func _on_core_hit(damage: float) -> void:
 	if state.phase != GameState.Phase.DEFEND:
 		return
 	state.base_hp = maxf(0.0, state.base_hp - damage)
+	Audio.play_sfx(&"core_hit", -2.0, randf_range(0.96, 1.03))
 	if state.base_hp <= 0.0:
 		finish_run(GameState.Phase.DEFEAT, "The Bastion fell.")
 

@@ -24,8 +24,11 @@ func take_damage(amount: float) -> void:
 	health = maxf(0.0, health - amount)
 	update_health_bar()
 	if health <= 0.0:
+		Audio.play_sfx(&"structure_break", -1.0, randf_range(0.94, 1.04))
 		destroyed.emit(cell)
 		queue_free()
+	else:
+		Audio.play_sfx(&"hit", -7.0, randf_range(0.85, 0.98))
 
 ## Restores health and returns whether any repair was actually needed.
 func repair(amount: float) -> bool:

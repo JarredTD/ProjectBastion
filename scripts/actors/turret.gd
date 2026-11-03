@@ -34,6 +34,7 @@ func fire() -> void:
 	for candidate in targets:
 		if global_position.distance_to(candidate.global_position) < global_position.distance_to(selected_target.global_position):
 			selected_target = candidate
+	Audio.play_sfx(&"turret_fire", -3.0, randf_range(0.96, 1.05))
 	selected_target.take_damage(damage)
 	muzzle_flash.points = PackedVector2Array([Vector2.ZERO, to_local(selected_target.global_position)])
 	muzzle_flash.visible = true

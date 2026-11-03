@@ -53,9 +53,12 @@ func take_damage(amount: float) -> void:
 	health = maxf(0.0, health - amount)
 	update_health_bar()
 	if health <= 0.0:
+		Audio.play_sfx(&"raider_death", -2.0, randf_range(0.92, 1.08))
 		active = false
 		defeated.emit(reward)
 		queue_free()
+	else:
+		Audio.play_sfx(&"hit", -5.0, randf_range(0.9, 1.1))
 
 ## Resizes the health bar and hides it while health is full.
 func update_health_bar() -> void:

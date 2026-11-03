@@ -2,15 +2,9 @@ extends Node
 
 enum MusicState { NONE, MENU, BUILD, DEFENSE, VICTORY, DEFEAT }
 
-const MUSIC_PATHS := {
-	MusicState.MENU: "res://assets/audio/music/menu.wav",
-	MusicState.BUILD: "res://assets/audio/music/build.wav",
-	MusicState.DEFENSE: "res://assets/audio/music/defense.wav",
-	MusicState.VICTORY: "res://assets/audio/music/victory.wav",
-	MusicState.DEFEAT: "res://assets/audio/music/defeat.wav",
-}
 const LOOPING_STATES := [MusicState.MENU, MusicState.BUILD, MusicState.DEFENSE]
-const UI_CLICK_PATH := "res://assets/audio/sfx/ui_click.wav"
+
+@export var catalog: AudioCatalog
 
 @onready var music_players: Array[AudioStreamPlayer] = [$MusicA, $MusicB]
 @onready var sfx_player: AudioStreamPlayer = $SfxPlayer
@@ -20,18 +14,26 @@ var current_music := MusicState.NONE
 var active_music_player := 0
 var music_tween: Tween
 var prepared_music: Dictionary = {}
-var ui_click: AudioStream
+var sfx_playback: AudioStreamPlaybackPolyphonic
 
 ## Prepares looping copies without changing the imported source files.
 func _ready() -> void:
-	for state in MUSIC_PATHS:
-		var stream: AudioStream = load(MUSIC_PATHS[state]).duplicate()
+	var music_streams := {
+		MusicState.MENU: catalog.menu_music,
+		MusicState.BUILD: catalog.build_music,
+		MusicState.DEFENSE: catalog.defense_music,
+		MusicState.VICTORY: catalog.victory_music,
+		MusicState.DEFEAT: catalog.defeat_music,
+	}
+	for state in music_streams:
+		var stream: AudioStream = music_streams[state].duplicate()
 		if state in LOOPING_STATES and stream is AudioStreamWAV:
 			stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 			stream.loop_begin = 0
 			stream.loop_end = roundi(stream.get_length() * stream.mix_rate)
 		prepared_music[state] = stream
-	ui_click = load(UI_CLICK_PATH)
+	sfx_player.play()
+	sfx_playback = sfx_player.get_stream_playback() as AudioStreamPlaybackPolyphonic
 
 ## Crossfades to the music assigned to a game state.
 func play_music(state: MusicState, fade_time := 0.75) -> void:
@@ -67,16 +69,14 @@ func stop_music(fade_time := 0.5) -> void:
 		music_tween.tween_callback(player.stop)
 	current_music = MusicState.NONE
 
-## Plays a non-positional gameplay sound with room for overlapping voices.
-func play_sfx(stream: AudioStream, volume_db := 0.0, pitch_scale := 1.0) -> void:
-	if stream == null:
+## Plays a named gameplay sound with room for overlapping voices.
+func play_sfx(cue: StringName, volume_db := 0.0, pitch_scale := 1.0) -> void:
+	var stream := catalog.sound_for(cue)
+	if stream == null or sfx_playback == null:
 		return
-	sfx_player.stream = stream
-	sfx_player.volume_db = volume_db
-	sfx_player.pitch_scale = pitch_scale
-	sfx_player.play()
+	sfx_playback.play_stream(stream, 0.0, volume_db, pitch_scale)
 
 ## Plays the shared menu confirmation sound.
 func play_ui_click() -> void:
-	ui_player.stream = ui_click
+	ui_player.stream = catalog.ui_click
 	ui_player.play()
