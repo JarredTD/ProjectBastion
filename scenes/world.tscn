@@ -1,0 +1,88 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world_view.gd" id="1_world"]
+[ext_resource type="Texture2D" path="res://assets/grid.svg" id="2_grid"]
+
+[node name="World" type="Node2D"]
+z_index = -10
+script = ExtResource("1_world")
+
+[node name="Arena" type="ColorRect" parent="."]
+offset_left = 32.0
+offset_top = 76.0
+offset_right = 1120.0
+offset_bottom = 612.0
+mouse_filter = 2
+color = Color(0.0941176, 0.137255, 0.192157, 1)
+
+[node name="Grid" type="TextureRect" parent="."]
+offset_left = 32.0
+offset_top = 76.0
+offset_right = 1120.0
+offset_bottom = 612.0
+mouse_filter = 2
+texture_repeat = 2
+texture = ExtResource("2_grid")
+stretch_mode = 1
+
+[node name="Core" type="Node2D" parent="."]
+position = Vector2(576, 344)
+
+[node name="Outer" type="Polygon2D" parent="Core"]
+polygon = PackedVector2Array(43, 0, 39.73, 16.45, 30.41, 30.41, 16.45, 39.73, 0, 43, -16.45, 39.73, -30.41, 30.41, -39.73, 16.45, -43, 0, -39.73, -16.45, -30.41, -30.41, -16.45, -39.73, 0, -43, 16.45, -39.73, 30.41, -30.41, 39.73, -16.45)
+color = Color(0.0901961, 0.12549, 0.168627, 1)
+
+[node name="Shell" type="Polygon2D" parent="Core"]
+polygon = PackedVector2Array(35, 0, 32.34, 13.39, 24.75, 24.75, 13.39, 32.34, 0, 35, -13.39, 32.34, -24.75, 24.75, -32.34, 13.39, -35, 0, -32.34, -13.39, -24.75, -24.75, -13.39, -32.34, 0, -35, 13.39, -32.34, 24.75, -24.75, 32.34, -13.39)
+color = Color(0.207843, 0.815686, 0.729412, 1)
+
+[node name="Inner" type="Polygon2D" parent="Core"]
+polygon = PackedVector2Array(23, 0, 21.25, 8.8, 16.26, 16.26, 8.8, 21.25, 0, 23, -8.8, 21.25, -16.26, 16.26, -21.25, 8.8, -23, 0, -21.25, -8.8, -16.26, -16.26, -8.8, -21.25, 0, -23, 8.8, -21.25, 16.26, -16.26, 21.25, -8.8)
+color = Color(0.109804, 0.505882, 0.470588, 1)
+
+[node name="Light" type="Polygon2D" parent="Core"]
+polygon = PackedVector2Array(11, 0, 10.16, 4.21, 7.78, 7.78, 4.21, 10.16, 0, 11, -4.21, 10.16, -7.78, 7.78, -10.16, 4.21, -11, 0, -10.16, -4.21, -7.78, -7.78, -4.21, -10.16, 0, -11, 4.21, -10.16, 7.78, -7.78, 10.16, -4.21)
+color = Color(0.717647, 1, 0.956863, 1)
+
+[node name="CoreHealthBar" type="Node2D" parent="Core"]
+unique_name_in_owner = true
+position = Vector2(-38, 49)
+
+[node name="HealthBackground" type="ColorRect" parent="Core/CoreHealthBar"]
+offset_right = 76.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.164706, 0.192157, 0.239216, 1)
+
+[node name="CoreHealthFill" type="ColorRect" parent="Core/CoreHealthBar"]
+unique_name_in_owner = true
+offset_right = 76.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.207843, 0.815686, 0.729412, 1)
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="NorthWest" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(224, 76)
+
+[node name="NorthEast" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(928, 76)
+
+[node name="EastNorth" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1120, 220)
+
+[node name="EastSouth" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1120, 492)
+
+[node name="SouthEast" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(928, 612)
+
+[node name="SouthWest" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(224, 612)
+
+[node name="WestSouth" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(32, 492)
+
+[node name="WestNorth" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(32, 220)
