@@ -10,6 +10,7 @@ var state := GameState.new()
 @onready var build_manager: Node2D = $BuildManager
 @onready var wave_director: Node = $WaveDirector
 @onready var hud: CanvasLayer = $Hud
+@onready var pause_menu: CanvasLayer = $PauseMenu
 
 ## Wires the scene together once every child is ready.
 func _ready() -> void:
@@ -18,6 +19,8 @@ func _ready() -> void:
 	hud.build_selected.connect(select_building)
 	hud.wave_start_requested.connect(start_defense)
 	hud.run_restart_requested.connect(reset_game)
+	pause_menu.restart_requested.connect(reset_game)
+	pause_menu.main_menu_requested.connect(_on_pause_main_menu_requested)
 	build_manager.hover_hint_changed.connect(hud.set_build_hint)
 	wave_director.enemy_defeated.connect(_on_enemy_defeated)
 	wave_director.core_hit.connect(_on_core_hit)
@@ -118,3 +121,7 @@ func _on_core_hit(damage: float) -> void:
 func _on_wave_cleared() -> void:
 	if state.phase == GameState.Phase.DEFEND:
 		finish_run(GameState.Phase.VICTORY, "Wave cleared. The Bastion stands!")
+
+## Returns to the title screen from the pause menu.
+func _on_pause_main_menu_requested() -> void:
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
