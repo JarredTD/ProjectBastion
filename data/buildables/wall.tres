@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BuildDefinition" format=3 uid="uid://cyk0lelxq7w1w"]
+
+[ext_resource type="Script" uid="uid://565a1av1h8y6" path="res://scripts/resources/build_definition.gd" id="1_definition"]
+[ext_resource type="PackedScene" path="res://scenes/actors/wall.tscn" id="2_wall"]
+
+[resource]
+script = ExtResource("1_definition")
+display_name = "WALL"
+scene = ExtResource("2_wall")
+cost = 15
+accent_color = Color(1, 0.941176, 0.658824, 1)
