@@ -35,6 +35,20 @@ func _ready() -> void:
 	sfx_player.play()
 	sfx_playback = sfx_player.get_stream_playback() as AudioStreamPlaybackPolyphonic
 
+## Stops active playback before the engine releases audio resources.
+func _exit_tree() -> void:
+	if music_tween != null and music_tween.is_valid():
+		music_tween.kill()
+	for player in music_players:
+		player.stop()
+		player.stream = null
+	sfx_player.stop()
+	sfx_playback = null
+	sfx_player.stream = null
+	ui_player.stop()
+	ui_player.stream = null
+	prepared_music.clear()
+
 ## Crossfades to the music assigned to a game state.
 func play_music(state: MusicState, fade_time := 0.75) -> void:
 	if state == current_music and music_players[active_music_player].playing:
