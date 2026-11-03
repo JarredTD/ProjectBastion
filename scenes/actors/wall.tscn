@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/actors/structure.gd" id="1_wall"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(28, 28)
+
+[node name="Wall" type="StaticBody2D" groups=["structures"]]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_wall")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Body" type="Polygon2D" parent="Visuals"]
+polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
+color = Color(0.439216, 0.505882, 0.603922, 1)
+
+[node name="Inset" type="Line2D" parent="Visuals"]
+points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10, -10, -10)
+width = 3.0
+default_color = Color(0.247059, 0.294118, 0.368627, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="HealthBar" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-14, 18)
+
+[node name="Background" type="ColorRect" parent="HealthBar"]
+offset_right = 28.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.164706, 0.192157, 0.239216, 1)
+
+[node name="HealthFill" type="ColorRect" parent="HealthBar"]
+unique_name_in_owner = true
+offset_right = 28.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.439216, 0.878431, 0.627451, 1)
+
+[node name="Effects" type="Node2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]

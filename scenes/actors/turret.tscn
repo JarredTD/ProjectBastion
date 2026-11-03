@@ -1,0 +1,83 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/actors/turret.gd" id="1_turret"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_range"]
+radius = 185.0
+
+[node name="Turret" type="StaticBody2D" groups=["structures"]]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_turret")
+max_health = 90.0
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Body" type="Polygon2D" parent="Visuals"]
+polygon = PackedVector2Array(14, 0, 9.9, 9.9, 0, 14, -9.9, 9.9, -14, 0, -9.9, -9.9, 0, -14, 9.9, -9.9)
+color = Color(0.901961, 0.662745, 0.309804, 1)
+
+[node name="Center" type="Polygon2D" parent="Visuals"]
+polygon = PackedVector2Array(7, 0, 4.95, 4.95, 0, 7, -4.95, 4.95, -7, 0, -4.95, -4.95, 0, -7, 4.95, -4.95)
+color = Color(0.427451, 0.270588, 0.156863, 1)
+
+[node name="Barrel" type="Line2D" parent="Visuals"]
+points = PackedVector2Array(0, 0, 0, -18)
+width = 5.0
+default_color = Color(1, 0.823529, 0.478431, 1)
+
+[node name="MuzzleSocket" type="Marker2D" parent="Visuals"]
+position = Vector2(0, -18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_body")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_range")
+
+[node name="Effects" type="Node2D" parent="."]
+
+[node name="MuzzleFlash" type="Line2D" parent="Effects"]
+unique_name_in_owner = true
+visible = false
+width = 4.0
+default_color = Color(1, 0.941176, 0.658824, 1)
+
+[node name="HealthBar" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-14, 18)
+
+[node name="Background" type="ColorRect" parent="HealthBar"]
+offset_right = 28.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.164706, 0.192157, 0.239216, 1)
+
+[node name="HealthFill" type="ColorRect" parent="HealthBar"]
+unique_name_in_owner = true
+offset_right = 28.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.439216, 0.878431, 0.627451, 1)
+
+[node name="FireTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.72
+autostart = true
+
+[node name="FlashTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.09
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
