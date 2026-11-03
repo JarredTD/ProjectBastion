@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/actors/player.gd" id="1_player"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_player"]
+radius = 12.0
+
+[node name="Player" type="CharacterBody2D"]
+position = Vector2(576, 465)
+collision_layer = 1
+collision_mask = 4
+script = ExtResource("1_player")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Body" type="Polygon2D" parent="Visuals"]
+polygon = PackedVector2Array(13, 0, 9.2, 9.2, 0, 13, -9.2, 9.2, -13, 0, -9.2, -9.2, 0, -13, 9.2, -9.2)
+color = Color(0.4, 0.658824, 1, 1)
+
+[node name="Face" type="Polygon2D" parent="Visuals"]
+polygon = PackedVector2Array(7, 0, 4.95, 4.95, 0, 7, -4.95, 4.95, -7, 0, -4.95, -4.95, 0, -7, 4.95, -4.95)
+color = Color(0.784314, 0.878431, 1, 1)
+
+[node name="Wrench" type="Line2D" parent="Visuals"]
+points = PackedVector2Array(0, 0, 0, -19)
+width = 5.0
+default_color = Color(0.913725, 0.94902, 1, 1)
+
+[node name="WeaponSocket" type="Marker2D" parent="Visuals"]
+position = Vector2(0, -19)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_player")
+
+[node name="Effects" type="Node2D" parent="."]
+
+[node name="AttackFlash" type="Line2D" parent="Effects"]
+unique_name_in_owner = true
+visible = false
+width = 4.0
+default_color = Color(1, 0.941176, 0.658824, 1)
+
+[node name="AttackTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.32
+one_shot = true
+
+[node name="FlashTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.12
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
