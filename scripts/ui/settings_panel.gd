@@ -37,6 +37,7 @@ func open() -> void:
 
 ## Saves the current mix and returns to the previous menu.
 func close() -> void:
+	Audio.play_ui_click()
 	Settings.save_settings()
 	hide()
 	closed.emit()
@@ -63,6 +64,7 @@ func _on_slider_drag_ended(_value_changed: bool) -> void:
 
 ## Restores the shipped mix and refreshes every control.
 func _on_defaults_pressed() -> void:
+	Audio.play_ui_click()
 	Settings.reset_audio_settings()
 	sync_from_settings()
 

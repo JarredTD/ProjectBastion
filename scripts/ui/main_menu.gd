@@ -14,10 +14,12 @@ func _ready() -> void:
 
 ## Starts a new game.
 func _on_play_pressed() -> void:
+	Audio.play_ui_click()
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 ## Opens the shared audio settings panel.
 func _on_settings_pressed() -> void:
+	Audio.play_ui_click()
 	settings_panel.open()
 
 ## Returns keyboard focus after closing audio settings.

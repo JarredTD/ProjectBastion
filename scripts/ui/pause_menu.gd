@@ -23,6 +23,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Switches between paused and active play.
 func toggle() -> void:
+	Audio.play_ui_click()
 	if overlay.visible:
 		close()
 	else:
@@ -41,15 +42,18 @@ func close() -> void:
 
 ## Returns to play from the Resume button.
 func _on_resume_pressed() -> void:
+	Audio.play_ui_click()
 	close()
 
 ## Unpauses before asking the game to reset itself.
 func _on_restart_pressed() -> void:
+	Audio.play_ui_click()
 	close()
 	restart_requested.emit()
 
 ## Opens audio settings without leaving the pause screen.
 func _on_settings_pressed() -> void:
+	Audio.play_ui_click()
 	settings_panel.open()
 
 ## Returns keyboard focus to the pause menu after settings close.
@@ -58,5 +62,6 @@ func _on_settings_closed() -> void:
 
 ## Unpauses before asking the game to leave the match.
 func _on_main_menu_pressed() -> void:
+	Audio.play_ui_click()
 	close()
 	main_menu_requested.emit()
