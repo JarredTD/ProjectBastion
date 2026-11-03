@@ -1,0 +1,21 @@
+# Allowlist: ignore everything unless explicitly included below.
+/*
+
+!/.gitignore
+!/.gitattributes
+!/.editorconfig
+!/project.godot
+!/main.tscn
+!/icon.svg
+!/README.md
+!/assets/
+!/assets/**
+!/data/
+!/data/**
+!/scenes/
+!/scenes/**
+!/scripts/
+!/scripts/**
+
+# Godot regenerates importer sidecars and cached imports.
+*.import
