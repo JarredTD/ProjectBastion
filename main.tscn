@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
+[ext_resource type="PackedScene" path="res://scenes/world.tscn" id="3_world"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="4_player"]
+[ext_resource type="Script" path="res://scripts/managers/build_manager.gd" id="5_build"]
+[ext_resource type="Script" path="res://scripts/managers/wave_director.gd" id="6_wave"]
+
+[node name="ProjectBastion" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="World" parent="." instance=ExtResource("3_world")]
+
+[node name="Actors" type="Node2D" parent="."]
+
+[node name="Structures" type="Node2D" parent="Actors"]
+
+[node name="Enemies" type="Node2D" parent="Actors"]
+
+[node name="Player" parent="Actors" instance=ExtResource("4_player")]
+
+[node name="BuildManager" type="Node2D" parent="."]
+script = ExtResource("5_build")
+world_path = NodePath("../World")
+structures_path = NodePath("../Actors/Structures")
+
+[node name="Preview" type="Polygon2D" parent="BuildManager"]
+z_index = 5
+polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
+color = Color(0.25, 0.9, 0.68, 0.45)
+
+[node name="WaveDirector" type="Node" parent="."]
+script = ExtResource("6_wave")
+enemies_path = NodePath("../Actors/Enemies")
+world_path = NodePath("../World")
+
+[node name="Hud" parent="." instance=ExtResource("2_hud")]
