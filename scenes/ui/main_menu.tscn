@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="2_settings"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -38,9 +39,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -190.0
-offset_top = -140.0
+offset_top = -170.0
 offset_right = 190.0
-offset_bottom = 140.0
+offset_bottom = 170.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 14
@@ -64,11 +65,22 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "PLAY"
 
+[node name="SettingsButton" type="Button" parent="Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "SETTINGS"
+
 [node name="QuitButton" type="Button" parent="Menu"]
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
 text = "QUIT"
 
+[node name="SettingsPanel" parent="." instance=ExtResource("2_settings")]
+
 [connection signal="pressed" from="Menu/PlayButton" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Menu/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Menu/QuitButton" to="." method="_on_quit_pressed"]
+[connection signal="closed" from="SettingsPanel" to="." method="_on_settings_closed"]

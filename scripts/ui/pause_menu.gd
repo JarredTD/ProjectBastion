@@ -5,6 +5,8 @@ signal main_menu_requested
 
 @onready var overlay: Control = %Overlay
 @onready var resume_button: Button = %ResumeButton
+@onready var settings_button: Button = %SettingsButton
+@onready var settings_panel: Control = $SettingsPanel
 
 ## Starts hidden so the match receives input normally.
 func _ready() -> void:
@@ -13,7 +15,10 @@ func _ready() -> void:
 ## Lets Escape pause and resume even while the rest of the tree is stopped.
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		toggle()
+		if settings_panel.is_open():
+			settings_panel.close()
+		else:
+			toggle()
 		get_viewport().set_input_as_handled()
 
 ## Switches between paused and active play.
@@ -42,6 +47,14 @@ func _on_resume_pressed() -> void:
 func _on_restart_pressed() -> void:
 	close()
 	restart_requested.emit()
+
+## Opens audio settings without leaving the pause screen.
+func _on_settings_pressed() -> void:
+	settings_panel.open()
+
+## Returns keyboard focus to the pause menu after settings close.
+func _on_settings_closed() -> void:
+	settings_button.grab_focus()
 
 ## Unpauses before asking the game to leave the match.
 func _on_main_menu_pressed() -> void:
