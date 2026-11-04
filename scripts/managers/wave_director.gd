@@ -15,6 +15,7 @@ var spawned := 0
 var alive := 0
 var spawn_cooldown := 0.4
 var rng := RandomNumberGenerator.new()
+var spawn_points_available := false
 
 @onready var enemies: Node2D = get_node(enemies_path)
 @onready var world: Node2D = get_node(world_path)
@@ -22,6 +23,9 @@ var rng := RandomNumberGenerator.new()
 ## Seeds spawn selection for this run of the game.
 func _ready() -> void:
 	rng.randomize()
+	spawn_points_available = not world.spawn_positions().is_empty()
+	if not spawn_points_available:
+		push_error("Wave director requires at least one world spawn marker.")
 
 ## Spawns raiders at the configured interval while the wave is active.
 func _process(delta: float) -> void:
@@ -34,6 +38,8 @@ func _process(delta: float) -> void:
 
 ## Starts spawning and wakes any raiders already in the scene.
 func start_wave() -> void:
+	if not spawn_points_available:
+		return
 	active = true
 	for enemy in enemies.get_children():
 		enemy.active = true

@@ -19,9 +19,26 @@ const GameState = preload("res://scripts/game_state.gd")
 
 var placed_definitions: Dictionary = {}
 var last_hover_hint := ""
+var definitions_valid := false
+
+## Verifies that every build option has the scene needed for placement.
+func _ready() -> void:
+	if definitions.is_empty():
+		push_error("Build manager requires at least one build definition.")
+		preview.hide()
+		return
+	for index in definitions.size():
+		var definition := definitions[index]
+		if definition == null or definition.scene == null:
+			push_error("Build definition %d is missing its resource or scene." % index)
+			preview.hide()
+			return
+	definitions_valid = true
 
 ## Updates the placement preview and its contextual hint.
 func _process(_delta: float) -> void:
+	if not definitions_valid:
+		return
 	var state: GameState = game.state
 	var mouse_position := get_viewport().get_mouse_position()
 	preview.visible = state.phase == GameState.Phase.BUILD and world.arena_rect().has_point(mouse_position) and not pointer_is_over_ui()
@@ -42,6 +59,9 @@ func _process(_delta: float) -> void:
 
 ## Places the selected structure when the hovered cell is valid and affordable.
 func try_place(mouse_position: Vector2) -> void:
+	if not definitions_valid:
+		game.state.show_message("Build data is unavailable.", 2.0)
+		return
 	var state: GameState = game.state
 	if not world.arena_rect().has_point(mouse_position):
 		return
@@ -95,7 +115,7 @@ func reset() -> void:
 	for structure in structures.get_children():
 		structure.queue_free()
 	placed_definitions.clear()
-	preview.visible = true
+	preview.visible = definitions_valid
 
 ## Converts a screen-space pointer position into a grid cell.
 func cell_from_position(mouse_position: Vector2) -> Vector2i:
