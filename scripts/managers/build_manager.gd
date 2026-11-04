@@ -4,7 +4,6 @@ signal hover_hint_changed(text: String)
 
 const GameConfig = preload("res://scripts/game_config.gd")
 const GameState = preload("res://scripts/game_state.gd")
-const BuildDefinition = preload("res://scripts/resources/build_definition.gd")
 
 @export_node_path("Node2D") var world_path: NodePath
 @export_node_path("Node2D") var structures_path: NodePath
