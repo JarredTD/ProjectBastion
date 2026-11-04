@@ -72,5 +72,9 @@ func find_repair_target() -> Node2D:
 func reset() -> void:
 	global_position = Vector2(576.0, 465.0)
 	rotation = 0.0
+	velocity = Vector2.ZERO
 	controls_enabled = true
 	combat_enabled = false
+	attack_timer.stop()
+	flash_timer.stop()
+	attack_flash.hide()
