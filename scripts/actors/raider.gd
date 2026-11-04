@@ -4,7 +4,7 @@ signal defeated(reward: float)
 signal core_hit(damage: float)
 
 @export_range(1.0, 10000.0, 1.0) var max_health := 72.0
-@export_range(0.0, 1000.0, 1.0) var speed := 39.0
+@export_range(0.0, 1000.0, 1.0) var speed := 58.0
 @export_range(0.0, 1000.0, 1.0) var structure_damage := 13.0
 @export_range(0.0, 1000.0, 1.0) var core_damage := 12.0
 @export_range(0.05, 10.0, 0.05) var attack_interval := 0.75

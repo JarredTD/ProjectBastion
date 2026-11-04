@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 	spawn_cooldown -= delta
 	if spawn_cooldown <= 0.0:
 		spawn_raider()
-		spawn_cooldown = 1.25
+		spawn_cooldown = GameConfig.ENEMY_SPAWN_INTERVAL
 
 ## Starts spawning and wakes any raiders already in the scene.
 func start_wave() -> void:
