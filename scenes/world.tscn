@@ -9,27 +9,27 @@ script = ExtResource("1_world")
 
 [node name="Arena" type="ColorRect" parent="."]
 offset_left = 32.0
-offset_top = 76.0
-offset_right = 1120.0
-offset_bottom = 612.0
+offset_top = 32.0
+offset_right = 2016.0
+offset_bottom = 1120.0
 mouse_filter = 2
 color = Color(0.0941176, 0.137255, 0.192157, 1)
 
 [node name="Grid" type="TextureRect" parent="."]
 offset_left = 32.0
-offset_top = 76.0
-offset_right = 1120.0
-offset_bottom = 612.0
+offset_top = 32.0
+offset_right = 2016.0
+offset_bottom = 1120.0
 mouse_filter = 2
 texture_repeat = 2
 texture = ExtResource("2_grid")
 stretch_mode = 1
 
 [node name="PlayerStart" type="Marker2D" parent="."]
-position = Vector2(576, 465)
+position = Vector2(1024, 720)
 
 [node name="Core" type="Node2D" parent="."]
-position = Vector2(576, 344)
+position = Vector2(1024, 576)
 
 [node name="Outer" type="Polygon2D" parent="Core"]
 polygon = PackedVector2Array(43, 0, 39.73, 16.45, 30.41, 30.41, 16.45, 39.73, 0, 43, -16.45, 39.73, -30.41, 30.41, -39.73, 16.45, -43, 0, -39.73, -16.45, -30.41, -30.41, -16.45, -39.73, 0, -43, 16.45, -39.73, 30.41, -30.41, 39.73, -16.45)
@@ -67,25 +67,25 @@ color = Color(0.207843, 0.815686, 0.729412, 1)
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="NorthWest" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(224, 76)
+position = Vector2(256, 32)
 
 [node name="NorthEast" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(928, 76)
+position = Vector2(1792, 32)
 
 [node name="EastNorth" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(1120, 220)
+position = Vector2(2016, 320)
 
 [node name="EastSouth" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(1120, 492)
+position = Vector2(2016, 832)
 
 [node name="SouthEast" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(928, 612)
+position = Vector2(1792, 1120)
 
 [node name="SouthWest" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(224, 612)
+position = Vector2(256, 1120)
 
 [node name="WestSouth" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(32, 492)
+position = Vector2(32, 832)
 
 [node name="WestNorth" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(32, 220)
+position = Vector2(32, 320)
