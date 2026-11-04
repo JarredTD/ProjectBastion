@@ -49,5 +49,3 @@ color = Color(0.929412, 0.356863, 0.407843, 1)
 [node name="Effects" type="Node2D" parent="."]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
-[node name="Audio" type="AudioStreamPlayer2D" parent="."]
