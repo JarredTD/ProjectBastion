@@ -15,11 +15,15 @@ var active_music_player := 0
 var music_tween: Tween
 var prepared_music: Dictionary = {}
 var sfx_playback: AudioStreamPlaybackPolyphonic
+var audio_available := true
 
 ## Prepares looping copies without changing the imported source files.
 func _ready() -> void:
 	if catalog == null:
 		push_error("Audio manager requires an audio catalog.")
+		return
+	if AudioServer.get_driver_name() == "Dummy":
+		audio_available = false
 		return
 	var music_streams := {
 		MusicState.MENU: catalog.menu_music,
@@ -58,6 +62,8 @@ func _exit_tree() -> void:
 
 ## Crossfades to the music assigned to a game state.
 func play_music(state: MusicState, fade_time := 0.75) -> void:
+	if not audio_available:
+		return
 	if state == current_music and music_players[active_music_player].playing:
 		return
 	if not prepared_music.has(state):
@@ -81,6 +87,8 @@ func play_music(state: MusicState, fade_time := 0.75) -> void:
 
 ## Fades out whichever music deck is currently active.
 func stop_music(fade_time := 0.5) -> void:
+	if not audio_available:
+		return
 	if music_tween != null and music_tween.is_valid():
 		music_tween.kill()
 	var player := music_players[active_music_player]
@@ -92,7 +100,7 @@ func stop_music(fade_time := 0.5) -> void:
 
 ## Plays a named gameplay sound with room for overlapping voices.
 func play_sfx(cue: StringName, volume_db := 0.0, pitch_scale := 1.0) -> void:
-	if catalog == null:
+	if not audio_available or catalog == null:
 		return
 	var stream := catalog.sound_for(cue)
 	if stream == null or sfx_playback == null:
@@ -101,7 +109,7 @@ func play_sfx(cue: StringName, volume_db := 0.0, pitch_scale := 1.0) -> void:
 
 ## Plays the shared menu confirmation sound.
 func play_ui_click() -> void:
-	if catalog == null or catalog.ui_click == null:
+	if not audio_available or catalog == null or catalog.ui_click == null:
 		return
 	ui_player.stream = catalog.ui_click
 	ui_player.play()
