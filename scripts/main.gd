@@ -8,6 +8,7 @@ var repair_sound_cooldown := 0.0
 
 @onready var player: CharacterBody2D = $Actors/Player
 @onready var world: Node2D = $World
+@onready var camera_rig: Node2D = $CameraRig
 @onready var build_manager: Node2D = $BuildManager
 @onready var wave_director: Node = $WaveDirector
 @onready var hud: CanvasLayer = $Hud
@@ -16,7 +17,8 @@ var repair_sound_cooldown := 0.0
 ## Wires the scene together once every child is ready.
 func _ready() -> void:
 	Audio.play_music(Audio.MusicState.BUILD)
-	player.configure(world.arena_rect())
+	player.configure(world.arena_rect(), world.player_start_position())
+	camera_rig.configure(player, world.arena_rect())
 	hud.configure(state, build_manager.definitions)
 	hud.build_selected.connect(select_building)
 	hud.wave_start_requested.connect(start_defense)
@@ -44,13 +46,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		handle_key(event.keycode)
 	elif event is InputEventMouseButton and event.pressed:
+		var mouse_position := get_global_mouse_position()
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if state.phase == GameState.Phase.BUILD:
-				build_manager.try_place(event.position)
+				build_manager.try_place(mouse_position)
 			elif state.phase == GameState.Phase.DEFEND:
-				player.try_attack(event.position)
+				player.try_attack(mouse_position)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and state.phase == GameState.Phase.BUILD:
-			build_manager.try_remove(event.position)
+			build_manager.try_remove(mouse_position)
 
 ## Handles shortcuts that should work alongside the clickable HUD controls.
 func handle_key(keycode: Key) -> void:
@@ -103,6 +106,7 @@ func reset_game() -> void:
 	build_manager.reset()
 	state.reset()
 	player.reset()
+	camera_rig.snap_to_target()
 	repair_sound_cooldown = 0.0
 	Audio.play_music(Audio.MusicState.BUILD)
 

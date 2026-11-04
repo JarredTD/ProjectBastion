@@ -1,41 +1,50 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://ewyrlboceii2"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://dhdkqaf1g121j" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
 [ext_resource type="PackedScene" path="res://scenes/world.tscn" id="3_world"]
 [ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="4_player"]
-[ext_resource type="Script" path="res://scripts/managers/build_manager.gd" id="5_build"]
-[ext_resource type="Script" path="res://scripts/managers/wave_director.gd" id="6_wave"]
+[ext_resource type="Script" uid="uid://bxu05fgul5c27" path="res://scripts/managers/build_manager.gd" id="5_build"]
+[ext_resource type="Script" uid="uid://bpp67b2omfukg" path="res://scripts/managers/wave_director.gd" id="6_wave"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="7_pause"]
+[ext_resource type="Script" uid="uid://cdofvg1fqjmn0" path="res://scripts/camera_rig.gd" id="8_camera"]
 
-[node name="ProjectBastion" type="Node2D"]
+[node name="ProjectBastion" type="Node2D" unique_id=170590304]
 script = ExtResource("1_main")
 
-[node name="World" parent="." instance=ExtResource("3_world")]
+[node name="World" parent="." unique_id=1106413799 instance=ExtResource("3_world")]
 
-[node name="Actors" type="Node2D" parent="."]
+[node name="Actors" type="Node2D" parent="." unique_id=1317909304]
 
-[node name="Structures" type="Node2D" parent="Actors"]
+[node name="Structures" type="Node2D" parent="Actors" unique_id=781623430]
 
-[node name="Enemies" type="Node2D" parent="Actors"]
+[node name="Enemies" type="Node2D" parent="Actors" unique_id=1620340259]
 
-[node name="Player" parent="Actors" instance=ExtResource("4_player")]
+[node name="Player" parent="Actors" unique_id=1290526348 instance=ExtResource("4_player")]
 
-[node name="BuildManager" type="Node2D" parent="."]
+[node name="CameraRig" type="Node2D" parent="." unique_id=605516424]
+script = ExtResource("8_camera")
+
+[node name="Camera2D" type="Camera2D" parent="CameraRig" unique_id=1384312633]
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+
+[node name="BuildManager" type="Node2D" parent="." unique_id=113779636]
 script = ExtResource("5_build")
 world_path = NodePath("../World")
 structures_path = NodePath("../Actors/Structures")
 
-[node name="Preview" type="Polygon2D" parent="BuildManager"]
+[node name="Preview" type="Polygon2D" parent="BuildManager" unique_id=649886226]
 z_index = 5
-polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
 color = Color(0.25, 0.9, 0.68, 0.45)
+polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
 
-[node name="WaveDirector" type="Node" parent="."]
+[node name="WaveDirector" type="Node" parent="." unique_id=458562232]
 script = ExtResource("6_wave")
 enemies_path = NodePath("../Actors/Enemies")
 world_path = NodePath("../World")
 
-[node name="Hud" parent="." instance=ExtResource("2_hud")]
+[node name="Hud" parent="." unique_id=1723289964 instance=ExtResource("2_hud")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("7_pause")]
+[node name="PauseMenu" parent="." unique_id=1479893818 instance=ExtResource("7_pause")]

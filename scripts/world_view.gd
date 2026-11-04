@@ -20,6 +20,10 @@ func arena_rect() -> Rect2:
 func core_position() -> Vector2:
 	return $Core.global_position
 
+## Returns the authored starting position for the player.
+func player_start_position() -> Vector2:
+	return $PlayerStart.global_position
+
 ## Collects the world positions of every authored enemy spawn marker.
 func spawn_positions() -> Array[Vector2]:
 	var positions: Array[Vector2] = []

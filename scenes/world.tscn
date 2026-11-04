@@ -25,6 +25,9 @@ texture_repeat = 2
 texture = ExtResource("2_grid")
 stretch_mode = 1
 
+[node name="PlayerStart" type="Marker2D" parent="."]
+position = Vector2(576, 465)
+
 [node name="Core" type="Node2D" parent="."]
 position = Vector2(576, 344)
 

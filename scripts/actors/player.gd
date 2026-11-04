@@ -7,6 +7,7 @@ extends CharacterBody2D
 var controls_enabled := true
 var combat_enabled := false
 var movement_bounds := Rect2()
+var start_position := Vector2.ZERO
 
 @onready var attack_timer: Timer = %AttackTimer
 @onready var flash_timer: Timer = %FlashTimer
@@ -16,9 +17,11 @@ var movement_bounds := Rect2()
 func _ready() -> void:
 	flash_timer.timeout.connect(func() -> void: attack_flash.visible = false)
 
-## Gives the player the part of the world they are allowed to move through.
-func configure(arena_bounds: Rect2) -> void:
+## Gives the player their movement bounds and authored starting point.
+func configure(arena_bounds: Rect2, spawn_position: Vector2) -> void:
 	movement_bounds = arena_bounds
+	start_position = spawn_position
+	reset()
 
 ## Reads movement input and moves the character through physics.
 func _physics_process(_delta: float) -> void:
@@ -70,7 +73,7 @@ func find_repair_target() -> Node2D:
 
 ## Returns the player to their starting point for a new run.
 func reset() -> void:
-	global_position = Vector2(576.0, 465.0)
+	global_position = start_position
 	rotation = 0.0
 	velocity = Vector2.ZERO
 	controls_enabled = true

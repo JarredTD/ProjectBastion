@@ -40,7 +40,7 @@ func _process(_delta: float) -> void:
 	if not definitions_valid:
 		return
 	var state: GameState = game.state
-	var mouse_position := get_viewport().get_mouse_position()
+	var mouse_position := get_global_mouse_position()
 	preview.visible = state.phase == GameState.Phase.BUILD and world.arena_rect().has_point(mouse_position) and not pointer_is_over_ui()
 	if not preview.visible:
 		set_hover_hint("")
@@ -117,7 +117,7 @@ func reset() -> void:
 	placed_definitions.clear()
 	preview.visible = definitions_valid
 
-## Converts a screen-space pointer position into a grid cell.
+## Converts a world-space pointer position into a grid cell.
 func cell_from_position(mouse_position: Vector2) -> Vector2i:
 	return Vector2i(floori(mouse_position.x / GameConfig.GRID_SIZE), floori(mouse_position.y / GameConfig.GRID_SIZE))
 
