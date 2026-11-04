@@ -18,6 +18,9 @@ var sfx_playback: AudioStreamPlaybackPolyphonic
 
 ## Prepares looping copies without changing the imported source files.
 func _ready() -> void:
+	if catalog == null:
+		push_error("Audio manager requires an audio catalog.")
+		return
 	var music_streams := {
 		MusicState.MENU: catalog.menu_music,
 		MusicState.BUILD: catalog.build_music,
@@ -26,7 +29,11 @@ func _ready() -> void:
 		MusicState.DEFEAT: catalog.defeat_music,
 	}
 	for state in music_streams:
-		var stream: AudioStream = music_streams[state].duplicate()
+		var source_stream: AudioStream = music_streams[state]
+		if source_stream == null:
+			push_error("Audio catalog is missing music for state %s." % MusicState.keys()[state])
+			continue
+		var stream: AudioStream = source_stream.duplicate()
 		if state in LOOPING_STATES and stream is AudioStreamWAV:
 			stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 			stream.loop_begin = 0
@@ -85,6 +92,8 @@ func stop_music(fade_time := 0.5) -> void:
 
 ## Plays a named gameplay sound with room for overlapping voices.
 func play_sfx(cue: StringName, volume_db := 0.0, pitch_scale := 1.0) -> void:
+	if catalog == null:
+		return
 	var stream := catalog.sound_for(cue)
 	if stream == null or sfx_playback == null:
 		return
@@ -92,5 +101,7 @@ func play_sfx(cue: StringName, volume_db := 0.0, pitch_scale := 1.0) -> void:
 
 ## Plays the shared menu confirmation sound.
 func play_ui_click() -> void:
+	if catalog == null or catalog.ui_click == null:
+		return
 	ui_player.stream = catalog.ui_click
 	ui_player.play()
