@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
-@export var speed := 190.0
-@export var attack_damage := 30.0
-@export var attack_range := 92.0
+@export_range(0.0, 1000.0, 1.0) var speed := 190.0
+@export_range(0.0, 1000.0, 1.0) var attack_damage := 30.0
+@export_range(0.0, 1000.0, 1.0) var attack_range := 92.0
 
 var controls_enabled := true
 var combat_enabled := false

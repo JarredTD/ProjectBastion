@@ -2,7 +2,7 @@ extends StaticBody2D
 
 signal destroyed(cell: Vector2i)
 
-@export var max_health := 150.0
+@export_range(1.0, 10000.0, 1.0) var max_health := 150.0
 
 var health: float
 var cell := Vector2i.ZERO
@@ -12,6 +12,7 @@ var cell := Vector2i.ZERO
 
 ## Starts each placed structure at full health.
 func _ready() -> void:
+	max_health = maxf(1.0, max_health)
 	health = max_health
 	update_health_bar()
 
@@ -21,6 +22,8 @@ func configure(grid_cell: Vector2i) -> void:
 
 ## Removes health and frees the occupied cell when the structure breaks.
 func take_damage(amount: float) -> void:
+	if health <= 0.0 or amount <= 0.0:
+		return
 	health = maxf(0.0, health - amount)
 	update_health_bar()
 	if health <= 0.0:
@@ -32,7 +35,7 @@ func take_damage(amount: float) -> void:
 
 ## Restores health and returns whether any repair was actually needed.
 func repair(amount: float) -> bool:
-	if health >= max_health:
+	if health <= 0.0 or health >= max_health or amount <= 0.0:
 		return false
 	health = minf(max_health, health + amount)
 	update_health_bar()

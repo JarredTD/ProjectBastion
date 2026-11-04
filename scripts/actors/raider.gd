@@ -3,12 +3,12 @@ extends CharacterBody2D
 signal defeated(reward: float)
 signal core_hit(damage: float)
 
-@export var max_health := 72.0
-@export var speed := 39.0
-@export var structure_damage := 13.0
-@export var core_damage := 12.0
-@export var attack_interval := 0.75
-@export var reward := 5.0
+@export_range(1.0, 10000.0, 1.0) var max_health := 72.0
+@export_range(0.0, 1000.0, 1.0) var speed := 39.0
+@export_range(0.0, 1000.0, 1.0) var structure_damage := 13.0
+@export_range(0.0, 1000.0, 1.0) var core_damage := 12.0
+@export_range(0.05, 10.0, 0.05) var attack_interval := 0.75
+@export_range(0.0, 1000.0, 1.0) var reward := 5.0
 
 var health: float
 var attack_cooldown := 0.0
@@ -20,6 +20,7 @@ var target_position := Vector2.ZERO
 
 ## Starts the raider at full health.
 func _ready() -> void:
+	max_health = maxf(1.0, max_health)
 	health = max_health
 	update_health_bar()
 
@@ -50,6 +51,8 @@ func _physics_process(delta: float) -> void:
 
 ## Removes health and reports the reward when the raider dies.
 func take_damage(amount: float) -> void:
+	if not active or health <= 0.0 or amount <= 0.0:
+		return
 	health = maxf(0.0, health - amount)
 	update_health_bar()
 	if health <= 0.0:

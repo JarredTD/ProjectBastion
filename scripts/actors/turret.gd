@@ -1,6 +1,6 @@
 extends "res://scripts/actors/structure.gd"
 
-@export var damage := 19.0
+@export_range(0.0, 1000.0, 1.0) var damage := 19.0
 
 var targets: Array[Node2D] = []
 
