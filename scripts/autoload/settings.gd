@@ -43,11 +43,18 @@ func reset_audio_settings() -> void:
 ## Reads audio preferences, falling back safely when no file exists.
 func load_settings() -> void:
 	var config := ConfigFile.new()
-	if config.load(SETTINGS_PATH) != OK:
+	var load_error := config.load(SETTINGS_PATH)
+	if load_error == ERR_FILE_NOT_FOUND:
+		return
+	if load_error != OK:
+		push_warning("Could not load audio settings: %s" % error_string(load_error))
 		return
 	for bus_name in AUDIO_BUSES:
-		var saved_value: float = config.get_value("audio", String(bus_name).to_lower(), get_audio_volume(bus_name))
-		audio_volumes[bus_name] = clampf(saved_value, 0.0, 1.0)
+		var saved_value: Variant = config.get_value("audio", String(bus_name).to_lower(), get_audio_volume(bus_name))
+		if typeof(saved_value) != TYPE_FLOAT and typeof(saved_value) != TYPE_INT:
+			push_warning("Ignoring invalid %s volume in audio settings." % bus_name)
+			continue
+		audio_volumes[bus_name] = clampf(float(saved_value), 0.0, 1.0)
 
 ## Writes the current audio preferences to the user data directory.
 func save_settings() -> void:
