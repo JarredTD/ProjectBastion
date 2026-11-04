@@ -130,6 +130,8 @@ func _on_core_hit(damage: float) -> void:
 		return
 	state.base_hp = maxf(0.0, state.base_hp - damage)
 	Audio.play_sfx(&"core_hit", -2.0, randf_range(0.96, 1.03))
+	if not camera_rig.is_world_position_visible(world.core_position()):
+		hud.show_core_warning()
 	if state.base_hp <= 0.0:
 		finish_run(GameState.Phase.DEFEAT, "The Bastion fell.")
 

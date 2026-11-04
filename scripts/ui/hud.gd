@@ -21,10 +21,13 @@ var build_definitions: Array
 @onready var help_label: Label = %HelpLabel
 @onready var message_panel: Control = %MessagePanel
 @onready var message_label: Label = %MessageLabel
+@onready var core_warning_panel: Control = %CoreWarningPanel
 @onready var end_panel: Control = %EndPanel
 @onready var end_title: Label = %EndTitle
 @onready var end_stats: Label = %EndStats
 @onready var restart_button: Button = %RestartButton
+
+var core_warning_time := 0.0
 
 ## Connects the clickable controls to the HUD's public signals.
 func _ready() -> void:
@@ -42,8 +45,14 @@ func configure(game_state: GameState, definitions: Array) -> void:
 func set_build_hint(text: String) -> void:
 	build_hint_label.text = text
 
+## Briefly warns the player when the core is attacked offscreen.
+func show_core_warning() -> void:
+	core_warning_time = 1.5
+
 ## Refreshes labels, selection states, and phase-specific panels.
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	core_warning_time = maxf(0.0, core_warning_time - delta)
+	core_warning_panel.visible = core_warning_time > 0.0
 	if state == null:
 		return
 	phase_label.text = phase_text()
