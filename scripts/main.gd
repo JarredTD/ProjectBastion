@@ -136,4 +136,6 @@ func _on_wave_cleared() -> void:
 
 ## Returns to the title screen from the pause menu.
 func _on_pause_main_menu_requested() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	var error := get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	if error != OK:
+		push_error("Could not return to the main menu: %s" % error_string(error))

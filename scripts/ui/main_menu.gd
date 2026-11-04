@@ -15,7 +15,9 @@ func _ready() -> void:
 ## Starts a new game.
 func _on_play_pressed() -> void:
 	Audio.play_ui_click()
-	get_tree().change_scene_to_file(GAME_SCENE)
+	var error := get_tree().change_scene_to_file(GAME_SCENE)
+	if error != OK:
+		push_error("Could not start the game: %s" % error_string(error))
 
 ## Opens the shared audio settings panel.
 func _on_settings_pressed() -> void:

@@ -80,6 +80,6 @@ func phase_text() -> String:
 ## Returns the controls that matter in the current phase.
 func help_text() -> String:
 	match state.phase:
-		GameState.Phase.BUILD: return "WASD move  •  LMB place  •  RMB remove  •  1/2 select  •  Space start"
-		GameState.Phase.DEFEND: return "WASD move  •  LMB attack  •  Hold RMB near damage to repair"
+		GameState.Phase.BUILD: return "WASD move  •  LMB place  •  RMB remove  •  1/2 select  •  Space start  •  Esc pause"
+		GameState.Phase.DEFEND: return "WASD move  •  LMB attack  •  Hold RMB near damage to repair  •  Esc pause"
 		_: return "Press R to play again"
