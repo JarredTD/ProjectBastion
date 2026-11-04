@@ -1,0 +1,72 @@
+name: Deploy game to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      GODOT_VERSION: 4.7.2
+      GODOT_RELEASE: 4.7.2-stable
+      GODOT_BINARY: Godot_v4.7.2-stable_linux.x86_64
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Godot
+        run: |
+          curl --fail --location --retry 3 \
+            --output godot.zip \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/${GODOT_BINARY}.zip"
+          unzip -q godot.zip
+          chmod +x "${GODOT_BINARY}"
+
+      - name: Install export templates
+        run: |
+          curl --fail --location --retry 3 \
+            --output export_templates.tpz \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/Godot_v${GODOT_RELEASE}_export_templates.tpz"
+          mkdir -p "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          unzip -q export_templates.tpz -d export_templates
+          mv export_templates/templates/* \
+            "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
+
+      - name: Export game
+        run: |
+          mkdir -p build/web
+          "./${GODOT_BINARY}" --headless --path . \
+            --export-release Web build/web/index.html
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy site
+        id: deployment
+        uses: actions/deploy-pages@v4

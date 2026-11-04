@@ -4,6 +4,9 @@
 !/.gitignore
 !/.gitattributes
 !/.editorconfig
+!/.github/
+!/.github/workflows/
+!/.github/workflows/deploy-pages.yml
 !/project.godot
 !/export_presets.cfg
 !/default_bus_layout.tres
