@@ -17,15 +17,16 @@ var wave_enemies: int
 var wave_enemies_defeated: int
 var objective_wave_count: int
 var endless: bool
+var run_seed: int
 var message: String
 var message_time: float
 
 ## Starts new state objects with a clean build phase.
 func _init() -> void:
-	reset(0)
+	reset(0, 0)
 
 ## Restores all match values without replacing the state object.
-func reset(objective_waves: int) -> void:
+func reset(objective_waves: int, seed: int) -> void:
 	phase = Phase.BUILD
 	build_kind = BuildKind.WALL
 	phase_time = GameConfig.BUILD_DURATION
@@ -39,6 +40,7 @@ func reset(objective_waves: int) -> void:
 	wave_enemies_defeated = 0
 	objective_wave_count = objective_waves
 	endless = false
+	run_seed = seed
 	show_message("Build a perimeter before the shoppers arrive.", 5.0)
 
 ## Shows a short HUD message for the given number of seconds.

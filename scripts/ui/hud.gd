@@ -79,7 +79,11 @@ func _process(delta: float) -> void:
 	if finished:
 		end_title.text = "STORE SECURED" if state.phase == GameState.Phase.VICTORY else "STOCK LOST"
 		end_title.modulate = Color("78ead2") if state.phase == GameState.Phase.VICTORY else Color("ed5b68")
-		end_stats.text = "Rushes cleared: %d\nShoppers turned away: %d" % [state.waves_cleared, state.enemies_defeated]
+		end_stats.text = "Rushes cleared: %d\nShoppers turned away: %d\nRun seed: %d" % [
+			state.waves_cleared,
+			state.enemies_defeated,
+			state.run_seed,
+		]
 		continue_button.visible = state.phase == GameState.Phase.VICTORY
 
 ## Builds the short phase label shown in the top bar.

@@ -13,6 +13,7 @@ var spawned := 0
 var alive := 0
 var spawn_cooldown := 0.4
 var rng := RandomNumberGenerator.new()
+var run_seed := 0
 var current_wave: WaveDefinition
 var enemy_roster: Array[EnemyDefinition] = []
 var approach_points: Array[ApproachPoint] = []
@@ -22,13 +23,23 @@ var approach_points: Array[ApproachPoint] = []
 
 ## Checks the authored wave and approach data before play begins.
 func _ready() -> void:
-	rng.randomize()
 	if run_definition == null:
 		push_error("Wave director requires a run definition.")
 	elif run_definition.objective_waves.is_empty():
 		push_error("Run definition requires at least one objective wave.")
 	if world.approach_points().is_empty():
 		push_error("Wave director requires at least one world approach point.")
+
+## Starts a run with the supplied seed, or creates one.
+func begin_run(seed := 0) -> int:
+	if seed == 0:
+		var seed_source := RandomNumberGenerator.new()
+		seed_source.randomize()
+		seed = seed_source.randi()
+		if seed == 0:
+			seed = 1
+	run_seed = seed
+	return run_seed
 
 ## Spawns enemies at the configured interval while the wave is active.
 func _process(delta: float) -> void:
@@ -43,6 +54,7 @@ func _process(delta: float) -> void:
 func prepare_wave(wave_number: int) -> bool:
 	if run_definition == null:
 		return false
+	rng.seed = hash([run_seed, wave_number])
 	current_wave = run_definition.wave_for(wave_number)
 	if current_wave == null:
 		return false
@@ -95,7 +107,6 @@ func reset() -> void:
 	enemy_roster.clear()
 	set_approaches_highlighted(false)
 	approach_points.clear()
-	rng.randomize()
 	for enemy in enemies.get_children():
 		enemy.queue_free()
 

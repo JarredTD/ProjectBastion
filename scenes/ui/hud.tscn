@@ -224,17 +224,17 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 offset_top = 82.0
 offset_right = 500.0
-offset_bottom = 132.0
+offset_bottom = 154.0
 theme_override_colors/font_color = Color(0.784314, 0.831373, 0.886275, 1)
 theme_override_font_sizes/font_size = 18
-text = "Rushes cleared: 5\nShoppers turned away: 70"
+text = "Rushes cleared: 5\nShoppers turned away: 70\nRun seed: 123456789"
 horizontal_alignment = 1
 
 [node name="EndActions" type="HBoxContainer" parent="Layout/EndPanel"]
 offset_left = 36.0
-offset_top = 154.0
+offset_top = 174.0
 offset_right = 464.0
-offset_bottom = 202.0
+offset_bottom = 222.0
 theme_override_constants/separation = 12
 alignment = 1
 

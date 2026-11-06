@@ -30,7 +30,7 @@ func _ready() -> void:
 	wave_director.enemy_defeated.connect(_on_enemy_defeated)
 	wave_director.core_hit.connect(_on_core_hit)
 	wave_director.wave_cleared.connect(_on_wave_cleared)
-	state.reset(wave_director.objective_wave_count())
+	state.reset(wave_director.objective_wave_count(), wave_director.begin_run())
 	prepare_current_wave()
 
 ## Advances the build timer and handles held repair input.
@@ -106,10 +106,10 @@ func repair_nearby(delta: float) -> void:
 			repair_sound_cooldown = 0.24
 
 ## Clears the arena and starts a fresh build phase.
-func reset_game() -> void:
+func reset_game(seed := 0) -> void:
 	wave_director.reset()
 	build_manager.reset()
-	state.reset(wave_director.objective_wave_count())
+	state.reset(wave_director.objective_wave_count(), wave_director.begin_run(seed))
 	player.reset()
 	camera_rig.snap_to_target()
 	repair_sound_cooldown = 0.0
