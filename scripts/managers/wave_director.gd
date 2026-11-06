@@ -15,7 +15,7 @@ var spawn_cooldown := 0.4
 var rng := RandomNumberGenerator.new()
 var current_wave: WaveDefinition
 var enemy_roster: Array[EnemyDefinition] = []
-var approach_markers: Array[Marker2D] = []
+var approach_points: Array[ApproachPoint] = []
 
 @onready var enemies: Node2D = get_node(enemies_path)
 @onready var world: Node2D = get_node(world_path)
@@ -27,8 +27,8 @@ func _ready() -> void:
 		push_error("Wave director requires a run definition.")
 	elif run_definition.objective_waves.is_empty():
 		push_error("Run definition requires at least one objective wave.")
-	if world.spawn_markers().is_empty():
-		push_error("Wave director requires at least one world spawn marker.")
+	if world.approach_points().is_empty():
+		push_error("Wave director requires at least one world approach point.")
 
 ## Spawns enemies at the configured interval while the wave is active.
 func _process(delta: float) -> void:
@@ -51,24 +51,30 @@ func prepare_wave(wave_number: int) -> bool:
 		push_error("Wave %d requires at least one valid enemy." % wave_number)
 		return false
 	shuffle_enemy_roster()
-	var available: Array[Marker2D] = world.spawn_markers()
-	approach_markers.clear()
+	set_approaches_highlighted(false)
+	var available: Array[ApproachPoint] = []
+	for point in world.approach_points():
+		if point.spawn_enabled and point.spawn_weight > 0.0:
+			available.append(point)
+	approach_points.clear()
 	var approach_total := mini(current_wave.approach_count, available.size())
-	for index in approach_total:
-		var selected_index := rng.randi_range(index, available.size() - 1)
-		var selected: Marker2D = available[selected_index]
-		available[selected_index] = available[index]
-		available[index] = selected
-		approach_markers.append(available[index])
+	for _index in approach_total:
+		var selected := choose_weighted_approach(available)
+		if selected == null:
+			break
+		approach_points.append(selected)
+		available.erase(selected)
+	set_approaches_highlighted(true)
 	spawned = 0
 	alive = 0
 	spawn_cooldown = 0.4
-	return not approach_markers.is_empty()
+	return not approach_points.is_empty()
 
 ## Starts spawning and wakes any enemies already in the scene.
 func start_wave() -> void:
-	if current_wave == null or approach_markers.is_empty():
+	if current_wave == null or approach_points.is_empty():
 		return
+	set_approaches_highlighted(false)
 	active = true
 	for enemy in enemies.get_children():
 		enemy.active = true
@@ -87,7 +93,8 @@ func reset() -> void:
 	spawn_cooldown = 0.4
 	current_wave = null
 	enemy_roster.clear()
-	approach_markers.clear()
+	set_approaches_highlighted(false)
+	approach_points.clear()
 	rng.randomize()
 	for enemy in enemies.get_children():
 		enemy.queue_free()
@@ -114,10 +121,30 @@ func shuffle_enemy_roster() -> void:
 
 ## Chooses one of the approach markers revealed for this wave.
 func random_spawn_position() -> Vector2:
-	if approach_markers.is_empty():
-		push_error("Wave requires at least one approach marker.")
+	var approach := choose_weighted_approach(approach_points)
+	if approach == null:
+		push_error("Wave requires at least one approach point.")
 		return world.core_position()
-	return approach_markers[rng.randi_range(0, approach_markers.size() - 1)].global_position
+	return approach.global_position
+
+## Chooses an approach using its map-authored relative weight.
+func choose_weighted_approach(points: Array[ApproachPoint]) -> ApproachPoint:
+	var total_weight := 0.0
+	for point in points:
+		total_weight += point.spawn_weight
+	if total_weight <= 0.0:
+		return null
+	var roll := rng.randf_range(0.0, total_weight)
+	for point in points:
+		roll -= point.spawn_weight
+		if roll <= 0.0:
+			return point
+	return points.back()
+
+## Keeps the selected map warnings in step with the build phase.
+func set_approaches_highlighted(value: bool) -> void:
+	for point in approach_points:
+		point.set_highlighted(value)
 
 ## Returns the fixed enemy budget prepared for this wave.
 func enemy_count() -> int:
@@ -130,8 +157,8 @@ func build_duration() -> float:
 ## Names the pressure points selected for the current wave.
 func approach_summary() -> String:
 	var names := PackedStringArray()
-	for marker in approach_markers:
-		names.append(String(marker.name).capitalize())
+	for point in approach_points:
+		names.append(point.display_name)
 	return ", ".join(names)
 
 ## Returns the number of waves in the completable objective.

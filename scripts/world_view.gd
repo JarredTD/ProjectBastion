@@ -24,10 +24,10 @@ func core_position() -> Vector2:
 func player_start_position() -> Vector2:
 	return $PlayerStart.global_position
 
-## Collects every authored enemy approach marker.
-func spawn_markers() -> Array[Marker2D]:
-	var markers: Array[Marker2D] = []
-	for marker in $SpawnPoints.get_children():
-		if marker is Marker2D:
-			markers.append(marker)
-	return markers
+## Collects every authored enemy approach point.
+func approach_points() -> Array[ApproachPoint]:
+	var points: Array[ApproachPoint] = []
+	for point in $SpawnPoints.get_children():
+		if point is ApproachPoint:
+			points.append(point)
+	return points
