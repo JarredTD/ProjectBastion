@@ -74,7 +74,7 @@ func try_place(mouse_position: Vector2) -> void:
 		return
 	if place_pos.distance_to(world.core_position()) < 74.0:
 		Audio.play_sfx(&"invalid", -3.0)
-		state.show_message("That's too close to the core.", 2.0)
+		state.show_message("That's too close to the stock.", 2.0)
 		return
 	if state.scrap < definition.cost:
 		Audio.play_sfx(&"invalid", -3.0)
@@ -134,7 +134,7 @@ func placement_hint(state: GameState, cell: Vector2i, place_pos: Vector2, defini
 	if state.occupied.has(cell):
 		return "Right-click to remove • full refund"
 	if place_pos.distance_to(world.core_position()) < 74.0:
-		return "Can't build this close to the core"
+		return "Can't build this close to the stock"
 	if state.scrap < definition.cost:
 		return "%d more scrap needed" % ceili(definition.cost - state.scrap)
 	return "Left-click to place %s" % definition.display_name.capitalize()

@@ -39,7 +39,7 @@ func reset(objective_waves: int) -> void:
 	wave_enemies_defeated = 0
 	objective_wave_count = objective_waves
 	endless = false
-	show_message("Build a perimeter before the raiders arrive.", 5.0)
+	show_message("Build a perimeter before the shoppers arrive.", 5.0)
 
 ## Shows a short HUD message for the given number of seconds.
 func show_message(text: String, duration: float) -> void:

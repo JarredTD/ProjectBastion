@@ -86,7 +86,7 @@ func start_defense() -> void:
 	Audio.play_sfx(&"wave_start")
 	player.combat_enabled = true
 	wave_director.start_wave()
-	state.show_message("They're here! Left-click to fight. Hold right-click near damage to repair.", 5.0)
+	state.show_message("The rush is here! Left-click to fight. Hold right-click near damage to repair.", 5.0)
 
 ## Repairs the nearest damaged structure, or the core, while spending scrap.
 func repair_nearby(delta: float) -> void:
@@ -138,7 +138,7 @@ func prepare_current_wave() -> void:
 	player.combat_enabled = false
 	var wave_name := "Endless %d" % (state.wave_number - state.objective_wave_count) if state.endless else "Wave %d" % state.wave_number
 	state.show_message(
-		"%s: %d raiders approaching from %s." % [wave_name, state.wave_enemies, wave_director.approach_summary()],
+		"%s: %d shoppers approaching from %s." % [wave_name, state.wave_enemies, wave_director.approach_summary()],
 		state.phase_time
 	)
 
@@ -166,7 +166,7 @@ func _on_core_hit(damage: float) -> void:
 	if not camera_rig.is_world_position_visible(world.core_position()):
 		hud.show_core_warning()
 	if state.base_hp <= 0.0:
-		finish_run(GameState.Phase.DEFEAT, "The Bastion fell.")
+		finish_run(GameState.Phase.DEFEAT, "The stock was overrun.")
 
 ## Advances the objective or ends it before the optional endless run.
 func _on_wave_cleared() -> void:
@@ -174,7 +174,7 @@ func _on_wave_cleared() -> void:
 		return
 	state.waves_cleared += 1
 	if not state.endless and state.wave_number >= state.objective_wave_count:
-		finish_run(GameState.Phase.VICTORY, "Objective complete. The Bastion stands!")
+		finish_run(GameState.Phase.VICTORY, "Opening time reached. The stock is secure!")
 		return
 	state.wave_number += 1
 	Audio.play_music(Audio.MusicState.BUILD)

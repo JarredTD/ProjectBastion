@@ -59,7 +59,7 @@ func _process(delta: float) -> void:
 		return
 	phase_label.text = phase_text()
 	scrap_label.text = "SCRAP  %03d" % floori(state.scrap)
-	core_label.text = "CORE  %03d" % ceili(state.base_hp)
+	core_label.text = "STOCK  %03d" % ceili(state.base_hp)
 	build_panel.visible = state.phase == GameState.Phase.BUILD
 	if build_definitions.size() >= 2:
 		wall_button.text = "[1] %s\n%d scrap" % [build_definitions[0].display_name, build_definitions[0].cost]
@@ -77,9 +77,9 @@ func _process(delta: float) -> void:
 	message_label.text = state.message
 	end_panel.visible = finished
 	if finished:
-		end_title.text = "BASTION SECURED" if state.phase == GameState.Phase.VICTORY else "BASTION LOST"
+		end_title.text = "STORE SECURED" if state.phase == GameState.Phase.VICTORY else "STOCK LOST"
 		end_title.modulate = Color("78ead2") if state.phase == GameState.Phase.VICTORY else Color("ed5b68")
-		end_stats.text = "Waves cleared: %d\nEnemies defeated: %d" % [state.waves_cleared, state.enemies_defeated]
+		end_stats.text = "Rushes cleared: %d\nShoppers turned away: %d" % [state.waves_cleared, state.enemies_defeated]
 		continue_button.visible = state.phase == GameState.Phase.VICTORY
 
 ## Builds the short phase label shown in the top bar.

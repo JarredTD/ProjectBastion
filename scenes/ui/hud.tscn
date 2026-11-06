@@ -62,7 +62,7 @@ offset_right = -28.0
 offset_bottom = 48.0
 theme_override_colors/font_color = Color(0.470588, 0.917647, 0.823529, 1)
 theme_override_font_sizes/font_size = 20
-text = "CORE  300"
+text = "STOCK  300"
 
 [node name="BuildPanel" type="ColorRect" parent="Layout"]
 unique_name_in_owner = true
@@ -87,7 +87,7 @@ offset_left = 16.0
 offset_top = 40.0
 offset_right = 152.0
 offset_bottom = 98.0
-tooltip_text = "Blocks raiders and takes a beating"
+tooltip_text = "Blocks shoppers and takes a beating"
 toggle_mode = true
 theme_override_font_sizes/font_size = 16
 text = "[1] WALL\n15 scrap"
@@ -98,7 +98,7 @@ offset_left = 168.0
 offset_top = 40.0
 offset_right = 304.0
 offset_bottom = 98.0
-tooltip_text = "Shoots any raider in range"
+tooltip_text = "Stops any shopper in range"
 toggle_mode = true
 theme_override_font_sizes/font_size = 16
 text = "[2] TURRET\n45 scrap"
@@ -151,7 +151,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.913725, 0.94902, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "Build a perimeter before the raiders arrive."
+text = "Build a perimeter before the shoppers arrive."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
@@ -178,7 +178,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.72, 0.74, 1)
 theme_override_font_sizes/font_size = 18
-text = "CORE UNDER ATTACK"
+text = "STOCK UNDER ATTACK"
 horizontal_alignment = 1
 vertical_alignment = 1
 mouse_filter = 2
@@ -217,7 +217,7 @@ offset_top = 32.0
 offset_right = 500.0
 offset_bottom = 74.0
 theme_override_font_sizes/font_size = 32
-text = "BASTION SECURED"
+text = "STORE SECURED"
 horizontal_alignment = 1
 
 [node name="EndStats" type="Label" parent="Layout/EndPanel"]
@@ -227,7 +227,7 @@ offset_right = 500.0
 offset_bottom = 132.0
 theme_override_colors/font_color = Color(0.784314, 0.831373, 0.886275, 1)
 theme_override_font_sizes/font_size = 18
-text = "Waves cleared: 5\nEnemies defeated: 70"
+text = "Rushes cleared: 5\nShoppers turned away: 70"
 horizontal_alignment = 1
 
 [node name="EndActions" type="HBoxContainer" parent="Layout/EndPanel"]
