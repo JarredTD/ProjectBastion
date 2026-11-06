@@ -20,7 +20,7 @@ extends Resource
 @export var repair: AudioStream
 @export var turret_fire: AudioStream
 @export var hit: AudioStream
-@export var raider_death: AudioStream
+@export var enemy_defeat: AudioStream
 @export var structure_break: AudioStream
 @export var core_hit: AudioStream
 
@@ -36,7 +36,7 @@ func sound_for(cue: StringName) -> AudioStream:
 		&"repair": return repair
 		&"turret_fire": return turret_fire
 		&"hit": return hit
-		&"raider_death": return raider_death
+		&"enemy_defeat": return enemy_defeat
 		&"structure_break": return structure_break
 		&"core_hit": return core_hit
 		_:

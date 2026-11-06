@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RunDefinition" load_steps=8 format=3]
+[gd_resource type="Resource" script_class="RunDefinition" load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/run_definition.gd" id="1_run"]
 [ext_resource type="Script" path="res://scripts/resources/wave_definition.gd" id="2_wave"]
@@ -7,11 +7,18 @@
 [ext_resource type="Resource" path="res://data/waves/objective_03.tres" id="5_wave_3"]
 [ext_resource type="Resource" path="res://data/waves/objective_04.tres" id="6_wave_4"]
 [ext_resource type="Resource" path="res://data/waves/objective_05.tres" id="7_wave_5"]
+[ext_resource type="Script" path="res://scripts/resources/enemy_wave_entry.gd" id="8_entry"]
+[ext_resource type="Resource" path="res://data/enemies/basic_shopper.tres" id="9_shopper"]
+
+[sub_resource type="Resource" id="EnemyWaveEntry_endless"]
+script = ExtResource("8_entry")
+enemy = ExtResource("9_shopper")
+count = 30
 
 [resource]
 script = ExtResource("1_run")
 objective_waves = Array[ExtResource("2_wave")]([ExtResource("3_wave_1"), ExtResource("4_wave_2"), ExtResource("5_wave_3"), ExtResource("6_wave_4"), ExtResource("7_wave_5")])
-endless_starting_enemies = 30
+endless_enemies = Array[ExtResource("8_entry")]([SubResource("EnemyWaveEntry_endless")])
 endless_enemy_growth = 2.1
 endless_starting_interval = 0.7
 endless_interval_decay = 0.85

@@ -1,18 +1,19 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://scripts/actors/raider.gd" id="1_raider"]
+[ext_resource type="Script" path="res://scripts/actors/enemy.gd" id="1_enemy"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_raider"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_enemy"]
 radius = 12.0
 
-[node name="Raider" type="CharacterBody2D" groups=["enemies"]]
+[node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
 collision_layer = 2
 collision_mask = 4
-script = ExtResource("1_raider")
+script = ExtResource("1_enemy")
 
 [node name="Visuals" type="Node2D" parent="."]
 
 [node name="Body" type="Polygon2D" parent="Visuals"]
+unique_name_in_owner = true
 polygon = PackedVector2Array(12, 0, 8.49, 8.49, 0, 12, -8.49, 8.49, -12, 0, -8.49, -8.49, 0, -12, 8.49, -8.49)
 color = Color(0.929412, 0.356863, 0.407843, 1)
 
@@ -27,7 +28,7 @@ polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
 color = Color(0.152941, 0.101961, 0.137255, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_raider")
+shape = SubResource("CircleShape2D_enemy")
 
 [node name="HealthBar" type="Node2D" parent="."]
 unique_name_in_owner = true

@@ -6,7 +6,6 @@ signal wave_cleared
 
 @export_node_path("Node2D") var enemies_path: NodePath
 @export_node_path("Node2D") var world_path: NodePath
-@export var raider_scene: PackedScene = preload("res://scenes/actors/raider.tscn")
 @export var run_definition: RunDefinition
 
 var active := false
@@ -15,6 +14,7 @@ var alive := 0
 var spawn_cooldown := 0.4
 var rng := RandomNumberGenerator.new()
 var current_wave: WaveDefinition
+var enemy_roster: Array[EnemyDefinition] = []
 var approach_markers: Array[Marker2D] = []
 
 @onready var enemies: Node2D = get_node(enemies_path)
@@ -30,13 +30,13 @@ func _ready() -> void:
 	if world.spawn_markers().is_empty():
 		push_error("Wave director requires at least one world spawn marker.")
 
-## Spawns raiders at the configured interval while the wave is active.
+## Spawns enemies at the configured interval while the wave is active.
 func _process(delta: float) -> void:
-	if not active or current_wave == null or spawned >= current_wave.enemy_count:
+	if not active or current_wave == null or spawned >= enemy_roster.size():
 		return
 	spawn_cooldown -= delta
 	if spawn_cooldown <= 0.0:
-		spawn_raider()
+		spawn_enemy()
 		spawn_cooldown = current_wave.spawn_interval
 
 ## Chooses this wave's pressure points once so the player can prepare for them.
@@ -46,6 +46,11 @@ func prepare_wave(wave_number: int) -> bool:
 	current_wave = run_definition.wave_for(wave_number)
 	if current_wave == null:
 		return false
+	enemy_roster = current_wave.enemy_roster()
+	if enemy_roster.is_empty():
+		push_error("Wave %d requires at least one valid enemy." % wave_number)
+		return false
+	shuffle_enemy_roster()
 	var available: Array[Marker2D] = world.spawn_markers()
 	approach_markers.clear()
 	var approach_total := mini(current_wave.approach_count, available.size())
@@ -60,7 +65,7 @@ func prepare_wave(wave_number: int) -> bool:
 	spawn_cooldown = 0.4
 	return not approach_markers.is_empty()
 
-## Starts spawning and wakes any raiders already in the scene.
+## Starts spawning and wakes any enemies already in the scene.
 func start_wave() -> void:
 	if current_wave == null or approach_markers.is_empty():
 		return
@@ -68,7 +73,7 @@ func start_wave() -> void:
 	for enemy in enemies.get_children():
 		enemy.active = true
 
-## Pauses spawning and every living raider.
+## Pauses spawning and every living enemy.
 func stop_wave() -> void:
 	active = false
 	for enemy in enemies.get_children():
@@ -81,21 +86,31 @@ func reset() -> void:
 	alive = 0
 	spawn_cooldown = 0.4
 	current_wave = null
+	enemy_roster.clear()
 	approach_markers.clear()
 	rng.randomize()
 	for enemy in enemies.get_children():
 		enemy.queue_free()
 
-## Creates one raider and connects its combat signals.
-func spawn_raider() -> void:
-	var raider: CharacterBody2D = raider_scene.instantiate()
-	enemies.add_child(raider)
-	raider.global_position = random_spawn_position()
-	raider.configure(world.core_position())
-	raider.defeated.connect(_on_raider_defeated)
-	raider.core_hit.connect(func(damage: float) -> void: core_hit.emit(damage))
+## Creates one enemy and connects its combat signals.
+func spawn_enemy() -> void:
+	var definition := enemy_roster[spawned]
+	var enemy: CharacterBody2D = definition.scene.instantiate()
+	enemies.add_child(enemy)
+	enemy.global_position = random_spawn_position()
+	enemy.configure(definition, world.core_position())
+	enemy.defeated.connect(_on_enemy_defeated)
+	enemy.core_hit.connect(func(damage: float) -> void: core_hit.emit(damage))
 	spawned += 1
 	alive += 1
+
+## Shuffles exact wave composition without changing its authored counts.
+func shuffle_enemy_roster() -> void:
+	for index in range(enemy_roster.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var selected := enemy_roster[swap_index]
+		enemy_roster[swap_index] = enemy_roster[index]
+		enemy_roster[index] = selected
 
 ## Chooses one of the approach markers revealed for this wave.
 func random_spawn_position() -> Vector2:
@@ -106,7 +121,7 @@ func random_spawn_position() -> Vector2:
 
 ## Returns the fixed enemy budget prepared for this wave.
 func enemy_count() -> int:
-	return current_wave.enemy_count if current_wave != null else 0
+	return enemy_roster.size()
 
 ## Returns the build time configured for this wave.
 func build_duration() -> float:
@@ -124,9 +139,9 @@ func objective_wave_count() -> int:
 	return run_definition.objective_waves.size() if run_definition != null else 0
 
 ## Tracks wave progress and reports the reward to the match coordinator.
-func _on_raider_defeated(reward: float) -> void:
+func _on_enemy_defeated(reward: float) -> void:
 	alive -= 1
 	enemy_defeated.emit(reward)
-	if current_wave != null and spawned >= current_wave.enemy_count and alive <= 0:
+	if current_wave != null and spawned >= enemy_roster.size() and alive <= 0:
 		active = false
 		wave_cleared.emit()
