@@ -23,12 +23,15 @@ func _ready() -> void:
 	hud.build_selected.connect(select_building)
 	hud.wave_start_requested.connect(start_defense)
 	hud.run_restart_requested.connect(reset_game)
+	hud.endless_requested.connect(continue_endless)
 	pause_menu.restart_requested.connect(reset_game)
 	pause_menu.main_menu_requested.connect(_on_pause_main_menu_requested)
 	build_manager.hover_hint_changed.connect(hud.set_build_hint)
 	wave_director.enemy_defeated.connect(_on_enemy_defeated)
 	wave_director.core_hit.connect(_on_core_hit)
 	wave_director.wave_cleared.connect(_on_wave_cleared)
+	state.reset(wave_director.objective_wave_count())
+	prepare_current_wave()
 
 ## Advances the build timer and handles held repair input.
 func _process(delta: float) -> void:
@@ -74,8 +77,10 @@ func select_building(index: int) -> void:
 	if state.phase == GameState.Phase.BUILD and index >= 0 and index < build_manager.definitions.size():
 		state.build_kind = index
 
-## Ends building and releases the first enemy wave.
+## Ends building and releases the prepared enemy wave.
 func start_defense() -> void:
+	if state.phase != GameState.Phase.BUILD:
+		return
 	state.phase = GameState.Phase.DEFEND
 	Audio.play_music(Audio.MusicState.DEFENSE)
 	Audio.play_sfx(&"wave_start")
@@ -104,11 +109,38 @@ func repair_nearby(delta: float) -> void:
 func reset_game() -> void:
 	wave_director.reset()
 	build_manager.reset()
-	state.reset()
+	state.reset(wave_director.objective_wave_count())
 	player.reset()
 	camera_rig.snap_to_target()
 	repair_sound_cooldown = 0.0
 	Audio.play_music(Audio.MusicState.BUILD)
+	prepare_current_wave()
+
+## Leaves the completed objective intact and begins the escalating endless run.
+func continue_endless() -> void:
+	if state.phase != GameState.Phase.VICTORY:
+		return
+	state.endless = true
+	state.wave_number += 1
+	player.controls_enabled = true
+	Audio.play_music(Audio.MusicState.BUILD)
+	prepare_current_wave()
+
+## Selects and reveals the next wave before its build timer begins.
+func prepare_current_wave() -> void:
+	if not wave_director.prepare_wave(state.wave_number):
+		finish_run(GameState.Phase.DEFEAT, "The next rush could not be prepared.")
+		return
+	state.phase = GameState.Phase.BUILD
+	state.phase_time = wave_director.build_duration()
+	state.wave_enemies = wave_director.enemy_count()
+	state.wave_enemies_defeated = 0
+	player.combat_enabled = false
+	var wave_name := "Endless %d" % (state.wave_number - state.objective_wave_count) if state.endless else "Wave %d" % state.wave_number
+	state.show_message(
+		"%s: %d raiders approaching from %s." % [wave_name, state.wave_enemies, wave_director.approach_summary()],
+		state.phase_time
+	)
 
 ## Freezes active play and presents the final result.
 func finish_run(result: GameState.Phase, message: String) -> void:
@@ -123,6 +155,7 @@ func finish_run(result: GameState.Phase, message: String) -> void:
 func _on_enemy_defeated(reward: float) -> void:
 	state.scrap += reward
 	state.enemies_defeated += 1
+	state.wave_enemies_defeated += 1
 
 ## Applies core damage and ends the run if the core falls.
 func _on_core_hit(damage: float) -> void:
@@ -135,10 +168,17 @@ func _on_core_hit(damage: float) -> void:
 	if state.base_hp <= 0.0:
 		finish_run(GameState.Phase.DEFEAT, "The Bastion fell.")
 
-## Ends the run once the wave director reports that no raiders remain.
+## Advances the objective or ends it before the optional endless run.
 func _on_wave_cleared() -> void:
-	if state.phase == GameState.Phase.DEFEND:
-		finish_run(GameState.Phase.VICTORY, "Wave cleared. The Bastion stands!")
+	if state.phase != GameState.Phase.DEFEND:
+		return
+	state.waves_cleared += 1
+	if not state.endless and state.wave_number >= state.objective_wave_count:
+		finish_run(GameState.Phase.VICTORY, "Objective complete. The Bastion stands!")
+		return
+	state.wave_number += 1
+	Audio.play_music(Audio.MusicState.BUILD)
+	prepare_current_wave()
 
 ## Returns to the title screen from the pause menu.
 func _on_pause_main_menu_requested() -> void:

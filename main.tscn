@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ewyrlboceii2"]
+[gd_scene load_steps=10 format=3 uid="uid://ewyrlboceii2"]
 
 [ext_resource type="Script" uid="uid://dhdkqaf1g121j" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bpp67b2omfukg" path="res://scripts/managers/wave_director.gd" id="6_wave"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="7_pause"]
 [ext_resource type="Script" uid="uid://cdofvg1fqjmn0" path="res://scripts/camera_rig.gd" id="8_camera"]
+[ext_resource type="Resource" path="res://data/waves/main_run.tres" id="9_run"]
 
 [node name="ProjectBastion" type="Node2D" unique_id=170590304]
 script = ExtResource("1_main")
@@ -44,6 +45,7 @@ polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
 script = ExtResource("6_wave")
 enemies_path = NodePath("../Actors/Enemies")
 world_path = NodePath("../World")
+run_definition = ExtResource("9_run")
 
 [node name="Hud" parent="." unique_id=1723289964 instance=ExtResource("2_hud")]
 

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WaveDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/wave_definition.gd" id="1_wave"]
+
+[resource]
+script = ExtResource("1_wave")
+enemy_count = 12
+spawn_interval = 1.0
+approach_count = 2
+build_duration = 25.0

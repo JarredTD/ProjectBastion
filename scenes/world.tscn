@@ -66,26 +66,26 @@ color = Color(0.207843, 0.815686, 0.729412, 1)
 
 [node name="SpawnPoints" type="Node2D" parent="."]
 
-[node name="NorthWest" type="Marker2D" parent="SpawnPoints"]
+[node name="North West" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(256, 32)
 
-[node name="NorthEast" type="Marker2D" parent="SpawnPoints"]
+[node name="North East" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(1792, 32)
 
-[node name="EastNorth" type="Marker2D" parent="SpawnPoints"]
+[node name="East Upper" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(2016, 320)
 
-[node name="EastSouth" type="Marker2D" parent="SpawnPoints"]
+[node name="East Lower" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(2016, 832)
 
-[node name="SouthEast" type="Marker2D" parent="SpawnPoints"]
+[node name="South East" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(1792, 1120)
 
-[node name="SouthWest" type="Marker2D" parent="SpawnPoints"]
+[node name="South West" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(256, 1120)
 
-[node name="WestSouth" type="Marker2D" parent="SpawnPoints"]
+[node name="West Lower" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(32, 832)
 
-[node name="WestNorth" type="Marker2D" parent="SpawnPoints"]
+[node name="West Upper" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(32, 320)
