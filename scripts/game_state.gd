@@ -24,6 +24,7 @@ var wave_approaches: String
 var objective_wave_count: int
 var endless: bool
 var run_seed: int
+var run_summary: RunSummary
 var message: String
 var message_time: float
 
@@ -53,6 +54,7 @@ func reset(objective_waves: int, seed: int) -> void:
 	objective_wave_count = objective_waves
 	endless = false
 	run_seed = seed
+	run_summary = null
 	show_message("Build a perimeter before the shoppers arrive.", 5.0)
 
 ## Adds points earned by turning away a shopper.

@@ -148,11 +148,32 @@ func prepare_current_wave() -> void:
 ## Freezes active play and presents the final result.
 func finish_run(result: GameState.Phase, message: String) -> void:
 	state.phase = result
+	finalize_run_summary(result)
 	state.show_message(message, 999.0)
 	player.controls_enabled = false
 	player.combat_enabled = false
 	wave_director.stop_wave()
 	Audio.play_music(Audio.MusicState.VICTORY if result == GameState.Phase.VICTORY else Audio.MusicState.DEFEAT)
+
+## Captures the completed run and updates its mode's local record.
+func finalize_run_summary(result: GameState.Phase) -> void:
+	var mode: StringName = &"endless" if state.endless else &"objective"
+	var new_best := Records.record_score(mode, state.score)
+	state.run_summary = RunSummary.new(
+		mode,
+		state.score,
+		state.shopper_points,
+		state.rush_points,
+		state.stock_points,
+		state.waves_cleared,
+		state.enemies_defeated,
+		roundi(state.base_hp),
+		state.run_seed,
+		result == GameState.Phase.VICTORY,
+		Records.best_score(mode),
+		new_best,
+		Records.is_persistent(),
+	)
 
 ## Awards scrap and updates the defeated-enemy count.
 func _on_enemy_defeated(reward: float, score_value: int) -> void:
