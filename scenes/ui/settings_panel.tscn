@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/settings_panel.gd" id="1_settings"]
+[ext_resource type="Theme" path="res://data/ui/interface_theme.tres" id="2_theme"]
 
 [node name="SettingsPanel" type="Control"]
 process_mode = 3
@@ -11,6 +12,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_settings")
+theme = ExtResource("2_theme")
 
 [node name="Dimmer" type="ColorRect" parent="."]
 layout_mode = 1
@@ -21,7 +23,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0117647, 0.0235294, 0.0392157, 0.9)
 
-[node name="Panel" type="ColorRect" parent="."]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -34,7 +36,6 @@ offset_right = 260.0
 offset_bottom = 218.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0392157, 0.0705882, 0.101961, 1)
 
 [node name="Accent" type="ColorRect" parent="Panel"]
 layout_mode = 0
@@ -61,6 +62,13 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.913725, 0.94902, 1, 1)
 theme_override_font_sizes/font_size = 28
 text = "AUDIO"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Panel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.568627, 0.639216, 0.721569, 1)
+theme_override_font_sizes/font_size = 14
+text = "Tune the mix without leaving the game."
 horizontal_alignment = 1
 
 [node name="Volumes" type="GridContainer" parent="Panel/Content"]
@@ -177,5 +185,6 @@ text = "DEFAULTS"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(154, 46)
 layout_mode = 2
+theme_type_variation = &"PrimaryButton"
 theme_override_font_sizes/font_size = 16
 text = "BACK"

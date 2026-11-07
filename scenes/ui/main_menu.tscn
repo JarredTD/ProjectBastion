@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="2_settings"]
+[ext_resource type="Theme" path="res://data/ui/interface_theme.tres" id="3_theme"]
+[ext_resource type="Script" path="res://scripts/ui/menu_backdrop.gd" id="4_backdrop"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,6 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
+theme = ExtResource("3_theme")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -22,39 +25,66 @@ grow_vertical = 2
 color = Color(0.0196078, 0.0352941, 0.054902, 1)
 mouse_filter = 2
 
+[node name="BackdropArt" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_backdrop")
+
 [node name="Accent" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 8.0
+offset_bottom = 6.0
 grow_horizontal = 2
 color = Color(0.25098, 0.827451, 0.690196, 1)
 mouse_filter = 2
 
+[node name="MenuCard" type="Panel" parent="."]
+offset_left = 64.0
+offset_top = 76.0
+offset_right = 492.0
+offset_bottom = 520.0
+mouse_filter = 2
+
+[node name="CardAccent" type="ColorRect" parent="MenuCard"]
+anchor_right = 1.0
+offset_bottom = 5.0
+mouse_filter = 2
+color = Color(0.25098, 0.827451, 0.690196, 1)
+
 [node name="Menu" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -190.0
-offset_top = -170.0
-offset_right = 190.0
-offset_bottom = 170.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_left = 98.0
+offset_top = 112.0
+offset_right = 458.0
+offset_bottom = 536.0
 theme_override_constants/separation = 14
+
+[node name="Kicker" type="Label" parent="Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.823529, 0.478431, 1)
+theme_override_font_sizes/font_size = 14
+text = "NIGHT SHIFT DEFENSE"
 
 [node name="Title" type="Label" parent="Menu"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.913725, 0.94902, 1, 1)
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 42
 text = "PROJECT BASTION"
-horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.568627, 0.639216, 0.721569, 1)
+theme_override_font_sizes/font_size = 16
+text = "Hold the stock. Control the rush."
 
 [node name="Spacer" type="Control" parent="Menu"]
-custom_minimum_size = Vector2(0, 28)
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 mouse_filter = 2
 
@@ -62,8 +92,9 @@ mouse_filter = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
+theme_type_variation = &"PrimaryButton"
 theme_override_font_sizes/font_size = 20
-text = "PLAY"
+text = "START SHIFT"
 
 [node name="SettingsButton" type="Button" parent="Menu"]
 unique_name_in_owner = true
