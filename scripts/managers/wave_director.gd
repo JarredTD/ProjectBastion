@@ -25,8 +25,9 @@ var approach_points: Array[ApproachPoint] = []
 func _ready() -> void:
 	if run_definition == null:
 		push_error("Wave director requires a run definition.")
-	elif run_definition.objective_waves.is_empty():
-		push_error("Run definition requires at least one objective wave.")
+	else:
+		for error in run_definition.validation_errors():
+			push_error("Run definition: %s" % error)
 	if world.approach_points().is_empty():
 		push_error("Wave director requires at least one world approach point.")
 
@@ -58,9 +59,16 @@ func prepare_wave(wave_number: int) -> bool:
 	current_wave = run_definition.wave_for(wave_number)
 	if current_wave == null:
 		return false
+	var wave_errors := current_wave.validation_errors()
+	if not wave_errors.is_empty():
+		for error in wave_errors:
+			push_error("Wave %d: %s" % [wave_number, error])
+		return false
 	enemy_roster = current_wave.enemy_roster()
 	if enemy_roster.is_empty():
 		push_error("Wave %d requires at least one valid enemy." % wave_number)
+		return false
+	if not enemy_scenes_are_valid():
 		return false
 	shuffle_enemy_roster()
 	set_approaches_highlighted(false)
@@ -130,6 +138,24 @@ func shuffle_enemy_roster() -> void:
 		enemy_roster[swap_index] = enemy_roster[index]
 		enemy_roster[index] = selected
 
+## Checks that enemy scenes expose the methods and signals used here.
+func enemy_scenes_are_valid() -> bool:
+	var checked: Dictionary[PackedScene, bool] = {}
+	for definition in enemy_roster:
+		if checked.has(definition.scene):
+			continue
+		checked[definition.scene] = true
+		var instance := definition.scene.instantiate()
+		var valid := instance is CharacterBody2D
+		valid = valid and instance.has_method("configure")
+		valid = valid and instance.has_signal("defeated")
+		valid = valid and instance.has_signal("core_hit")
+		instance.free()
+		if not valid:
+			push_error("Enemy scene for %s does not meet the spawning contract." % definition.display_name)
+			return false
+	return true
+
 ## Chooses one of the approach markers revealed for this wave.
 func random_spawn_position() -> Vector2:
 	var approach := choose_weighted_approach(approach_points)
@@ -160,6 +186,10 @@ func set_approaches_highlighted(value: bool) -> void:
 ## Returns the fixed enemy budget prepared for this wave.
 func enemy_count() -> int:
 	return enemy_roster.size()
+
+## Describes the exact enemy mix prepared for the HUD.
+func enemy_summary() -> String:
+	return current_wave.roster_summary() if current_wave != null else ""
 
 ## Returns the build time configured for this wave.
 func build_duration() -> float:

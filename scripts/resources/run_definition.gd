@@ -34,3 +34,26 @@ func wave_for(wave_number: int) -> WaveDefinition:
 	wave.approach_count = mini(endless_maximum_approaches, endless_starting_approaches + endless_index)
 	wave.build_duration = endless_build_duration
 	return wave
+
+## Checks the objective and endless wave data.
+func validation_errors() -> PackedStringArray:
+	var errors := PackedStringArray()
+	if objective_waves.is_empty():
+		errors.append("At least one objective wave is required.")
+	for index in objective_waves.size():
+		var wave := objective_waves[index]
+		if wave == null:
+			errors.append("Objective wave %d is missing." % (index + 1))
+			continue
+		for error in wave.validation_errors():
+			errors.append("Objective wave %d: %s" % [index + 1, error])
+	if endless_enemies.is_empty():
+		errors.append("Endless enemy roster cannot be empty.")
+	for index in endless_enemies.size():
+		var entry := endless_enemies[index]
+		if entry == null or entry.enemy == null:
+			errors.append("Endless enemy entry %d is incomplete." % (index + 1))
+			continue
+		for error in entry.enemy.validation_errors():
+			errors.append("Endless %s: %s" % [entry.enemy.display_name, error])
+	return errors

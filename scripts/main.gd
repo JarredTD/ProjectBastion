@@ -138,7 +138,7 @@ func prepare_current_wave() -> void:
 	player.combat_enabled = false
 	var wave_name := "Endless %d" % (state.wave_number - state.objective_wave_count) if state.endless else "Wave %d" % state.wave_number
 	state.show_message(
-		"%s: %d shoppers approaching from %s." % [wave_name, state.wave_enemies, wave_director.approach_summary()],
+		"%s: %s approaching from %s." % [wave_name, wave_director.enemy_summary(), wave_director.approach_summary()],
 		state.phase_time
 	)
 

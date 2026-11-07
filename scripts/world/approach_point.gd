@@ -24,3 +24,12 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO, 20.0, Color(indicator_color, 0.2))
 		draw_arc(Vector2.ZERO, 26.0, 0.0, TAU, 32, indicator_color, 3.0)
 		draw_arc(Vector2.ZERO, 34.0, 0.0, TAU, 32, Color(indicator_color, 0.45), 2.0)
+
+## Surfaces common map-authoring mistakes in the scene inspector.
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings := PackedStringArray()
+	if display_name.strip_edges().is_empty():
+		warnings.append("Display name cannot be empty.")
+	if spawn_enabled and spawn_weight <= 0.0:
+		warnings.append("An enabled approach needs a positive spawn weight.")
+	return warnings

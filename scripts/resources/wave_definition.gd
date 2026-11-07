@@ -16,3 +16,30 @@ func enemy_roster() -> Array[EnemyDefinition]:
 		for _index in entry.count:
 			roster.append(entry.enemy)
 	return roster
+
+## Describes the exact enemy composition shown before the wave begins.
+func roster_summary() -> String:
+	var parts := PackedStringArray()
+	for entry in enemies:
+		if entry == null or entry.enemy == null:
+			continue
+		var label := entry.enemy.display_name if entry.count == 1 else entry.enemy.plural_name
+		parts.append("%d %s" % [entry.count, label])
+	return ", ".join(parts)
+
+## Checks that every roster entry has an enemy definition.
+func validation_errors() -> PackedStringArray:
+	var errors := PackedStringArray()
+	if enemies.is_empty():
+		errors.append("Enemy roster cannot be empty.")
+	for index in enemies.size():
+		var entry := enemies[index]
+		if entry == null:
+			errors.append("Enemy entry %d is missing." % (index + 1))
+			continue
+		if entry.enemy == null:
+			errors.append("Enemy entry %d has no definition." % (index + 1))
+			continue
+		for error in entry.enemy.validation_errors():
+			errors.append("%s: %s" % [entry.enemy.display_name, error])
+	return errors

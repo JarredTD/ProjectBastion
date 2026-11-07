@@ -3,6 +3,7 @@ extends Resource
 
 @export_category("Identity")
 @export var display_name := "Enemy"
+@export var plural_name := "Enemies"
 @export var scene: PackedScene
 @export var behavior_id: StringName = &"direct"
 @export var accent_color := Color("ed5b68")
@@ -14,3 +15,16 @@ extends Resource
 @export_range(0.0, 1000.0, 1.0) var objective_damage := 12.0
 @export_range(0.05, 10.0, 0.05) var attack_interval := 0.75
 @export_range(0.0, 1000.0, 1.0) var reward := 5.0
+
+## Checks the fields needed to spawn this enemy.
+func validation_errors() -> PackedStringArray:
+	var errors := PackedStringArray()
+	if display_name.strip_edges().is_empty():
+		errors.append("Display name cannot be empty.")
+	if plural_name.strip_edges().is_empty():
+		errors.append("Plural name cannot be empty.")
+	if scene == null:
+		errors.append("Enemy scene is missing.")
+	if behavior_id.is_empty():
+		errors.append("Behavior identifier cannot be empty.")
+	return errors
