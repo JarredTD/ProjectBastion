@@ -71,46 +71,54 @@ color = Color(0.207843, 0.815686, 0.729412, 1)
 position = Vector2(256, 32)
 script = ExtResource("3_approach")
 display_name = "North West"
+direction_icon = "↖"
 tags = Array[StringName]([&"north", &"west"])
 
 [node name="North East" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(1792, 32)
 script = ExtResource("3_approach")
 display_name = "North East"
+direction_icon = "↗"
 tags = Array[StringName]([&"north", &"east"])
 
 [node name="East Upper" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(2016, 320)
 script = ExtResource("3_approach")
 display_name = "East Upper"
+direction_icon = "→"
 tags = Array[StringName]([&"east", &"upper"])
 
 [node name="East Lower" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(2016, 832)
 script = ExtResource("3_approach")
 display_name = "East Lower"
+direction_icon = "→"
 tags = Array[StringName]([&"east", &"lower"])
 
 [node name="South East" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(1792, 1120)
 script = ExtResource("3_approach")
 display_name = "South East"
+direction_icon = "↘"
 tags = Array[StringName]([&"south", &"east"])
 
 [node name="South West" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(256, 1120)
 script = ExtResource("3_approach")
 display_name = "South West"
+direction_icon = "↙"
 tags = Array[StringName]([&"south", &"west"])
 
 [node name="West Lower" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(32, 832)
 script = ExtResource("3_approach")
 display_name = "West Lower"
+direction_icon = "←"
 tags = Array[StringName]([&"west", &"lower"])
 
 [node name="West Upper" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(32, 320)
 script = ExtResource("3_approach")
 display_name = "West Upper"
+direction_icon = "←"
 tags = Array[StringName]([&"west", &"upper"])

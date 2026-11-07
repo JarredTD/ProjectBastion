@@ -135,12 +135,10 @@ func prepare_current_wave() -> void:
 	state.phase_time = wave_director.build_duration()
 	state.wave_enemies = wave_director.enemy_count()
 	state.wave_enemies_defeated = 0
+	state.wave_composition = wave_director.enemy_summary()
+	state.wave_approaches = wave_director.approach_summary()
 	player.combat_enabled = false
-	var wave_name := "Endless %d" % (state.wave_number - state.objective_wave_count) if state.endless else "Wave %d" % state.wave_number
-	state.show_message(
-		"%s: %s approaching from %s." % [wave_name, wave_director.enemy_summary(), wave_director.approach_summary()],
-		state.phase_time
-	)
+	state.show_message("Approaches marked. Build before the rush.", 4.0)
 
 ## Freezes active play and presents the final result.
 func finish_run(result: GameState.Phase, message: String) -> void:

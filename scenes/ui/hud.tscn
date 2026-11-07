@@ -21,6 +21,14 @@ anchor_right = 1.0
 offset_bottom = 64.0
 color = Color(0.0627451, 0.0901961, 0.133333, 1)
 
+[node name="Accent" type="ColorRect" parent="Layout/TopBar"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+mouse_filter = 2
+color = Color(0.207843, 0.815686, 0.729412, 0.8)
+
 [node name="Title" type="Label" parent="Layout/TopBar"]
 offset_left = 28.0
 offset_top = 16.0
@@ -39,6 +47,7 @@ offset_bottom = 48.0
 theme_override_colors/font_color = Color(0.470588, 0.917647, 0.823529, 1)
 theme_override_font_sizes/font_size = 21
 text = "BUILD  30"
+horizontal_alignment = 1
 
 [node name="ScrapLabel" type="Label" parent="Layout/TopBar"]
 unique_name_in_owner = true
@@ -51,6 +60,7 @@ offset_bottom = 48.0
 theme_override_colors/font_color = Color(1, 0.823529, 0.478431, 1)
 theme_override_font_sizes/font_size = 20
 text = "SCRAP  210"
+horizontal_alignment = 2
 
 [node name="CoreLabel" type="Label" parent="Layout/TopBar"]
 unique_name_in_owner = true
@@ -63,14 +73,21 @@ offset_bottom = 48.0
 theme_override_colors/font_color = Color(0.470588, 0.917647, 0.823529, 1)
 theme_override_font_sizes/font_size = 20
 text = "STOCK  300"
+horizontal_alignment = 2
 
 [node name="BuildPanel" type="ColorRect" parent="Layout"]
 unique_name_in_owner = true
 offset_left = 28.0
 offset_top = 92.0
 offset_right = 348.0
-offset_bottom = 244.0
+offset_bottom = 332.0
 color = Color(0.04, 0.07, 0.1, 0.92)
+
+[node name="Accent" type="ColorRect" parent="Layout/BuildPanel"]
+anchor_bottom = 1.0
+offset_right = 4.0
+mouse_filter = 2
+color = Color(0.207843, 0.815686, 0.729412, 0.9)
 
 [node name="BuildTitle" type="Label" parent="Layout/BuildPanel"]
 offset_left = 16.0
@@ -131,10 +148,10 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -180.0
+offset_left = -210.0
 offset_top = 80.0
-offset_right = 330.0
-offset_bottom = 148.0
+offset_right = 210.0
+offset_bottom = 144.0
 color = Color(0.04, 0.07, 0.1, 0.92)
 
 [node name="MessageLabel" type="Label" parent="Layout/MessagePanel"]
@@ -182,6 +199,97 @@ text = "STOCK UNDER ATTACK"
 horizontal_alignment = 1
 vertical_alignment = 1
 mouse_filter = 2
+
+[node name="WaveIntelPanel" type="ColorRect" parent="Layout"]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -348.0
+offset_top = 92.0
+offset_right = -28.0
+offset_bottom = 322.0
+mouse_filter = 2
+color = Color(0.04, 0.07, 0.1, 0.92)
+
+[node name="Accent" type="ColorRect" parent="Layout/WaveIntelPanel"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+mouse_filter = 2
+color = Color(1, 0.780392, 0.419608, 0.95)
+
+[node name="IntelTitle" type="Label" parent="Layout/WaveIntelPanel"]
+unique_name_in_owner = true
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 304.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(1, 0.823529, 0.478431, 1)
+theme_override_font_sizes/font_size = 14
+text = "NEXT RUSH"
+
+[node name="IntelWave" type="Label" parent="Layout/WaveIntelPanel"]
+unique_name_in_owner = true
+offset_left = 16.0
+offset_top = 38.0
+offset_right = 304.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0.913725, 0.94902, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "WAVE 1 OF 5"
+
+[node name="CompositionTitle" type="Label" parent="Layout/WaveIntelPanel"]
+offset_left = 16.0
+offset_top = 78.0
+offset_right = 304.0
+offset_bottom = 98.0
+theme_override_colors/font_color = Color(0.568627, 0.639216, 0.721569, 1)
+theme_override_font_sizes/font_size = 12
+text = "INCOMING"
+
+[node name="IntelComposition" type="Label" parent="Layout/WaveIntelPanel"]
+unique_name_in_owner = true
+offset_left = 16.0
+offset_top = 100.0
+offset_right = 304.0
+offset_bottom = 128.0
+theme_override_colors/font_color = Color(0.913725, 0.94902, 1, 1)
+theme_override_font_sizes/font_size = 17
+text = "10 Shoppers"
+autowrap_mode = 2
+
+[node name="ApproachTitle" type="Label" parent="Layout/WaveIntelPanel"]
+offset_left = 16.0
+offset_top = 140.0
+offset_right = 304.0
+offset_bottom = 160.0
+theme_override_colors/font_color = Color(0.568627, 0.639216, 0.721569, 1)
+theme_override_font_sizes/font_size = 12
+text = "APPROACHES"
+
+[node name="IntelApproaches" type="Label" parent="Layout/WaveIntelPanel"]
+unique_name_in_owner = true
+offset_left = 16.0
+offset_top = 162.0
+offset_right = 304.0
+offset_bottom = 206.0
+theme_override_colors/font_color = Color(1, 0.823529, 0.478431, 1)
+theme_override_font_sizes/font_size = 15
+text = "↖ North West  •  → East Lower"
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="IntelHint" type="Label" parent="Layout/WaveIntelPanel"]
+offset_left = 16.0
+offset_top = 208.0
+offset_right = 304.0
+offset_bottom = 226.0
+theme_override_colors/font_color = Color(0.568627, 0.639216, 0.721569, 1)
+theme_override_font_sizes/font_size = 12
+text = "Arrows mark the active entrances"
+horizontal_alignment = 1
 
 [node name="HelpLabel" type="Label" parent="Layout"]
 unique_name_in_owner = true

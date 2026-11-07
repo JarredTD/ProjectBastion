@@ -51,7 +51,7 @@ func _process(delta: float) -> void:
 		spawn_enemy()
 		spawn_cooldown = current_wave.spawn_interval
 
-## Chooses this wave's pressure points once so the player can prepare for them.
+## Chooses this wave's approaches before the build phase.
 func prepare_wave(wave_number: int) -> bool:
 	if run_definition == null:
 		return false
@@ -164,7 +164,7 @@ func random_spawn_position() -> Vector2:
 		return world.core_position()
 	return approach.global_position
 
-## Chooses an approach using its map-authored relative weight.
+## Chooses an approach using its spawn weight.
 func choose_weighted_approach(points: Array[ApproachPoint]) -> ApproachPoint:
 	var total_weight := 0.0
 	for point in points:
@@ -199,7 +199,7 @@ func build_duration() -> float:
 func approach_summary() -> String:
 	var names := PackedStringArray()
 	for point in approach_points:
-		names.append(point.display_name)
+		names.append(point.display_label())
 	return ", ".join(names)
 
 ## Returns the number of waves in the completable objective.

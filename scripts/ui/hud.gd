@@ -5,6 +5,7 @@ signal wave_start_requested
 signal run_restart_requested
 signal endless_requested
 
+const GameConfig = preload("res://scripts/game_config.gd")
 const GameState = preload("res://scripts/game_state.gd")
 
 var state: GameState
@@ -18,6 +19,11 @@ var build_definitions: Array
 @onready var turret_button: Button = %TurretButton
 @onready var start_wave_button: Button = %StartWaveButton
 @onready var build_hint_label: Label = %BuildHintLabel
+@onready var wave_intel_panel: Control = %WaveIntelPanel
+@onready var intel_title: Label = %IntelTitle
+@onready var intel_wave: Label = %IntelWave
+@onready var intel_composition: Label = %IntelComposition
+@onready var intel_approaches: Label = %IntelApproaches
 @onready var help_label: Label = %HelpLabel
 @onready var message_panel: Control = %MessagePanel
 @onready var message_label: Label = %MessageLabel
@@ -60,7 +66,14 @@ func _process(delta: float) -> void:
 	phase_label.text = phase_text()
 	scrap_label.text = "SCRAP  %03d" % floori(state.scrap)
 	core_label.text = "STOCK  %03d" % ceili(state.base_hp)
+	core_label.modulate = Color("ed5b68") if state.base_hp <= GameConfig.MAX_BASE_HP * 0.3 else Color.WHITE
 	build_panel.visible = state.phase == GameState.Phase.BUILD
+	wave_intel_panel.visible = state.phase == GameState.Phase.BUILD or state.phase == GameState.Phase.DEFEND
+	if wave_intel_panel.visible:
+		intel_title.text = "NEXT RUSH" if state.phase == GameState.Phase.BUILD else "CURRENT RUSH"
+		intel_wave.text = wave_title()
+		intel_composition.text = state.wave_composition
+		intel_approaches.text = state.wave_approaches.replace(", ", "  •  ")
 	if build_definitions.size() >= 2:
 		wall_button.text = "[1] %s\n%d scrap" % [build_definitions[0].display_name, build_definitions[0].cost]
 		turret_button.text = "[2] %s\n%d scrap" % [build_definitions[1].display_name, build_definitions[1].cost]
@@ -99,6 +112,12 @@ func phase_text() -> String:
 			if state.endless:
 				return "ENDLESS  %d  %d / %d" % [state.wave_number - state.objective_wave_count, state.wave_enemies_defeated, state.wave_enemies]
 			return "WAVE  %d / %d  %d / %d" % [state.wave_number, state.objective_wave_count, state.wave_enemies_defeated, state.wave_enemies]
+
+## Builds the compact wave name shown in the rush-intelligence panel.
+func wave_title() -> String:
+	if state.endless:
+		return "ENDLESS  %d" % (state.wave_number - state.objective_wave_count)
+	return "WAVE  %d OF %d" % [state.wave_number, state.objective_wave_count]
 
 ## Returns the controls that matter in the current phase.
 func help_text() -> String:
