@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/settings_panel.gd" id="1_settings"]
 [ext_resource type="Theme" path="res://data/ui/interface_theme.tres" id="2_theme"]
+[ext_resource type="Script" path="res://scripts/ui/accent_panel.gd" id="3_accent"]
 
 [node name="SettingsPanel" type="Control"]
 process_mode = 3
@@ -36,13 +37,8 @@ offset_right = 260.0
 offset_bottom = 218.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Accent" type="ColorRect" parent="Panel"]
-layout_mode = 0
-offset_right = 520.0
-offset_bottom = 6.0
-color = Color(0.25098, 0.827451, 0.690196, 1)
-mouse_filter = 2
+script = ExtResource("3_accent")
+accent_width = 6.0
 
 [node name="Content" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
@@ -59,15 +55,13 @@ theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="Panel/Content"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.913725, 0.94902, 1, 1)
-theme_override_font_sizes/font_size = 28
+theme_type_variation = &"ScreenTitle"
 text = "AUDIO"
 horizontal_alignment = 1
 
 [node name="Hint" type="Label" parent="Panel/Content"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.568627, 0.639216, 0.721569, 1)
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"MutedLabel"
 text = "Tune the mix without leaving the game."
 horizontal_alignment = 1
 
