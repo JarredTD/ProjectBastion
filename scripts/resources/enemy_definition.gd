@@ -15,6 +15,7 @@ extends Resource
 @export_range(0.0, 1000.0, 1.0) var objective_damage := 12.0
 @export_range(0.05, 10.0, 0.05) var attack_interval := 0.75
 @export_range(0.0, 1000.0, 1.0) var reward := 5.0
+@export_range(0, 100000, 1) var score_value := 100
 
 ## Checks the fields needed to spawn this enemy.
 func validation_errors() -> PackedStringArray:

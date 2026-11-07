@@ -16,3 +16,4 @@ structure_damage = 13.0
 objective_damage = 12.0
 attack_interval = 0.75
 reward = 5.0
+score_value = 100

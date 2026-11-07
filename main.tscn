@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ewyrlboceii2"]
+[gd_scene load_steps=11 format=3 uid="uid://ewyrlboceii2"]
 
 [ext_resource type="Script" uid="uid://dhdkqaf1g121j" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
@@ -9,9 +9,11 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="7_pause"]
 [ext_resource type="Script" uid="uid://cdofvg1fqjmn0" path="res://scripts/camera_rig.gd" id="8_camera"]
 [ext_resource type="Resource" path="res://data/waves/main_run.tres" id="9_run"]
+[ext_resource type="Resource" path="res://data/scoring/default_score_rules.tres" id="10_score"]
 
 [node name="ProjectBastion" type="Node2D" unique_id=170590304]
 script = ExtResource("1_main")
+score_rules = ExtResource("10_score")
 
 [node name="World" parent="." unique_id=1106413799 instance=ExtResource("3_world")]
 

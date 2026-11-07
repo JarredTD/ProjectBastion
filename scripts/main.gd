@@ -6,6 +6,8 @@ const GameState = preload("res://scripts/game_state.gd")
 var state := GameState.new()
 var repair_sound_cooldown := 0.0
 
+@export var score_rules: ScoreRules
+
 @onready var player: CharacterBody2D = $Actors/Player
 @onready var world: Node2D = $World
 @onready var camera_rig: Node2D = $CameraRig
@@ -16,6 +18,9 @@ var repair_sound_cooldown := 0.0
 
 ## Wires the scene together once every child is ready.
 func _ready() -> void:
+	if score_rules == null:
+		push_warning("Score rules are missing; using default values.")
+		score_rules = ScoreRules.new()
 	Audio.play_music(Audio.MusicState.BUILD)
 	player.configure(world.arena_rect(), world.player_start_position())
 	camera_rig.configure(player, world.arena_rect())
@@ -150,10 +155,11 @@ func finish_run(result: GameState.Phase, message: String) -> void:
 	Audio.play_music(Audio.MusicState.VICTORY if result == GameState.Phase.VICTORY else Audio.MusicState.DEFEAT)
 
 ## Awards scrap and updates the defeated-enemy count.
-func _on_enemy_defeated(reward: float) -> void:
+func _on_enemy_defeated(reward: float, score_value: int) -> void:
 	state.scrap += reward
 	state.enemies_defeated += 1
 	state.wave_enemies_defeated += 1
+	state.award_shopper_points(score_value)
 
 ## Applies core damage and ends the run if the core falls.
 func _on_core_hit(damage: float) -> void:
@@ -171,7 +177,9 @@ func _on_wave_cleared() -> void:
 	if state.phase != GameState.Phase.DEFEND:
 		return
 	state.waves_cleared += 1
+	state.award_rush_points(score_rules.rush_clear_bonus(state.wave_number))
 	if not state.endless and state.wave_number >= state.objective_wave_count:
+		state.award_stock_points(score_rules.stock_bonus(state.base_hp, GameConfig.MAX_BASE_HP))
 		finish_run(GameState.Phase.VICTORY, "Opening time reached. The stock is secure!")
 		return
 	state.wave_number += 1

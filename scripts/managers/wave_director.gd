@@ -1,6 +1,6 @@
 extends Node
 
-signal enemy_defeated(reward: float)
+signal enemy_defeated(reward: float, score_value: int)
 signal core_hit(damage: float)
 signal wave_cleared
 
@@ -207,9 +207,9 @@ func objective_wave_count() -> int:
 	return run_definition.objective_waves.size() if run_definition != null else 0
 
 ## Tracks wave progress and reports the reward to the match coordinator.
-func _on_enemy_defeated(reward: float) -> void:
+func _on_enemy_defeated(reward: float, score_value: int) -> void:
 	alive -= 1
-	enemy_defeated.emit(reward)
+	enemy_defeated.emit(reward, score_value)
 	if current_wave != null and spawned >= enemy_roster.size() and alive <= 0:
 		active = false
 		wave_cleared.emit()

@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-signal defeated(reward: float)
+signal defeated(reward: float, score_value: int)
 signal core_hit(damage: float)
 
 var definition: EnemyDefinition
@@ -59,7 +59,7 @@ func take_damage(amount: float) -> void:
 	if health <= 0.0:
 		Audio.play_sfx(&"enemy_defeat", -2.0, randf_range(0.92, 1.08))
 		active = false
-		defeated.emit(definition.reward)
+		defeated.emit(definition.reward, definition.score_value)
 		queue_free()
 	else:
 		Audio.play_sfx(&"hit", -5.0, randf_range(0.9, 1.1))

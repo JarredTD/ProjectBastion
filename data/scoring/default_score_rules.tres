@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ScoreRules" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/score_rules.gd" id="1_rules"]
+
+[resource]
+script = ExtResource("1_rules")
+rush_clear_base = 500
+rush_clear_growth = 100
+stock_bonus_max = 2000
