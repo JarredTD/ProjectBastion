@@ -32,47 +32,63 @@ offset_top = -2.0
 mouse_filter = 2
 color = Color(0.207843, 0.815686, 0.729412, 0.8)
 
-[node name="Title" type="Label" parent="Layout/TopBar"]
-offset_left = 28.0
-offset_top = 12.0
-offset_right = 300.0
-offset_bottom = 44.0
-theme_type_variation = &"StatLabel"
-text = "PROJECT BASTION"
+[node name="Stats" type="MarginContainer" parent="Layout/TopBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_right = -24.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="PhaseLabel" type="Label" parent="Layout/TopBar"]
+[node name="Row" type="HBoxContainer" parent="Layout/TopBar/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Layout/TopBar/Stats/Row"]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+theme_type_variation = &"StatLabel"
+theme_override_font_sizes/font_size = 18
+text = "PROJECT BASTION"
+vertical_alignment = 1
+
+[node name="PhaseLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
 unique_name_in_owner = true
-anchor_left = 0.35
-anchor_right = 0.55
-offset_top = 13.0
-offset_bottom = 43.0
+layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"StatLabel"
 text = "BUILD  30"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ScrapLabel" type="Label" parent="Layout/TopBar"]
+[node name="ScoreLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
 unique_name_in_owner = true
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -432.0
-offset_top = 14.0
-offset_right = -252.0
-offset_bottom = 44.0
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_type_variation = &"StatLabel"
+text = "SCORE  0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ScrapLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
 theme_type_variation = &"CurrencyLabel"
 text = "SCRAP  210"
 horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="CoreLabel" type="Label" parent="Layout/TopBar"]
+[node name="CoreLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
 unique_name_in_owner = true
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -216.0
-offset_top = 14.0
-offset_right = -28.0
-offset_bottom = 44.0
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
 theme_type_variation = &"StatLabel"
 text = "STOCK  300"
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="BuildPanel" type="Panel" parent="Layout"]
 unique_name_in_owner = true
@@ -300,9 +316,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -125.0
+offset_top = -185.0
 offset_right = 250.0
-offset_bottom = 125.0
+offset_bottom = 185.0
 
 [node name="Content" type="VBoxContainer" parent="Layout/EndPanel"]
 layout_mode = 1
@@ -324,15 +340,37 @@ theme_type_variation = &"ScreenTitle"
 text = "STORE SECURED"
 horizontal_alignment = 1
 
+[node name="EndScore" type="Label" parent="Layout/EndPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CurrencyLabel"
+theme_override_font_sizes/font_size = 32
+text = "SCORE  12,840"
+horizontal_alignment = 1
+
+[node name="EndBreakdown" type="Label" parent="Layout/EndPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyStrong"
+text = "Shopper points  7,200\nRush bonuses  4,000\nStock secured  1,640"
+horizontal_alignment = 1
+
 [node name="EndStats" type="Label" parent="Layout/EndPanel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 18
 theme_type_variation = &"MutedLabel"
-text = "Rushes cleared: 5\nShoppers turned away: 70\nRun seed: 123456789"
+text = "5 rushes cleared  •  70 shoppers turned away\nRun seed  123456789"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="RecordLabel" type="Label" parent="Layout/EndPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+text = "NEW OBJECTIVE BEST  •  12,840"
+horizontal_alignment = 1
 
 [node name="EndActions" type="HBoxContainer" parent="Layout/EndPanel/Content"]
 layout_mode = 2

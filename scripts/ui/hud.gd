@@ -12,6 +12,7 @@ var state: GameState
 var build_definitions: Array
 
 @onready var phase_label: Label = %PhaseLabel
+@onready var score_label: Label = %ScoreLabel
 @onready var scrap_label: Label = %ScrapLabel
 @onready var core_label: Label = %CoreLabel
 @onready var build_panel: Control = %BuildPanel
@@ -30,7 +31,10 @@ var build_definitions: Array
 @onready var core_warning_panel: Control = %CoreWarningPanel
 @onready var end_panel: Control = %EndPanel
 @onready var end_title: Label = %EndTitle
+@onready var end_score: Label = %EndScore
+@onready var end_breakdown: Label = %EndBreakdown
 @onready var end_stats: Label = %EndStats
+@onready var record_label: Label = %RecordLabel
 @onready var continue_button: Button = %ContinueButton
 @onready var restart_button: Button = %RestartButton
 
@@ -64,6 +68,7 @@ func _process(delta: float) -> void:
 	if state == null:
 		return
 	phase_label.text = phase_text()
+	score_label.text = "SCORE  %s" % format_score(state.score)
 	scrap_label.text = "SCRAP  %03d" % floori(state.scrap)
 	core_label.text = "STOCK  %03d" % ceili(state.base_hp)
 	core_label.modulate = Color("ed5b68") if state.base_hp <= GameConfig.MAX_BASE_HP * 0.3 else Color.WHITE
@@ -91,15 +96,39 @@ func _process(delta: float) -> void:
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
 	end_panel.visible = finished
-	if finished:
+	if finished and state.run_summary != null:
+		var summary := state.run_summary
 		end_title.text = "STORE SECURED" if state.phase == GameState.Phase.VICTORY else "STOCK LOST"
 		end_title.modulate = Color("78ead2") if state.phase == GameState.Phase.VICTORY else Color("ed5b68")
-		end_stats.text = "Rushes cleared: %d\nShoppers turned away: %d\nRun seed: %d" % [
-			state.waves_cleared,
-			state.enemies_defeated,
-			state.run_seed,
+		end_score.text = "SCORE  %s" % format_score(summary.score)
+		end_breakdown.text = "Shopper points  %s\nRush bonuses  %s\nStock secured  %s" % [
+			format_score(summary.shopper_points),
+			format_score(summary.rush_points),
+			format_score(summary.stock_points),
+		]
+		end_stats.text = "%d rushes cleared  •  %d shoppers turned away\nStock remaining  %d  •  Run seed  %d" % [
+			summary.waves_cleared,
+			summary.shoppers_defeated,
+			summary.stock_remaining,
+			summary.run_seed,
+		]
+		var mode_name := "ENDLESS" if summary.mode == &"endless" else "OBJECTIVE"
+		var record_kind := "LOCAL BEST" if summary.persistent_record else "SESSION BEST"
+		record_label.text = "%s%s  •  %s" % [
+			"NEW " if summary.new_best else "",
+			"%s %s" % [mode_name, record_kind],
+			format_score(summary.best_score),
 		]
 		continue_button.visible = state.phase == GameState.Phase.VICTORY
+
+## Adds thousands separators to score values without locale-dependent output.
+func format_score(value: int) -> String:
+	var digits := str(maxi(0, value))
+	var formatted := ""
+	while digits.length() > 3:
+		formatted = "," + digits.right(3) + formatted
+		digits = digits.left(digits.length() - 3)
+	return digits + formatted
 
 ## Builds the short phase label shown in the top bar.
 func phase_text() -> String:
