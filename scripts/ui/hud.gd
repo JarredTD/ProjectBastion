@@ -85,6 +85,8 @@ func _process(delta: float) -> void:
 	turret_button.button_pressed = state.build_kind == GameState.BuildKind.TURRET
 	start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
 	help_label.text = help_text()
+	help_label.offset_top = -154.0 if state.phase == GameState.Phase.BUILD else -28.0
+	help_label.offset_bottom = -132.0 if state.phase == GameState.Phase.BUILD else -5.0
 	var finished := state.phase == GameState.Phase.VICTORY or state.phase == GameState.Phase.DEFEAT
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
