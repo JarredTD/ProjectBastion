@@ -13,7 +13,7 @@ var build_definitions: Array
 
 @onready var phase_label: Label = %PhaseLabel
 @onready var score_label: Label = %ScoreLabel
-@onready var scrap_label: Label = %ScrapLabel
+@onready var coin_label: Label = %CoinLabel
 @onready var core_label: Label = %CoreLabel
 @onready var build_panel: Control = %BuildPanel
 @onready var wall_button: Button = %WallButton
@@ -69,7 +69,7 @@ func _process(delta: float) -> void:
 		return
 	phase_label.text = phase_text()
 	score_label.text = "SCORE  %s" % format_score(state.score)
-	scrap_label.text = "SCRAP  %03d" % floori(state.scrap)
+	coin_label.text = "COINS  %03d" % floori(state.coins)
 	core_label.text = "STOCK  %03d" % ceili(state.base_hp)
 	core_label.modulate = Color("ed5b68") if state.base_hp <= GameConfig.MAX_BASE_HP * 0.3 else Color.WHITE
 	build_panel.visible = state.phase == GameState.Phase.BUILD
@@ -80,12 +80,12 @@ func _process(delta: float) -> void:
 		intel_composition.text = state.wave_composition
 		intel_approaches.text = state.wave_approaches.replace(", ", "  •  ")
 	if build_definitions.size() >= 2:
-		wall_button.text = "[1] %s\n%d scrap" % [build_definitions[0].display_name, build_definitions[0].cost]
-		turret_button.text = "[2] %s\n%d scrap" % [build_definitions[1].display_name, build_definitions[1].cost]
+		wall_button.text = "[1] %s\n%d coins" % [build_definitions[0].display_name, build_definitions[0].cost]
+		turret_button.text = "[2] %s\n%d coins" % [build_definitions[1].display_name, build_definitions[1].cost]
 		wall_button.icon = build_definitions[0].icon
 		turret_button.icon = build_definitions[1].icon
-		wall_button.disabled = state.scrap < build_definitions[0].cost
-		turret_button.disabled = state.scrap < build_definitions[1].cost
+		wall_button.disabled = state.coins < build_definitions[0].cost
+		turret_button.disabled = state.coins < build_definitions[1].cost
 	wall_button.button_pressed = state.build_kind == GameState.BuildKind.WALL
 	turret_button.button_pressed = state.build_kind == GameState.BuildKind.TURRET
 	start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number

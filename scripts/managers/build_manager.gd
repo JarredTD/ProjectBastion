@@ -50,7 +50,7 @@ func _process(_delta: float) -> void:
 	preview.global_position = place_pos
 	var definition: BuildDefinition = current_definition(state)
 	var occupied: bool = state.occupied.has(cell)
-	var valid := not occupied and place_pos.distance_to(world.core_position()) >= 74.0 and state.scrap >= definition.cost
+	var valid := not occupied and place_pos.distance_to(world.core_position()) >= 74.0 and state.coins >= definition.cost
 	if occupied:
 		preview.color = Color(0.95, 0.62, 0.24, 0.55)
 	else:
@@ -76,9 +76,9 @@ func try_place(mouse_position: Vector2) -> void:
 		Audio.play_sfx(&"invalid", -3.0)
 		state.show_message("That's too close to the stock.", 2.0)
 		return
-	if state.scrap < definition.cost:
+	if state.coins < definition.cost:
 		Audio.play_sfx(&"invalid", -3.0)
-		state.show_message("Not enough scrap.", 2.0)
+		state.show_message("Not enough coins.", 2.0)
 		return
 	var structure: StaticBody2D = definition.scene.instantiate()
 	structures.add_child(structure)
@@ -87,7 +87,7 @@ func try_place(mouse_position: Vector2) -> void:
 	structure.destroyed.connect(_on_structure_destroyed)
 	state.occupied[cell] = true
 	placed_definitions[cell] = definition
-	state.scrap -= definition.cost
+	state.coins -= definition.cost
 	Audio.play_sfx(&"place", -1.0, randf_range(0.96, 1.04))
 
 ## Removes a placed structure during building and refunds its full cost.
@@ -102,8 +102,8 @@ func try_remove(mouse_position: Vector2) -> void:
 		if structure.cell == cell:
 			var definition: BuildDefinition = placed_definitions.get(cell)
 			if definition != null:
-				state.scrap += definition.cost
-				state.show_message("%s removed  •  +%d scrap" % [definition.display_name.capitalize(), definition.cost], 2.0)
+				state.coins += definition.cost
+				state.show_message("%s removed  •  +%d coins" % [definition.display_name.capitalize(), definition.cost], 2.0)
 			state.occupied.erase(cell)
 			placed_definitions.erase(cell)
 			Audio.play_sfx(&"remove", -1.0, randf_range(0.96, 1.04))
@@ -135,8 +135,8 @@ func placement_hint(state: GameState, cell: Vector2i, place_pos: Vector2, defini
 		return "Right-click to remove • full refund"
 	if place_pos.distance_to(world.core_position()) < 74.0:
 		return "Can't build this close to the stock"
-	if state.scrap < definition.cost:
-		return "%d more scrap needed" % ceili(definition.cost - state.scrap)
+	if state.coins < definition.cost:
+		return "%d more coins needed" % ceili(definition.cost - state.coins)
 	return "Left-click to place %s" % definition.display_name.capitalize()
 
 ## Prevents world previews from appearing beneath interactive HUD controls.

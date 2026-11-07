@@ -93,9 +93,9 @@ func start_defense() -> void:
 	wave_director.start_wave()
 	state.show_message("The rush is here! Left-click to fight. Hold right-click near damage to repair.", 5.0)
 
-## Repairs the nearest damaged structure, or the core, while spending scrap.
+## Repairs the nearest damaged structure, or the core, while spending coins.
 func repair_nearby(delta: float) -> void:
-	if state.scrap <= 0.0:
+	if state.coins <= 0.0:
 		return
 	var target: Node2D = player.find_repair_target()
 	var repaired := false
@@ -105,7 +105,7 @@ func repair_nearby(delta: float) -> void:
 		state.base_hp = minf(GameConfig.MAX_BASE_HP, state.base_hp + 18.0 * delta)
 		repaired = true
 	if repaired:
-		state.scrap = maxf(0.0, state.scrap - 6.0 * delta)
+		state.coins = maxf(0.0, state.coins - 6.0 * delta)
 		if repair_sound_cooldown <= 0.0:
 			Audio.play_sfx(&"repair", -5.0, randf_range(0.96, 1.04))
 			repair_sound_cooldown = 0.24
@@ -175,9 +175,9 @@ func finalize_run_summary(result: GameState.Phase) -> void:
 		Records.is_persistent(),
 	)
 
-## Awards scrap and updates the defeated-enemy count.
+## Awards coins and updates the defeated-enemy count.
 func _on_enemy_defeated(reward: float, score_value: int) -> void:
-	state.scrap += reward
+	state.coins += reward
 	state.enemies_defeated += 1
 	state.wave_enemies_defeated += 1
 	state.award_shopper_points(score_value)

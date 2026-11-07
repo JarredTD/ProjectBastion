@@ -7,7 +7,7 @@ enum BuildKind { WALL, TURRET }
 var phase: Phase
 var build_kind: int
 var phase_time: float
-var scrap: float
+var coins: float
 var base_hp: float
 var occupied: Dictionary
 var enemies_defeated: int
@@ -37,7 +37,7 @@ func reset(objective_waves: int, seed: int) -> void:
 	phase = Phase.BUILD
 	build_kind = BuildKind.WALL
 	phase_time = GameConfig.BUILD_DURATION
-	scrap = GameConfig.STARTING_SCRAP
+	coins = GameConfig.STARTING_COINS
 	base_hp = GameConfig.MAX_BASE_HP
 	occupied = {}
 	enemies_defeated = 0

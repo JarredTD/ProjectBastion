@@ -72,12 +72,12 @@ text = "SCORE  0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="ScrapLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
+[node name="CoinLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_type_variation = &"CurrencyLabel"
-text = "SCRAP  210"
+text = "COINS  210"
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -134,7 +134,7 @@ layout_mode = 2
 tooltip_text = "Blocks shoppers and takes a beating"
 toggle_mode = true
 theme_override_font_sizes/font_size = 16
-text = "[1] WALL\n15 scrap"
+text = "[1] WALL\n15 coins"
 
 [node name="TurretButton" type="Button" parent="Layout/BuildPanel/Content/Actions"]
 unique_name_in_owner = true
@@ -143,7 +143,7 @@ layout_mode = 2
 tooltip_text = "Stops any shopper in range"
 toggle_mode = true
 theme_override_font_sizes/font_size = 16
-text = "[2] TURRET\n45 scrap"
+text = "[2] TURRET\n45 coins"
 
 [node name="StartWaveButton" type="Button" parent="Layout/BuildPanel/Content/Actions"]
 unique_name_in_owner = true
