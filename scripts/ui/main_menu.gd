@@ -27,7 +27,3 @@ func _on_settings_pressed() -> void:
 ## Returns keyboard focus after closing audio settings.
 func _on_settings_closed() -> void:
 	settings_button.grab_focus()
-
-## Closes the game.
-func _on_quit_pressed() -> void:
-	get_tree().quit()

@@ -113,15 +113,8 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 17
 text = "SETTINGS"
 
-[node name="QuitButton" type="Button" parent="Menu"]
-custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
-theme_override_font_sizes/font_size = 17
-text = "QUIT"
-
 [node name="SettingsPanel" parent="." instance=ExtResource("2_settings")]
 
 [connection signal="pressed" from="Menu/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Menu/SettingsButton" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="Menu/QuitButton" to="." method="_on_quit_pressed"]
 [connection signal="closed" from="SettingsPanel" to="." method="_on_settings_closed"]
