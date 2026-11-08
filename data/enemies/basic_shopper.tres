@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=10 format=3]
+[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/enemy_definition.gd" id="1_definition"]
 [ext_resource type="PackedScene" path="res://scenes/actors/enemy.tscn" id="2_scene"]
@@ -8,16 +8,40 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/shopper_blue_defeated.png" id="6_blue_defeated"]
 [ext_resource type="Script" path="res://scripts/resources/enemy_appearance.gd" id="7_appearance"]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_red"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": ExtResource("3_red_active")}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("4_red_defeated")}],
+"loop": false,
+"name": &"defeated",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_blue"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": ExtResource("5_blue_active")}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("6_blue_defeated")}],
+"loop": false,
+"name": &"defeated",
+"speed": 5.0
+}]
+
 [sub_resource type="Resource" id="EnemyAppearance_red"]
 script = ExtResource("7_appearance")
-active_texture = ExtResource("3_red_active")
-defeated_texture = ExtResource("4_red_defeated")
+sprite_frames = SubResource("SpriteFrames_red")
 visual_scale = 0.2
 
 [sub_resource type="Resource" id="EnemyAppearance_blue"]
 script = ExtResource("7_appearance")
-active_texture = ExtResource("5_blue_active")
-defeated_texture = ExtResource("6_blue_defeated")
+sprite_frames = SubResource("SpriteFrames_blue")
 visual_scale = 0.2
 
 [resource]

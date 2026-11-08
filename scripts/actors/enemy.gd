@@ -13,7 +13,8 @@ var target_range := 56.0
 
 @onready var health_fill: ColorRect = %HealthFill
 @onready var health_bar: Node2D = %HealthBar
-@onready var visual_sprite: Sprite2D = %VisualSprite
+@onready var visual_sprite: AnimatedSprite2D = %VisualSprite
+@onready var collision_shape: CollisionShape2D = %CollisionShape2D
 @onready var defeat_timer: Timer = %DefeatTimer
 
 ## Hides the health bar until the enemy is configured.
@@ -28,9 +29,15 @@ func configure(enemy_definition: EnemyDefinition, core_position: Vector2, object
 	target_range = objective_range
 	health = maxf(1.0, definition.max_health)
 	appearance = definition.appearances[clampi(appearance_index, 0, definition.appearances.size() - 1)]
-	visual_sprite.texture = appearance.active_texture
+	visual_sprite.sprite_frames = appearance.sprite_frames
 	visual_sprite.scale = Vector2.ONE * appearance.visual_scale
 	visual_sprite.position = appearance.offset
+	visual_sprite.play(appearance.active_animation)
+	var circle := collision_shape.shape.duplicate() as CircleShape2D
+	circle.radius = definition.collision_radius
+	collision_shape.shape = circle
+	health_bar.position = definition.health_bar_offset
+	$HealthBar/Background.size.x = definition.health_bar_width
 	health_fill.color = definition.accent_color
 	update_health_bar()
 
@@ -74,7 +81,7 @@ func take_damage(amount: float) -> void:
 		Audio.play_sfx(&"enemy_defeat", -2.0, randf_range(0.92, 1.08))
 		set_active(false)
 		health_bar.hide()
-		visual_sprite.texture = appearance.defeated_texture
+		visual_sprite.play(appearance.defeated_animation)
 		set_deferred("collision_layer", 0)
 		set_deferred("collision_mask", 0)
 		defeated.emit(definition.reward, definition.score_value)
@@ -84,5 +91,5 @@ func take_damage(amount: float) -> void:
 
 ## Resizes the health bar and hides it while health is full.
 func update_health_bar() -> void:
-	health_fill.size.x = 24.0 * health / definition.max_health
+	health_fill.size.x = definition.health_bar_width * health / definition.max_health
 	health_bar.visible = health < definition.max_health

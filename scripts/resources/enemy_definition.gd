@@ -9,6 +9,9 @@ extends Resource
 
 @export_category("Presentation")
 @export var appearances: Array[EnemyAppearance] = []
+@export_range(1.0, 128.0, 1.0) var collision_radius := 12.0
+@export_range(8.0, 256.0, 1.0) var health_bar_width := 24.0
+@export var health_bar_offset := Vector2(-12.0, -25.0)
 
 @export_category("Movement and combat")
 @export_range(1.0, 10000.0, 1.0) var max_health := 72.0
