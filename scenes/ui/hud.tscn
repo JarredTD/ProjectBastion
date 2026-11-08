@@ -35,7 +35,7 @@ theme = ExtResource("2_theme")
 [node name="TopBar" type="ColorRect" parent="Layout"]
 layout_mode = 0
 anchor_right = 1.0
-offset_bottom = 72.0
+offset_bottom = 60.0
 mouse_filter = 2
 color = Color(0.035, 0.06, 0.085, 0.97)
 
@@ -52,19 +52,19 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 8.0
-offset_right = -16.0
-offset_bottom = -8.0
+offset_left = 12.0
+offset_top = 6.0
+offset_right = -12.0
+offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Row" type="HBoxContainer" parent="Layout/TopBar/Stats"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 
 [node name="Title" type="TextureRect" parent="Layout/TopBar/Stats/Row"]
-custom_minimum_size = Vector2(88, 0)
+custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_hud_logo")
@@ -74,27 +74,29 @@ stretch_mode = 5
 [node name="PhaseLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
 unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(220, 0)
+custom_minimum_size = Vector2(210, 0)
 theme_type_variation = &"StatLabel"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 17
 text = "BUILD  1 / 5  30s"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_type_variation = &"StatLabel"
+theme_override_font_sizes/font_size = 17
 text = "SCORE  0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CoinLabel" type="Label" parent="Layout/TopBar/Stats/Row"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 theme_type_variation = &"CurrencyLabel"
+theme_override_font_sizes/font_size = 17
 text = "COINS  210"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -104,6 +106,7 @@ unique_name_in_owner = true
 size_flags_horizontal = 3
 layout_mode = 2
 theme_type_variation = &"StatLabel"
+theme_override_font_sizes/font_size = 17
 text = "STOCK  300"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -114,10 +117,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -340.0
-offset_top = -142.0
-offset_right = 340.0
-offset_bottom = -18.0
+offset_left = -320.0
+offset_top = -130.0
+offset_right = 320.0
+offset_bottom = -16.0
 script = ExtResource("3_accent")
 accent_color = Color(1, 0.184314, 0.423529, 0.95)
 
@@ -135,7 +138,7 @@ grow_vertical = 2
 theme_override_constants/separation = 4
 
 [node name="HeaderArt" type="TextureRect" parent="Layout/BuildPanel/Content"]
-custom_minimum_size = Vector2(0, 26)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_stock_up")
@@ -144,40 +147,40 @@ stretch_mode = 5
 
 [node name="Actions" type="HBoxContainer" parent="Layout/BuildPanel/Content"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="WallButton" type="Button" parent="Layout/BuildPanel/Content/Actions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(138, 56)
+custom_minimum_size = Vector2(124, 50)
 layout_mode = 2
 tooltip_text = "Blocks shoppers and takes a beating"
 toggle_mode = true
 theme_type_variation = &"StoreButton"
 expand_icon = true
-icon_max_width = 30
-theme_override_font_sizes/font_size = 16
+icon_max_width = 26
+theme_override_font_sizes/font_size = 15
 text = "[1] WALL\n15 coins"
 
 [node name="TurretButton" type="Button" parent="Layout/BuildPanel/Content/Actions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(138, 56)
+custom_minimum_size = Vector2(124, 50)
 layout_mode = 2
 tooltip_text = "Stops any shopper in range"
 toggle_mode = true
 theme_type_variation = &"StoreButton"
 expand_icon = true
-icon_max_width = 30
-theme_override_font_sizes/font_size = 16
+icon_max_width = 26
+theme_override_font_sizes/font_size = 15
 text = "[2] TURRET\n45 coins"
 
 [node name="StartWaveButton" type="Button" parent="Layout/BuildPanel/Content/Actions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(258, 56)
+custom_minimum_size = Vector2(230, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Start the wave"
 theme_type_variation = &"PrimaryButton"
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 text = "START WAVE  [SPACE]"
 
 [node name="BuildHintLabel" type="Label" parent="Layout/BuildPanel/Content"]
@@ -193,10 +196,10 @@ autowrap_mode = 2
 [node name="MessagePanel" type="Panel" parent="Layout"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 24.0
-offset_top = 84.0
-offset_right = 624.0
-offset_bottom = 140.0
+offset_left = 20.0
+offset_top = 72.0
+offset_right = 620.0
+offset_bottom = 128.0
 mouse_filter = 2
 
 [node name="MessageLabel" type="Label" parent="Layout/MessagePanel"]
@@ -205,14 +208,14 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 14.0
-offset_top = 6.0
-offset_right = -14.0
-offset_bottom = -6.0
+offset_left = 12.0
+offset_top = 5.0
+offset_right = -12.0
+offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.913725, 0.94902, 1, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "Build a perimeter before the shoppers arrive."
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -225,9 +228,9 @@ layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -160.0
-offset_top = 148.0
+offset_top = 136.0
 offset_right = 160.0
-offset_bottom = 190.0
+offset_bottom = 174.0
 color = Color(0.35, 0.055, 0.08, 0.96)
 mouse_filter = 2
 
@@ -239,7 +242,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.72, 0.74, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "STOCK UNDER ATTACK"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -250,10 +253,10 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -312.0
-offset_top = 84.0
-offset_right = -24.0
-offset_bottom = 274.0
+offset_left = -292.0
+offset_top = 72.0
+offset_right = -20.0
+offset_bottom = 240.0
 mouse_filter = 2
 script = ExtResource("3_accent")
 accent_color = Color(1, 0.780392, 0.419608, 0.95)
@@ -264,10 +267,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 12.0
-offset_right = -16.0
-offset_bottom = -10.0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = -14.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 2
@@ -282,6 +285,7 @@ text = "NEXT RUSH"
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"StatLabel"
+theme_override_font_sizes/font_size = 18
 text = "WAVE 1 OF 5"
 
 [node name="CompositionTitle" type="Label" parent="Layout/WaveIntelPanel/Content"]
@@ -292,9 +296,10 @@ text = "INCOMING"
 
 [node name="IntelComposition" type="Label" parent="Layout/WaveIntelPanel/Content"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 theme_type_variation = &"BodyStrong"
+theme_override_font_sizes/font_size = 15
 text = "10 Shoppers"
 autowrap_mode = 2
 
@@ -306,10 +311,10 @@ text = "APPROACHES"
 
 [node name="IntelApproaches" type="Label" parent="Layout/WaveIntelPanel/Content"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 42)
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 14
 theme_type_variation = &"SectionLabel"
 text = "↖ North West  •  → East Lower"
 vertical_alignment = 1
@@ -322,10 +327,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -340.0
-offset_top = -178.0
-offset_right = 340.0
-offset_bottom = -150.0
+offset_left = -320.0
+offset_top = -166.0
+offset_right = 320.0
+offset_bottom = -140.0
 mouse_filter = 2
 
 [node name="HelpLabel" type="Label" parent="Layout/HelpPanel"]
@@ -340,7 +345,7 @@ offset_right = -10.0
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 theme_type_variation = &"MutedLabel"
 text = "WASD move  •  LMB place  •  RMB remove  •  1/2 select  •  Space start  •  Esc pause"
 horizontal_alignment = 1
@@ -390,9 +395,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = 130.0
-offset_right = 250.0
+offset_left = -230.0
+offset_top = 114.0
+offset_right = 230.0
 offset_bottom = 250.0
 modulate = Color(1, 1, 1, 1)
 
@@ -401,9 +406,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 24.0
+offset_left = 20.0
 offset_top = 6.0
-offset_right = -24.0
+offset_right = -20.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -421,7 +426,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"CurrencyLabel"
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 text = "SCORE  12,840"
 horizontal_alignment = 1
 
@@ -433,13 +438,44 @@ theme_type_variation = &"BodyStrong"
 text = "Shopper points  7,200\nRush bonuses  4,000\nStock secured  1,640"
 horizontal_alignment = 1
 
-[node name="EndStats" type="Label" parent="Layout/EndPanel/Content"]
+[node name="EndMetrics" type="HBoxContainer" parent="Layout/EndPanel/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RushesMetric" type="Label" parent="Layout/EndPanel/Content/EndMetrics"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BodyStrong"
+theme_override_font_sizes/font_size = 13
+text = "5 RUSHES"
+horizontal_alignment = 1
+
+[node name="ShoppersMetric" type="Label" parent="Layout/EndPanel/Content/EndMetrics"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BodyStrong"
+theme_override_font_sizes/font_size = 13
+text = "70 SHOPPERS"
+horizontal_alignment = 1
+
+[node name="StockMetric" type="Label" parent="Layout/EndPanel/Content/EndMetrics"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BodyStrong"
+theme_override_font_sizes/font_size = 13
+text = "164 STOCK"
+horizontal_alignment = 1
+
+[node name="SeedLabel" type="Label" parent="Layout/EndPanel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 13
 theme_type_variation = &"MutedLabel"
-text = "5 rushes  •  70 shoppers  •  Stock 164  •  Seed 123456789"
+theme_override_font_sizes/font_size = 11
+text = "RUN 123456789"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -447,7 +483,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SectionLabel"
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 11
 text = "NEW OBJECTIVE BEST  •  12,840"
 horizontal_alignment = 1
 
@@ -458,17 +494,17 @@ alignment = 1
 
 [node name="ContinueButton" type="Button" parent="Layout/EndPanel/Content/EndActions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(190, 34)
+custom_minimum_size = Vector2(172, 32)
 layout_mode = 2
 tooltip_text = "Keep playing with rapidly growing rushes"
 theme_type_variation = &"PrimaryButton"
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 14
 text = "CONTINUE ENDLESS"
 
 [node name="RestartButton" type="Button" parent="Layout/EndPanel/Content/EndActions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(190, 34)
+custom_minimum_size = Vector2(172, 32)
 layout_mode = 2
 tooltip_text = "Try a new layout"
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 14
 text = "PLAY AGAIN  [R]"

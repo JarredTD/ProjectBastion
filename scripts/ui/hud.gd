@@ -41,7 +41,10 @@ var touch_mode := false
 @onready var end_title: Label = %EndTitle
 @onready var end_score: Label = %EndScore
 @onready var end_breakdown: Label = %EndBreakdown
-@onready var end_stats: Label = %EndStats
+@onready var rushes_metric: Label = %RushesMetric
+@onready var shoppers_metric: Label = %ShoppersMetric
+@onready var stock_metric: Label = %StockMetric
+@onready var seed_label: Label = %SeedLabel
 @onready var record_label: Label = %RecordLabel
 @onready var continue_button: Button = %ContinueButton
 @onready var restart_button: Button = %RestartButton
@@ -73,27 +76,27 @@ func set_touch_mode(enabled: bool) -> void:
 	help_panel.visible = not enabled
 	build_hint_label.visible = not enabled
 	if enabled:
-		build_panel.offset_left = -300.0
-		build_panel.offset_top = -120.0
-		build_panel.offset_right = 300.0
+		build_panel.offset_left = -280.0
+		build_panel.offset_top = -110.0
+		build_panel.offset_right = 280.0
 		build_content.offset_left = 8.0
 		build_content.offset_top = 8.0
 		build_content.offset_right = -8.0
 		build_content.offset_bottom = -8.0
-		wall_button.custom_minimum_size.x = 120.0
-		turret_button.custom_minimum_size.x = 120.0
-		start_wave_button.custom_minimum_size.x = 220.0
+		wall_button.custom_minimum_size.x = 108.0
+		turret_button.custom_minimum_size.x = 108.0
+		start_wave_button.custom_minimum_size.x = 200.0
 	else:
-		build_panel.offset_left = -340.0
-		build_panel.offset_top = -142.0
-		build_panel.offset_right = 340.0
+		build_panel.offset_left = -320.0
+		build_panel.offset_top = -130.0
+		build_panel.offset_right = 320.0
 		build_content.offset_left = 12.0
 		build_content.offset_top = 8.0
 		build_content.offset_right = -12.0
 		build_content.offset_bottom = -8.0
-		wall_button.custom_minimum_size.x = 138.0
-		turret_button.custom_minimum_size.x = 138.0
-		start_wave_button.custom_minimum_size.x = 258.0
+		wall_button.custom_minimum_size.x = 124.0
+		turret_button.custom_minimum_size.x = 124.0
+		start_wave_button.custom_minimum_size.x = 230.0
 	update_safe_area()
 
 ## Insets the HUD around mobile display cutouts.
@@ -151,8 +154,8 @@ func _process(delta: float) -> void:
 	else:
 		start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
 	help_label.text = help_text()
-	help_panel.offset_top = -178.0 if state.phase == GameState.Phase.BUILD else -42.0
-	help_panel.offset_bottom = -150.0 if state.phase == GameState.Phase.BUILD else -10.0
+	help_panel.offset_top = -166.0 if state.phase == GameState.Phase.BUILD else -36.0
+	help_panel.offset_bottom = -140.0 if state.phase == GameState.Phase.BUILD else -10.0
 	var finished := state.phase == GameState.Phase.VICTORY or state.phase == GameState.Phase.DEFEAT
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
@@ -160,8 +163,8 @@ func _process(delta: float) -> void:
 	end_background.visible = finished
 	end_backdrop.visible = finished
 	if finished and state.run_summary != null:
-		end_panel.offset_top = 130.0 if state.phase == GameState.Phase.VICTORY else -30.0
-		end_panel.offset_bottom = 250.0 if state.phase == GameState.Phase.VICTORY else 90.0
+		end_panel.offset_top = 114.0 if state.phase == GameState.Phase.VICTORY else -40.0
+		end_panel.offset_bottom = 250.0 if state.phase == GameState.Phase.VICTORY else 96.0
 		end_background.color = Color("5f5594") if state.phase == GameState.Phase.VICTORY else Color("1c1524")
 		end_backdrop.texture = victory_texture if state.phase == GameState.Phase.VICTORY else defeat_texture
 		var summary := state.run_summary
@@ -173,12 +176,10 @@ func _process(delta: float) -> void:
 			format_score(summary.rush_points),
 			format_score(summary.stock_points),
 		]
-		end_stats.text = "%d rushes  •  %d shoppers  •  Stock %d  •  Seed %d" % [
-			summary.waves_cleared,
-			summary.shoppers_defeated,
-			summary.stock_remaining,
-			summary.run_seed,
-		]
+		rushes_metric.text = "%d RUSHES" % summary.waves_cleared
+		shoppers_metric.text = "%d SHOPPERS" % summary.shoppers_defeated
+		stock_metric.text = "%d STOCK" % summary.stock_remaining
+		seed_label.text = "RUN %d" % summary.run_seed
 		var mode_name := "ENDLESS" if summary.mode == &"endless" else "OBJECTIVE"
 		var record_kind := "LOCAL BEST" if summary.persistent_record else "SESSION BEST"
 		record_label.text = "%s%s  •  %s" % [
