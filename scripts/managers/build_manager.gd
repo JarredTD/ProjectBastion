@@ -4,9 +4,11 @@ signal hover_hint_changed(text: String)
 
 const GameConfig = preload("res://scripts/game_config.gd")
 const GameState = preload("res://scripts/game_state.gd")
+enum PlacementIssue { NONE, OCCUPIED, PLAYER, STOREFRONT, COINS }
 
 @export_node_path("Node2D") var world_path: NodePath
 @export_node_path("Node2D") var structures_path: NodePath
+@export_node_path("CharacterBody2D") var player_path: NodePath
 @export var definitions: Array[BuildDefinition] = [
 	preload("res://data/buildables/wall.tres"),
 	preload("res://data/buildables/turret.tres"),
@@ -15,6 +17,7 @@ const GameState = preload("res://scripts/game_state.gd")
 @onready var game: Node2D = get_parent()
 @onready var world: Node2D = get_node(world_path)
 @onready var structures: Node2D = get_node(structures_path)
+@onready var player: CharacterBody2D = get_node(player_path)
 @onready var preview: Polygon2D = $Preview
 
 var placed_definitions: Dictionary = {}
@@ -49,13 +52,12 @@ func _process(_delta: float) -> void:
 	var place_pos := cell_center(cell)
 	preview.global_position = place_pos
 	var definition: BuildDefinition = current_definition(state)
-	var occupied: bool = state.occupied.has(cell)
-	var valid: bool = not occupied and place_pos.distance_to(world.core_position()) >= world.core_clearance() and state.coins >= definition.cost
-	if occupied:
+	var issue := placement_issue(state, cell, place_pos, definition)
+	if issue == PlacementIssue.OCCUPIED:
 		preview.color = Color(0.95, 0.62, 0.24, 0.55)
 	else:
-		preview.color = Color(0.25, 0.9, 0.68, 0.45) if valid else Color(1.0, 0.25, 0.3, 0.45)
-	set_hover_hint(placement_hint(state, cell, place_pos, definition))
+		preview.color = Color(0.25, 0.9, 0.68, 0.45) if issue == PlacementIssue.NONE else Color(1.0, 0.25, 0.3, 0.45)
+	set_hover_hint(placement_message(issue, state, definition, true))
 
 ## Places the selected structure when the hovered cell is valid and affordable.
 func try_place(mouse_position: Vector2) -> void:
@@ -68,17 +70,10 @@ func try_place(mouse_position: Vector2) -> void:
 	var cell := cell_from_position(mouse_position)
 	var place_pos := cell_center(cell)
 	var definition: BuildDefinition = current_definition(state)
-	if state.occupied.has(cell):
+	var issue := placement_issue(state, cell, place_pos, definition)
+	if issue != PlacementIssue.NONE:
 		Audio.play_sfx(&"invalid", -3.0)
-		state.show_message("There's already something there.", 2.0)
-		return
-	if place_pos.distance_to(world.core_position()) < world.core_clearance():
-		Audio.play_sfx(&"invalid", -3.0)
-		state.show_message("That's too close to the stock.", 2.0)
-		return
-	if state.coins < definition.cost:
-		Audio.play_sfx(&"invalid", -3.0)
-		state.show_message("Not enough coins.", 2.0)
+		state.show_message(placement_message(issue, state, definition, false), 2.0)
 		return
 	var structure: StaticBody2D = definition.scene.instantiate()
 	structures.add_child(structure)
@@ -129,15 +124,31 @@ func cell_center(cell: Vector2i) -> Vector2:
 func current_definition(state: GameState) -> BuildDefinition:
 	return definitions[clampi(state.build_kind, 0, definitions.size() - 1)]
 
-## Describes what a click would do at the hovered cell.
-func placement_hint(state: GameState, cell: Vector2i, place_pos: Vector2, definition: BuildDefinition) -> String:
+## Returns the first reason a structure cannot use this grid cell.
+func placement_issue(state: GameState, cell: Vector2i, place_pos: Vector2, definition: BuildDefinition) -> int:
 	if state.occupied.has(cell):
-		return "Right-click to remove • full refund"
+		return PlacementIssue.OCCUPIED
+	if place_pos.distance_to(player.global_position) < GameConfig.GRID_SIZE:
+		return PlacementIssue.PLAYER
 	if place_pos.distance_to(world.core_position()) < world.core_clearance():
-		return "Can't build this close to the stock"
+		return PlacementIssue.STOREFRONT
 	if state.coins < definition.cost:
-		return "%d more coins needed" % ceili(definition.cost - state.coins)
-	return "Left-click to place %s" % definition.display_name.capitalize()
+		return PlacementIssue.COINS
+	return PlacementIssue.NONE
+
+## Describes the placement result for either hover guidance or click feedback.
+func placement_message(issue: int, state: GameState, definition: BuildDefinition, hover: bool) -> String:
+	match issue:
+		PlacementIssue.OCCUPIED:
+			return "Right-click to remove • full refund" if hover else "There's already something there."
+		PlacementIssue.PLAYER:
+			return "Move away before building there"
+		PlacementIssue.STOREFRONT:
+			return "Can't build this close to the stock"
+		PlacementIssue.COINS:
+			return "%d more coins needed" % ceili(definition.cost - state.coins) if hover else "Not enough coins."
+		_:
+			return "Left-click to place %s" % definition.display_name.capitalize()
 
 ## Prevents world previews from appearing beneath interactive HUD controls.
 func pointer_is_over_ui() -> bool:

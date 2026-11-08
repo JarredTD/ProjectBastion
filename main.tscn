@@ -37,6 +37,7 @@ position_smoothing_speed = 6.0
 script = ExtResource("5_build")
 world_path = NodePath("../World")
 structures_path = NodePath("../Actors/Structures")
+player_path = NodePath("../Actors/Player")
 
 [node name="Preview" type="Polygon2D" parent="BuildManager" unique_id=649886226]
 z_index = 5
