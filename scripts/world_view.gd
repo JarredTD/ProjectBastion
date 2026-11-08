@@ -2,6 +2,8 @@ extends Node2D
 
 const GameConfig = preload("res://scripts/game_config.gd")
 
+@export_range(0.0, 256.0, 1.0) var core_build_radius := 96.0
+
 @onready var game: Node2D = get_parent()
 @onready var core_health_bar: Node2D = %CoreHealthBar
 @onready var core_health_fill: ColorRect = %CoreHealthFill
@@ -24,6 +26,10 @@ func arena_rect() -> Rect2:
 ## Returns the core's current world position.
 func core_position() -> Vector2:
 	return $Core.global_position
+
+## Returns the clearance structures should leave around the storefront.
+func core_clearance() -> float:
+	return core_build_radius
 
 ## Returns the player's starting position.
 func player_start_position() -> Vector2:

@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/actors/structure.gd" id="1_wall"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/cart_barricade.png" id="2_cart"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(28, 28)
@@ -12,21 +13,16 @@ script = ExtResource("1_wall")
 
 [node name="Visuals" type="Node2D" parent="."]
 
-[node name="Body" type="Polygon2D" parent="Visuals"]
-polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
-color = Color(0.439216, 0.505882, 0.603922, 1)
-
-[node name="Inset" type="Line2D" parent="Visuals"]
-points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10, -10, -10)
-width = 3.0
-default_color = Color(0.247059, 0.294118, 0.368627, 1)
+[node name="Sprite" type="Sprite2D" parent="Visuals"]
+texture = ExtResource("2_cart")
+scale = Vector2(0.11, 0.11)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="HealthBar" type="Node2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-14, 18)
+position = Vector2(-14, 23)
 
 [node name="Background" type="ColorRect" parent="HealthBar"]
 offset_right = 28.0

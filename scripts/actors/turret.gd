@@ -7,6 +7,7 @@ var targets: Array[Node2D] = []
 @onready var fire_timer: Timer = %FireTimer
 @onready var flash_timer: Timer = %FlashTimer
 @onready var muzzle_flash: Line2D = %MuzzleFlash
+@onready var visuals: Node2D = $Visuals
 
 ## Connects detection and firing timers after base structure setup.
 func _ready() -> void:
@@ -35,6 +36,7 @@ func fire() -> void:
 		if global_position.distance_to(candidate.global_position) < global_position.distance_to(selected_target.global_position):
 			selected_target = candidate
 	Audio.play_sfx(&"turret_fire", -3.0, randf_range(0.96, 1.05))
+	visuals.rotation = global_position.direction_to(selected_target.global_position).angle() + PI * 0.5
 	selected_target.take_damage(damage)
 	muzzle_flash.points = PackedVector2Array([Vector2.ZERO, to_local(selected_target.global_position)])
 	muzzle_flash.visible = true

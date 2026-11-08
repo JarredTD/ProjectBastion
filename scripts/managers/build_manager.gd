@@ -50,7 +50,7 @@ func _process(_delta: float) -> void:
 	preview.global_position = place_pos
 	var definition: BuildDefinition = current_definition(state)
 	var occupied: bool = state.occupied.has(cell)
-	var valid := not occupied and place_pos.distance_to(world.core_position()) >= 74.0 and state.coins >= definition.cost
+	var valid: bool = not occupied and place_pos.distance_to(world.core_position()) >= world.core_clearance() and state.coins >= definition.cost
 	if occupied:
 		preview.color = Color(0.95, 0.62, 0.24, 0.55)
 	else:
@@ -72,7 +72,7 @@ func try_place(mouse_position: Vector2) -> void:
 		Audio.play_sfx(&"invalid", -3.0)
 		state.show_message("There's already something there.", 2.0)
 		return
-	if place_pos.distance_to(world.core_position()) < 74.0:
+	if place_pos.distance_to(world.core_position()) < world.core_clearance():
 		Audio.play_sfx(&"invalid", -3.0)
 		state.show_message("That's too close to the stock.", 2.0)
 		return
@@ -133,7 +133,7 @@ func current_definition(state: GameState) -> BuildDefinition:
 func placement_hint(state: GameState, cell: Vector2i, place_pos: Vector2, definition: BuildDefinition) -> String:
 	if state.occupied.has(cell):
 		return "Right-click to remove • full refund"
-	if place_pos.distance_to(world.core_position()) < 74.0:
+	if place_pos.distance_to(world.core_position()) < world.core_clearance():
 		return "Can't build this close to the stock"
 	if state.coins < definition.cost:
 		return "%d more coins needed" % ceili(definition.cost - state.coins)
