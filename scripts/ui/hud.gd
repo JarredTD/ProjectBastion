@@ -128,8 +128,8 @@ func _process(delta: float) -> void:
 	else:
 		start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
 	help_label.text = help_text()
-	help_label.offset_top = -154.0 if state.phase == GameState.Phase.BUILD else -28.0
-	help_label.offset_bottom = -132.0 if state.phase == GameState.Phase.BUILD else -5.0
+	help_label.offset_top = -194.0 if state.phase == GameState.Phase.BUILD else -28.0
+	help_label.offset_bottom = -172.0 if state.phase == GameState.Phase.BUILD else -5.0
 	var finished := state.phase == GameState.Phase.VICTORY or state.phase == GameState.Phase.DEFEAT
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
@@ -175,8 +175,8 @@ func phase_text() -> String:
 	match state.phase:
 		GameState.Phase.BUILD:
 			if state.endless:
-				return "BUILD  E%d  %02d" % [state.wave_number - state.objective_wave_count, ceili(state.phase_time)]
-			return "BUILD  %d / %d  %02d" % [state.wave_number, state.objective_wave_count, ceili(state.phase_time)]
+				return "E%d  %02ds" % [state.wave_number - state.objective_wave_count, ceili(state.phase_time)]
+			return "%d / %d  %02ds" % [state.wave_number, state.objective_wave_count, ceili(state.phase_time)]
 		GameState.Phase.VICTORY: return "VICTORY"
 		GameState.Phase.DEFEAT: return "DEFEAT"
 		_:

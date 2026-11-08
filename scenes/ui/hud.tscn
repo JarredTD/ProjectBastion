@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
 [ext_resource type="Theme" path="res://data/ui/interface_theme.tres" id="2_theme"]
@@ -11,6 +11,8 @@
 [sub_resource type="AtlasTexture" id="AtlasTexture_build_panel"]
 atlas = ExtResource("5_upgrade_art")
 region = Rect2(110, 510, 1070, 200)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_build_panel"]
 
 [node name="Hud" type="CanvasLayer"]
 layer = 20
@@ -113,7 +115,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -390.0
-offset_top = -136.0
+offset_top = -170.0
 offset_right = 390.0
 offset_bottom = -4.0
 mouse_filter = 2
@@ -128,10 +130,10 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -340.0
-offset_top = -126.0
+offset_top = -154.0
 offset_right = 340.0
 offset_bottom = -18.0
-modulate = Color(1, 1, 1, 0.88)
+theme_override_styles/panel = SubResource("StyleBox_build_panel")
 script = ExtResource("3_accent")
 accent_color = Color(0.207843, 0.815686, 0.729412, 0.9)
 
@@ -141,7 +143,7 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 16.0
-offset_top = 12.0
+offset_top = 42.0
 offset_right = -16.0
 offset_bottom = -8.0
 grow_horizontal = 2
@@ -156,6 +158,7 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(74, 60)
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
+theme_override_colors/font_color = Color(0.18, 0.08, 0.16, 1)
 text = "BUILD"
 vertical_alignment = 1
 
@@ -198,6 +201,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 13
 theme_type_variation = &"MutedLabel"
+theme_override_colors/font_color = Color(0.18, 0.08, 0.16, 1)
 text = "Move over the arena to pick a spot"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -206,12 +210,10 @@ autowrap_mode = 2
 [node name="MessagePanel" type="Panel" parent="Layout"]
 unique_name_in_owner = true
 layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -210.0
-offset_top = 68.0
-offset_right = 210.0
-offset_bottom = 124.0
+offset_left = 24.0
+offset_top = 112.0
+offset_right = 624.0
+offset_bottom = 168.0
 mouse_filter = 2
 
 [node name="MessageLabel" type="Label" parent="Layout/MessagePanel"]
@@ -266,9 +268,9 @@ layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -312.0
-offset_top = 72.0
+offset_top = 112.0
 offset_right = -24.0
-offset_bottom = 262.0
+offset_bottom = 302.0
 mouse_filter = 2
 script = ExtResource("3_accent")
 accent_color = Color(1, 0.780392, 0.419608, 0.95)
@@ -378,9 +380,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -160.0
+offset_top = 95.0
 offset_right = 250.0
-offset_bottom = 185.0
+offset_bottom = 260.0
 modulate = Color(1, 1, 1, 0.93)
 
 [node name="Content" type="VBoxContainer" parent="Layout/EndPanel"]
@@ -388,16 +390,17 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 36.0
-offset_top = 28.0
-offset_right = -36.0
-offset_bottom = -28.0
+offset_left = 24.0
+offset_top = 10.0
+offset_right = -24.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 4
 
 [node name="EndTitle" type="Label" parent="Layout/EndPanel/Content"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_type_variation = &"ScreenTitle"
 text = "STORE SECURED"
@@ -407,12 +410,13 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"CurrencyLabel"
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "SCORE  12,840"
 horizontal_alignment = 1
 
 [node name="EndBreakdown" type="Label" parent="Layout/EndPanel/Content"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_type_variation = &"BodyStrong"
 text = "Shopper points  7,200\nRush bonuses  4,000\nStock secured  1,640"
@@ -422,7 +426,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 14
 theme_type_variation = &"MutedLabel"
 text = "5 rushes cleared  •  70 shoppers turned away\nRun seed  123456789"
 horizontal_alignment = 1
@@ -432,6 +436,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SectionLabel"
+theme_override_font_sizes/font_size = 12
 text = "NEW OBJECTIVE BEST  •  12,840"
 horizontal_alignment = 1
 
@@ -442,18 +447,18 @@ alignment = 1
 
 [node name="ContinueButton" type="Button" parent="Layout/EndPanel/Content/EndActions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(208, 42)
+custom_minimum_size = Vector2(190, 36)
 layout_mode = 2
 tooltip_text = "Keep playing with rapidly growing rushes"
 theme_type_variation = &"ArtButton"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 15
 text = "CONTINUE ENDLESS"
 
 [node name="RestartButton" type="Button" parent="Layout/EndPanel/Content/EndActions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(208, 42)
+custom_minimum_size = Vector2(190, 36)
 layout_mode = 2
 theme_type_variation = &"ArtButton"
 tooltip_text = "Try a new layout"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 15
 text = "PLAY AGAIN  [R]"
