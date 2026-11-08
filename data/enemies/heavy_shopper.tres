@@ -50,13 +50,13 @@ animations = [{
 [sub_resource type="Resource" id="EnemyAppearance_gray"]
 script = ExtResource("4_appearance")
 sprite_frames = SubResource("SpriteFrames_gray")
-visual_scale = 0.18
+visual_scale = 0.23
 defeat_duration = 0.4
 
 [sub_resource type="Resource" id="EnemyAppearance_purple"]
 script = ExtResource("4_appearance")
 sprite_frames = SubResource("SpriteFrames_purple")
-visual_scale = 0.18
+visual_scale = 0.23
 defeat_duration = 0.4
 
 [resource]
@@ -66,9 +66,9 @@ plural_name = "Heavy Shoppers"
 scene = ExtResource("2_scene")
 accent_color = Color(0.568627, 0.337255, 0.960784, 1)
 appearances = Array[ExtResource("4_appearance")]([SubResource("EnemyAppearance_gray"), SubResource("EnemyAppearance_purple")])
-collision_radius = 18.0
-health_bar_width = 36.0
-health_bar_offset = Vector2(-18, -36)
+collision_radius = 20.0
+health_bar_width = 40.0
+health_bar_offset = Vector2(-20, -42)
 max_health = 180.0
 speed = 40.0
 structure_damage = 24.0
