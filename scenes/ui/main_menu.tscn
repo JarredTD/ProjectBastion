@@ -1,10 +1,9 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="2_settings"]
 [ext_resource type="Theme" path="res://data/ui/interface_theme.tres" id="3_theme"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ui/main_menu.png" id="4_menu_art"]
-[ext_resource type="Script" path="res://scripts/ui/accent_panel.gd" id="5_accent"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ui/game_logo.png" id="6_logo"]
 [ext_resource type="PackedScene" path="res://scenes/ui/orientation_guard.tscn" id="7_orientation"]
 
@@ -82,21 +81,11 @@ grow_horizontal = 2
 color = Color(1, 0.184314, 0.423529, 1)
 mouse_filter = 2
 
-[node name="MenuCard" type="Panel" parent="."]
-offset_left = 32.0
-offset_top = 24.0
-offset_right = 448.0
-offset_bottom = 516.0
-mouse_filter = 2
-script = ExtResource("5_accent")
-accent_color = Color(1, 0.184314, 0.423529, 1)
-accent_width = 5.0
-
 [node name="Menu" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 64.0
+offset_left = 48.0
 offset_top = 52.0
-offset_right = 416.0
+offset_right = 400.0
 offset_bottom = 488.0
 theme_override_constants/separation = 14
 
