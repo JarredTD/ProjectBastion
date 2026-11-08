@@ -20,7 +20,6 @@ var touch_mode := false
 @onready var coin_label: Label = %CoinLabel
 @onready var core_label: Label = %CoreLabel
 @onready var build_panel: Control = %BuildPanel
-@onready var build_panel_art: Control = %BuildPanelArt
 @onready var build_title: Label = $Layout/BuildPanel/Content/Actions/BuildTitle
 @onready var build_content: VBoxContainer = $Layout/BuildPanel/Content
 @onready var wall_button: Button = %WallButton
@@ -77,8 +76,6 @@ func set_touch_mode(enabled: bool) -> void:
 	if enabled:
 		build_panel.offset_left = -320.0
 		build_panel.offset_right = 320.0
-		build_panel_art.offset_left = -330.0
-		build_panel_art.offset_right = 330.0
 		build_content.offset_left = 8.0
 		build_content.offset_right = -8.0
 		wall_button.custom_minimum_size.x = 120.0
@@ -87,8 +84,6 @@ func set_touch_mode(enabled: bool) -> void:
 	else:
 		build_panel.offset_left = -340.0
 		build_panel.offset_right = 340.0
-		build_panel_art.offset_left = -390.0
-		build_panel_art.offset_right = 390.0
 		build_content.offset_left = 16.0
 		build_content.offset_right = -16.0
 		wall_button.custom_minimum_size.x = 138.0
@@ -126,12 +121,11 @@ func _process(delta: float) -> void:
 	if state == null:
 		return
 	phase_label.text = phase_text()
-	score_label.text = format_score(state.score)
-	coin_label.text = "%03d" % floori(state.coins)
-	core_label.text = "%03d" % ceili(state.base_hp)
+	score_label.text = "SCORE  %s" % format_score(state.score)
+	coin_label.text = "COINS  %03d" % floori(state.coins)
+	core_label.text = "STOCK  %03d" % ceili(state.base_hp)
 	core_label.modulate = Color("ed5b68") if state.base_hp <= GameConfig.MAX_BASE_HP * 0.3 else Color.WHITE
 	build_panel.visible = state.phase == GameState.Phase.BUILD
-	build_panel_art.visible = build_panel.visible
 	wave_intel_panel.visible = state.phase == GameState.Phase.BUILD or state.phase == GameState.Phase.DEFEND
 	if wave_intel_panel.visible:
 		intel_title.text = "NEXT RUSH" if state.phase == GameState.Phase.BUILD else "CURRENT RUSH"
@@ -152,8 +146,8 @@ func _process(delta: float) -> void:
 	else:
 		start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
 	help_label.text = help_text()
-	help_label.offset_top = -194.0 if state.phase == GameState.Phase.BUILD else -28.0
-	help_label.offset_bottom = -172.0 if state.phase == GameState.Phase.BUILD else -5.0
+	help_label.offset_top = -160.0 if state.phase == GameState.Phase.BUILD else -28.0
+	help_label.offset_bottom = -138.0 if state.phase == GameState.Phase.BUILD else -5.0
 	var finished := state.phase == GameState.Phase.VICTORY or state.phase == GameState.Phase.DEFEAT
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
@@ -161,7 +155,7 @@ func _process(delta: float) -> void:
 	end_background.visible = finished
 	end_backdrop.visible = finished
 	if finished and state.run_summary != null:
-		end_panel.offset_top = 135.0 if state.phase == GameState.Phase.VICTORY else 80.0
+		end_panel.offset_top = 120.0 if state.phase == GameState.Phase.VICTORY else 80.0
 		end_background.color = Color("5f5594") if state.phase == GameState.Phase.VICTORY else Color("1c1524")
 		end_backdrop.texture = victory_texture if state.phase == GameState.Phase.VICTORY else defeat_texture
 		var summary := state.run_summary
@@ -202,8 +196,8 @@ func phase_text() -> String:
 	match state.phase:
 		GameState.Phase.BUILD:
 			if state.endless:
-				return "E%d  %02ds" % [state.wave_number - state.objective_wave_count, ceili(state.phase_time)]
-			return "%d / %d  %02ds" % [state.wave_number, state.objective_wave_count, ceili(state.phase_time)]
+				return "BUILD  E%d  %02ds" % [state.wave_number - state.objective_wave_count, ceili(state.phase_time)]
+			return "BUILD  %d / %d  %02ds" % [state.wave_number, state.objective_wave_count, ceili(state.phase_time)]
 		GameState.Phase.VICTORY: return "VICTORY"
 		GameState.Phase.DEFEAT: return "DEFEAT"
 		_:

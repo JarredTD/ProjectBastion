@@ -1,51 +1,4 @@
-[gd_resource type="Theme" load_steps=18 format=3]
-
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/button_frames.png" id="1_button_frames"]
-
-[sub_resource type="AtlasTexture" id="AtlasButtonWarm"]
-atlas = ExtResource("1_button_frames")
-region = Rect2(230, 88, 180, 100)
-
-[sub_resource type="AtlasTexture" id="AtlasButtonBlue"]
-atlas = ExtResource("1_button_frames")
-region = Rect2(230, 188, 180, 100)
-
-[sub_resource type="AtlasTexture" id="AtlasButtonPink"]
-atlas = ExtResource("1_button_frames")
-region = Rect2(230, 294, 180, 100)
-
-[sub_resource type="StyleBoxTexture" id="ArtButtonWarm"]
-texture = SubResource("AtlasButtonWarm")
-texture_margin_left = 16.0
-texture_margin_top = 16.0
-texture_margin_right = 16.0
-texture_margin_bottom = 16.0
-content_margin_left = 18.0
-content_margin_top = 8.0
-content_margin_right = 18.0
-content_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxTexture" id="ArtButtonBlue"]
-texture = SubResource("AtlasButtonBlue")
-texture_margin_left = 16.0
-texture_margin_top = 16.0
-texture_margin_right = 16.0
-texture_margin_bottom = 16.0
-content_margin_left = 18.0
-content_margin_top = 8.0
-content_margin_right = 18.0
-content_margin_bottom = 8.0
-
-[sub_resource type="StyleBoxTexture" id="ArtButtonPink"]
-texture = SubResource("AtlasButtonPink")
-texture_margin_left = 16.0
-texture_margin_top = 16.0
-texture_margin_right = 16.0
-texture_margin_bottom = 16.0
-content_margin_left = 18.0
-content_margin_top = 8.0
-content_margin_right = 18.0
-content_margin_bottom = 8.0
+[gd_resource type="Theme" load_steps=11 format=3]
 
 [sub_resource type="StyleBoxFlat" id="ButtonNormal"]
 content_margin_left = 16.0
@@ -73,7 +26,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.25, 0.83, 0.69, 0.9)
+border_color = Color(1, 0.72, 0.28, 0.95)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -84,12 +37,12 @@ content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 8.0
-bg_color = Color(0.08, 0.28, 0.25, 1)
+bg_color = Color(0.28, 0.07, 0.14, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.31, 0.93, 0.78, 1)
+border_color = Color(1, 0.29, 0.49, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -157,7 +110,7 @@ corner_radius_bottom_left = 3
 [sub_resource type="StyleBoxFlat" id="SliderFill"]
 content_margin_top = 5.0
 content_margin_bottom = 5.0
-bg_color = Color(0.25, 0.83, 0.69, 1)
+bg_color = Color(1, 0.29, 0.49, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -168,12 +121,12 @@ content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 8.0
-bg_color = Color(0.08, 0.34, 0.29, 1)
+bg_color = Color(0.78, 0.08, 0.25, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.31, 0.93, 0.78, 0.9)
+border_color = Color(1, 0.48, 0.62, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -184,12 +137,12 @@ content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 8.0
-bg_color = Color(0.11, 0.46, 0.38, 1)
+bg_color = Color(0.95, 0.12, 0.34, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.48, 1, 0.88, 1)
+border_color = Color(1, 0.78, 0.42, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -242,15 +195,3 @@ CurrencyLabel/font_sizes/font_size = 20
 BodyStrong/base_type = &"Label"
 BodyStrong/colors/font_color = Color(0.913725, 0.94902, 1, 1)
 BodyStrong/font_sizes/font_size = 17
-ArtButton/base_type = &"Button"
-ArtButton/colors/font_color = Color(0.12, 0.08, 0.12, 1)
-ArtButton/colors/font_hover_color = Color(0.04, 0.08, 0.12, 1)
-ArtButton/colors/font_pressed_color = Color(0.12, 0.04, 0.08, 1)
-ArtButton/colors/font_focus_color = Color(0.12, 0.08, 0.12, 1)
-ArtButton/colors/font_disabled_color = Color(0.38, 0.34, 0.38, 1)
-ArtButton/styles/normal = SubResource("ArtButtonWarm")
-ArtButton/styles/hover = SubResource("ArtButtonBlue")
-ArtButton/styles/pressed = SubResource("ArtButtonPink")
-ArtButton/styles/hover_pressed = SubResource("ArtButtonPink")
-ArtButton/styles/disabled = SubResource("ArtButtonWarm")
-ArtButton/styles/focus = SubResource("ButtonFocus")

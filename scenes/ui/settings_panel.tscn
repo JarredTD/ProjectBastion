@@ -172,7 +172,6 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(154, 46)
 layout_mode = 2
-theme_type_variation = &"ArtButton"
 theme_override_font_sizes/font_size = 16
 text = "DEFAULTS"
 
@@ -180,6 +179,6 @@ text = "DEFAULTS"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(154, 46)
 layout_mode = 2
-theme_type_variation = &"ArtButton"
+theme_type_variation = &"PrimaryButton"
 theme_override_font_sizes/font_size = 16
 text = "BACK"

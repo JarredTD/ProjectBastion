@@ -125,7 +125,7 @@ mouse_filter = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-theme_type_variation = &"ArtButton"
+theme_type_variation = &"PrimaryButton"
 theme_override_font_sizes/font_size = 20
 text = "START SHIFT"
 
@@ -133,7 +133,6 @@ text = "START SHIFT"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme_type_variation = &"ArtButton"
 theme_override_font_sizes/font_size = 17
 text = "SETTINGS"
 
