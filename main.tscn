@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ewyrlboceii2"]
+[gd_scene load_steps=12 format=3 uid="uid://ewyrlboceii2"]
 
 [ext_resource type="Script" uid="uid://dhdkqaf1g121j" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cdofvg1fqjmn0" path="res://scripts/camera_rig.gd" id="8_camera"]
 [ext_resource type="Resource" path="res://data/waves/main_run.tres" id="9_run"]
 [ext_resource type="Resource" path="res://data/scoring/default_score_rules.tres" id="10_score"]
+[ext_resource type="PackedScene" path="res://scenes/ui/mobile_controls.tscn" id="11_mobile"]
 
 [node name="ProjectBastion" type="Node2D" unique_id=170590304]
 script = ExtResource("1_main")
@@ -51,5 +52,7 @@ world_path = NodePath("../World")
 run_definition = ExtResource("9_run")
 
 [node name="Hud" parent="." unique_id=1723289964 instance=ExtResource("2_hud")]
+
+[node name="MobileControls" parent="." instance=ExtResource("11_mobile")]
 
 [node name="PauseMenu" parent="." unique_id=1479893818 instance=ExtResource("7_pause")]

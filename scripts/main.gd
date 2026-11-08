@@ -18,6 +18,7 @@ var touch_repair_held := false
 @onready var build_manager: Node2D = $BuildManager
 @onready var wave_director: Node = $WaveDirector
 @onready var hud: CanvasLayer = $Hud
+@onready var mobile_controls: CanvasLayer = $MobileControls
 @onready var pause_menu: CanvasLayer = $PauseMenu
 
 ## Wires the scene together once every child is ready.
@@ -30,12 +31,19 @@ func _ready() -> void:
 	player.configure(world.arena_rect(), world.player_start_position())
 	camera_rig.configure(player, world.arena_rect())
 	hud.configure(state, build_manager.definitions)
+	mobile_controls.configure(state)
 	hud.build_selected.connect(select_building)
 	hud.wave_start_requested.connect(start_defense)
 	hud.run_restart_requested.connect(reset_game)
 	hud.endless_requested.connect(continue_endless)
 	pause_menu.restart_requested.connect(reset_game)
 	pause_menu.main_menu_requested.connect(_on_pause_main_menu_requested)
+	mobile_controls.world_action_requested.connect(_on_touch_world_action)
+	mobile_controls.movement_changed.connect(player.set_touch_movement)
+	mobile_controls.repair_held_changed.connect(set_touch_repair_held)
+	mobile_controls.pause_requested.connect(pause_menu.toggle)
+	mobile_controls.touch_mode_changed.connect(hud.set_touch_mode)
+	hud.set_touch_mode(mobile_controls.is_touch_mode())
 	build_manager.hover_hint_changed.connect(hud.set_build_hint)
 	wave_director.enemy_defeated.connect(_on_enemy_defeated)
 	wave_director.core_hit.connect(_on_core_hit)
@@ -58,7 +66,7 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		handle_key(event.keycode)
-	elif event is InputEventMouseButton and event.pressed:
+	elif event is InputEventMouseButton and event.pressed and not mobile_controls.blocks_mouse_gameplay():
 		var mouse_position := get_global_mouse_position()
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			primary_action(mouse_position)
@@ -81,6 +89,14 @@ func remove_action(world_position: Vector2) -> void:
 func set_touch_repair_held(value: bool) -> void:
 	touch_repair_held = value
 
+## Converts a touch position through the active camera before acting on it.
+func _on_touch_world_action(screen_position: Vector2, removing: bool) -> void:
+	var world_position := get_viewport().get_canvas_transform().affine_inverse() * screen_position
+	if removing:
+		remove_action(world_position)
+	else:
+		primary_action(world_position)
+
 ## Handles shortcuts that should work alongside the clickable HUD controls.
 func handle_key(keycode: Key) -> void:
 	match keycode:
@@ -94,6 +110,8 @@ func handle_key(keycode: Key) -> void:
 		KEY_R:
 			if state.phase == GameState.Phase.VICTORY or state.phase == GameState.Phase.DEFEAT:
 				reset_game()
+		KEY_F10:
+			mobile_controls.toggle_desktop_preview()
 
 ## Selects a buildable when the match is still in its build phase.
 func select_building(index: int) -> void:
@@ -109,7 +127,10 @@ func start_defense() -> void:
 	Audio.play_sfx(&"wave_start")
 	player.combat_enabled = true
 	wave_director.start_wave()
-	state.show_message("The rush is here! Left-click to fight. Hold right-click near damage to repair.", 5.0)
+	if mobile_controls.is_touch_mode():
+		state.show_message("The rush is here! Tap shoppers to fight. Hold REPAIR near damage.", 5.0)
+	else:
+		state.show_message("The rush is here! Left-click to fight. Hold right-click near damage to repair.", 5.0)
 
 ## Repairs the nearest damaged structure, or the core, while spending coins.
 func repair_nearby(delta: float) -> void:

@@ -10,6 +10,7 @@ const GameState = preload("res://scripts/game_state.gd")
 
 var state: GameState
 var build_definitions: Array
+var touch_mode := false
 
 @onready var phase_label: Label = %PhaseLabel
 @onready var score_label: Label = %ScoreLabel
@@ -57,6 +58,12 @@ func configure(game_state: GameState, definitions: Array) -> void:
 func set_build_hint(text: String) -> void:
 	build_hint_label.text = text
 
+## Adapts labels and guidance for touch controls.
+func set_touch_mode(enabled: bool) -> void:
+	touch_mode = enabled
+	help_label.visible = not enabled
+	build_hint_label.visible = not enabled
+
 ## Briefly warns the player when the core is attacked offscreen.
 func show_core_warning() -> void:
 	core_warning_time = 1.5
@@ -80,15 +87,18 @@ func _process(delta: float) -> void:
 		intel_composition.text = state.wave_composition
 		intel_approaches.text = state.wave_approaches.replace(", ", "  •  ")
 	if build_definitions.size() >= 2:
-		wall_button.text = "[1] %s\n%d coins" % [build_definitions[0].display_name, build_definitions[0].cost]
-		turret_button.text = "[2] %s\n%d coins" % [build_definitions[1].display_name, build_definitions[1].cost]
+		wall_button.text = "%s\n%d coins" % [build_definitions[0].display_name, build_definitions[0].cost] if touch_mode else "[1] %s\n%d coins" % [build_definitions[0].display_name, build_definitions[0].cost]
+		turret_button.text = "%s\n%d coins" % [build_definitions[1].display_name, build_definitions[1].cost] if touch_mode else "[2] %s\n%d coins" % [build_definitions[1].display_name, build_definitions[1].cost]
 		wall_button.icon = build_definitions[0].icon
 		turret_button.icon = build_definitions[1].icon
 		wall_button.disabled = state.coins < build_definitions[0].cost
 		turret_button.disabled = state.coins < build_definitions[1].cost
 	wall_button.button_pressed = state.build_kind == GameState.BuildKind.WALL
 	turret_button.button_pressed = state.build_kind == GameState.BuildKind.TURRET
-	start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
+	if touch_mode:
+		start_wave_button.text = "START ENDLESS  %d" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d" % state.wave_number
+	else:
+		start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
 	help_label.text = help_text()
 	help_label.offset_top = -154.0 if state.phase == GameState.Phase.BUILD else -28.0
 	help_label.offset_bottom = -132.0 if state.phase == GameState.Phase.BUILD else -5.0

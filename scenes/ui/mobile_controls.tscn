@@ -1,0 +1,68 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/mobile_controls.gd" id="1_mobile"]
+[ext_resource type="Script" path="res://scripts/ui/virtual_joystick.gd" id="2_joystick"]
+[ext_resource type="Theme" path="res://data/ui/interface_theme.tres" id="3_theme"]
+
+[node name="MobileControls" type="CanvasLayer"]
+layer = 40
+script = ExtResource("1_mobile")
+
+[node name="Controls" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("3_theme")
+
+[node name="VirtualJoystick" type="Control" parent="Controls"]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -154.0
+offset_right = 148.0
+offset_bottom = -14.0
+grow_vertical = 0
+script = ExtResource("2_joystick")
+
+[node name="ActionStack" type="VBoxContainer" parent="Controls"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -146.0
+offset_top = -212.0
+offset_right = -14.0
+offset_bottom = -14.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="PauseButton" type="Button" parent="Controls/ActionStack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132, 54)
+layout_mode = 2
+text = "PAUSE"
+
+[node name="RemoveButton" type="Button" parent="Controls/ActionStack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132, 64)
+layout_mode = 2
+toggle_mode = true
+theme_type_variation = &"PrimaryButton"
+text = "REMOVE"
+
+[node name="RepairButton" type="Button" parent="Controls/ActionStack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132, 64)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "HOLD REPAIR"
+
