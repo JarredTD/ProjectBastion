@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 
 const GameConfig = preload("res://scripts/game_config.gd")
@@ -12,23 +13,38 @@ var state: GameState
 
 @onready var core_health_bar: Node2D = %CoreHealthBar
 @onready var core_health_fill: ColorRect = %CoreHealthFill
-@onready var core_collision_shape: CollisionShape2D = %CoreCollisionShape
 
 ## Validates the storefront footprint and points each approach toward the stock.
 func _ready() -> void:
-	var core_shape := core_collision_shape.shape as CircleShape2D
-	if core_shape == null:
-		push_warning("Storefront collision must use a circle shape.")
-	else:
-		if core_attack_radius < core_shape.radius + GameConfig.GRID_SIZE * 0.5:
-			push_warning("Storefront attack radius needs enough room for a shopper at the edge.")
-		if core_repair_radius <= core_shape.radius:
-			push_warning("Storefront repair radius should extend beyond its collision radius.")
-		if core_build_radius < core_shape.radius + GameConfig.GRID_SIZE * 0.5:
-			push_warning("Storefront build radius is too small for the building grid.")
-	core_health_bar.hide()
+	if not Engine.is_editor_hint():
+		for warning in storefront_warnings():
+			push_warning(warning)
+		core_health_bar.hide()
 	for point in approach_points():
 		point.set_target_position(core_position())
+
+## Shows storefront setup problems directly in the editor inspector.
+func _get_configuration_warnings() -> PackedStringArray:
+	return storefront_warnings()
+
+## Checks interaction ranges against the collision shape authored in the scene.
+func storefront_warnings() -> PackedStringArray:
+	var warnings := PackedStringArray()
+	var collision_node := get_node_or_null("Core/CoreBody/CoreCollisionShape") as CollisionShape2D
+	if collision_node == null:
+		warnings.append("Storefront requires a collision shape.")
+		return warnings
+	var core_shape := collision_node.shape as CircleShape2D
+	if core_shape == null:
+		warnings.append("Storefront collision must use a circle shape.")
+		return warnings
+	if core_attack_radius < core_shape.radius + GameConfig.GRID_SIZE * 0.5:
+		warnings.append("Storefront attack radius needs enough room for a shopper at the edge.")
+	if core_repair_radius <= core_shape.radius:
+		warnings.append("Storefront repair radius should extend beyond its collision radius.")
+	if core_build_radius < core_shape.radius + GameConfig.GRID_SIZE * 0.5:
+		warnings.append("Storefront build radius is too small for the building grid.")
+	return warnings
 
 ## Supplies the live match state while keeping the world usable on its own.
 func configure(game_state: GameState) -> void:
