@@ -21,6 +21,8 @@ var touch_mode := false
 @onready var core_label: Label = %CoreLabel
 @onready var build_panel: Control = %BuildPanel
 @onready var build_panel_art: Control = %BuildPanelArt
+@onready var build_title: Label = $Layout/BuildPanel/Content/Actions/BuildTitle
+@onready var build_content: VBoxContainer = $Layout/BuildPanel/Content
 @onready var wall_button: Button = %WallButton
 @onready var turret_button: Button = %TurretButton
 @onready var start_wave_button: Button = %StartWaveButton
@@ -35,6 +37,7 @@ var touch_mode := false
 @onready var message_label: Label = %MessageLabel
 @onready var core_warning_panel: Control = %CoreWarningPanel
 @onready var end_panel: Control = %EndPanel
+@onready var end_background: ColorRect = %EndBackground
 @onready var end_backdrop: TextureRect = %EndBackdrop
 @onready var end_title: Label = %EndTitle
 @onready var end_score: Label = %EndScore
@@ -70,6 +73,27 @@ func set_touch_mode(enabled: bool) -> void:
 	touch_mode = enabled
 	help_label.visible = not enabled
 	build_hint_label.visible = not enabled
+	build_title.visible = not enabled
+	if enabled:
+		build_panel.offset_left = -320.0
+		build_panel.offset_right = 320.0
+		build_panel_art.offset_left = -330.0
+		build_panel_art.offset_right = 330.0
+		build_content.offset_left = 8.0
+		build_content.offset_right = -8.0
+		wall_button.custom_minimum_size.x = 120.0
+		turret_button.custom_minimum_size.x = 120.0
+		start_wave_button.custom_minimum_size.x = 220.0
+	else:
+		build_panel.offset_left = -340.0
+		build_panel.offset_right = 340.0
+		build_panel_art.offset_left = -390.0
+		build_panel_art.offset_right = 390.0
+		build_content.offset_left = 16.0
+		build_content.offset_right = -16.0
+		wall_button.custom_minimum_size.x = 138.0
+		turret_button.custom_minimum_size.x = 138.0
+		start_wave_button.custom_minimum_size.x = 258.0
 	update_safe_area()
 
 ## Insets the HUD around mobile display cutouts.
@@ -78,7 +102,7 @@ func update_safe_area() -> void:
 	layout.offset_top = 0.0
 	layout.offset_right = 0.0
 	layout.offset_bottom = 0.0
-	if not touch_mode:
+	if not touch_mode or OS.get_name() not in ["Web", "Android", "iOS"]:
 		return
 	var screen_size := Vector2(DisplayServer.screen_get_size())
 	var safe_area := DisplayServer.get_display_safe_area()
@@ -134,8 +158,11 @@ func _process(delta: float) -> void:
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
 	end_panel.visible = finished
+	end_background.visible = finished
 	end_backdrop.visible = finished
 	if finished and state.run_summary != null:
+		end_panel.offset_top = 135.0 if state.phase == GameState.Phase.VICTORY else 80.0
+		end_background.color = Color("5f5594") if state.phase == GameState.Phase.VICTORY else Color("1c1524")
 		end_backdrop.texture = victory_texture if state.phase == GameState.Phase.VICTORY else defeat_texture
 		var summary := state.run_summary
 		end_title.text = "STORE SECURED" if state.phase == GameState.Phase.VICTORY else "STOCK LOST"
