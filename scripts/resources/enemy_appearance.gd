@@ -6,6 +6,7 @@ extends Resource
 @export var defeated_animation: StringName = &"defeated"
 @export_range(0.01, 2.0, 0.01) var visual_scale := 0.2
 @export var offset := Vector2.ZERO
+@export_range(0.05, 5.0, 0.05) var defeat_duration := 0.3
 
 ## Checks the animations required for this appearance.
 func validation_errors() -> PackedStringArray:

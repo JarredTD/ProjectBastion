@@ -33,6 +33,7 @@ func configure(enemy_definition: EnemyDefinition, core_position: Vector2, object
 	visual_sprite.scale = Vector2.ONE * appearance.visual_scale
 	visual_sprite.position = appearance.offset
 	visual_sprite.play(appearance.active_animation)
+	defeat_timer.wait_time = appearance.defeat_duration
 	var circle := collision_shape.shape.duplicate() as CircleShape2D
 	circle.radius = definition.collision_radius
 	collision_shape.shape = circle

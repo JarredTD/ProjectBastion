@@ -1,17 +1,23 @@
-[gd_resource type="Resource" script_class="WaveDefinition" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="WaveDefinition" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/wave_definition.gd" id="1_wave"]
 [ext_resource type="Script" path="res://scripts/resources/enemy_wave_entry.gd" id="2_entry"]
 [ext_resource type="Resource" path="res://data/enemies/basic_shopper.tres" id="3_shopper"]
+[ext_resource type="Resource" path="res://data/enemies/heavy_shopper.tres" id="4_heavy"]
 
 [sub_resource type="Resource" id="EnemyWaveEntry_shoppers"]
 script = ExtResource("2_entry")
 enemy = ExtResource("3_shopper")
-count = 16
+count = 10
+
+[sub_resource type="Resource" id="EnemyWaveEntry_heavy"]
+script = ExtResource("2_entry")
+enemy = ExtResource("4_heavy")
+count = 6
 
 [resource]
 script = ExtResource("1_wave")
-enemies = Array[ExtResource("2_entry")]([SubResource("EnemyWaveEntry_shoppers")])
+enemies = Array[ExtResource("2_entry")]([SubResource("EnemyWaveEntry_shoppers"), SubResource("EnemyWaveEntry_heavy")])
 spawn_interval = 0.8
 approach_count = 3
 build_duration = 25.0
