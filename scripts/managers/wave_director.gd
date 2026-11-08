@@ -125,7 +125,7 @@ func spawn_enemy() -> void:
 	enemies.add_child(enemy)
 	enemy.global_position = random_spawn_position()
 	var appearance_index := rng.randi_range(0, definition.appearances.size() - 1)
-	enemy.configure(definition, world.core_position(), appearance_index)
+	enemy.configure(definition, world.core_position(), world.core_attack_range(), appearance_index)
 	enemy.defeated.connect(_on_enemy_defeated)
 	enemy.core_hit.connect(func(damage: float) -> void: core_hit.emit(damage))
 	spawned += 1

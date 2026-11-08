@@ -2,14 +2,27 @@ extends Node2D
 
 const GameConfig = preload("res://scripts/game_config.gd")
 
-@export_range(0.0, 256.0, 1.0) var core_build_radius := 96.0
+@export_category("Storefront footprint")
+@export_range(1.0, 256.0, 1.0) var core_collision_radius := 48.0
+@export_range(1.0, 256.0, 1.0) var core_attack_radius := 68.0
+@export_range(1.0, 256.0, 1.0) var core_repair_radius := 76.0
+@export_range(1.0, 256.0, 1.0) var core_build_radius := 96.0
 
 @onready var game: Node2D = get_parent()
 @onready var core_health_bar: Node2D = %CoreHealthBar
 @onready var core_health_fill: ColorRect = %CoreHealthFill
+@onready var core_collision_shape: CollisionShape2D = %CoreCollisionShape
 
 ## Points each approach warning toward the stock.
 func _ready() -> void:
+	var core_shape := core_collision_shape.shape as CircleShape2D
+	core_shape.radius = core_collision_radius
+	if core_attack_radius < core_collision_radius + GameConfig.GRID_SIZE * 0.5:
+		push_warning("Storefront attack radius needs enough room for a shopper at the edge.")
+	if core_repair_radius <= core_collision_radius:
+		push_warning("Storefront repair radius should extend beyond its collision radius.")
+	if core_build_radius < core_collision_radius + GameConfig.GRID_SIZE * 0.5:
+		push_warning("Storefront build radius is too small for the building grid.")
 	for point in approach_points():
 		point.set_target_position(core_position())
 
@@ -30,6 +43,14 @@ func core_position() -> Vector2:
 ## Returns the clearance structures should leave around the storefront.
 func core_clearance() -> float:
 	return core_build_radius
+
+## Returns how close shoppers get before attacking the storefront.
+func core_attack_range() -> float:
+	return core_attack_radius
+
+## Returns how close the player must be to repair the storefront.
+func core_repair_range() -> float:
+	return core_repair_radius
 
 ## Returns the player's starting position.
 func player_start_position() -> Vector2:

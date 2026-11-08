@@ -9,6 +9,7 @@ var health: float
 var attack_cooldown := 0.0
 var active := true
 var target_position := Vector2.ZERO
+var target_range := 56.0
 
 @onready var health_fill: ColorRect = %HealthFill
 @onready var health_bar: Node2D = %HealthBar
@@ -21,9 +22,10 @@ func _ready() -> void:
 	defeat_timer.timeout.connect(queue_free)
 
 ## Applies this enemy's stats and objective.
-func configure(enemy_definition: EnemyDefinition, core_position: Vector2, appearance_index: int) -> void:
+func configure(enemy_definition: EnemyDefinition, core_position: Vector2, objective_range: float, appearance_index: int) -> void:
 	definition = enemy_definition
 	target_position = core_position
+	target_range = objective_range
 	health = maxf(1.0, definition.max_health)
 	appearance = definition.appearances[clampi(appearance_index, 0, definition.appearances.size() - 1)]
 	visual_sprite.texture = appearance.active_texture
@@ -41,7 +43,7 @@ func _physics_process(delta: float) -> void:
 	if definition == null:
 		velocity = Vector2.ZERO
 		return
-	if global_position.distance_to(target_position) < 47.0:
+	if global_position.distance_to(target_position) < target_range:
 		velocity = Vector2.ZERO
 		if attack_cooldown <= 0.0:
 			core_hit.emit(definition.objective_damage)

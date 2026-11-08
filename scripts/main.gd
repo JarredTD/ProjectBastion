@@ -101,7 +101,7 @@ func repair_nearby(delta: float) -> void:
 	var repaired := false
 	if target != null:
 		repaired = target.repair(24.0 * delta)
-	elif player.global_position.distance_to(world.core_position()) < 74.0 and state.base_hp < GameConfig.MAX_BASE_HP:
+	elif player.global_position.distance_to(world.core_position()) < world.core_repair_range() and state.base_hp < GameConfig.MAX_BASE_HP:
 		state.base_hp = minf(GameConfig.MAX_BASE_HP, state.base_hp + 18.0 * delta)
 		repaired = true
 	if repaired:
