@@ -20,7 +20,7 @@ var repair_held := false
 @onready var pause_button: Button = %PauseButton
 
 func _ready() -> void:
-	native_touch = DisplayServer.is_touchscreen_available()
+	native_touch = OS.get_name() in ["Web", "Android", "iOS"] and DisplayServer.is_touchscreen_available()
 	desktop_preview = OS.get_cmdline_user_args().has("--touch-ui") or OS.get_environment("BASTION_TOUCH_PREVIEW") == "1"
 	joystick.connect(&"direction_changed", func(direction: Vector2) -> void: movement_changed.emit(direction))
 	repair_button.button_down.connect(set_repair_held.bind(true))
@@ -91,7 +91,7 @@ func update_safe_area() -> void:
 	controls.offset_top = 0.0
 	controls.offset_right = 0.0
 	controls.offset_bottom = 0.0
-	if not is_touch_mode():
+	if not is_touch_mode() or OS.get_name() not in ["Web", "Android", "iOS"]:
 		return
 	var screen_size := Vector2(DisplayServer.screen_get_size())
 	var safe_area := DisplayServer.get_display_safe_area()
