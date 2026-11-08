@@ -20,7 +20,6 @@ var touch_mode := false
 @onready var coin_label: Label = %CoinLabel
 @onready var core_label: Label = %CoreLabel
 @onready var build_panel: Control = %BuildPanel
-@onready var build_title: Label = $Layout/BuildPanel/Content/Actions/BuildTitle
 @onready var build_content: VBoxContainer = $Layout/BuildPanel/Content
 @onready var wall_button: Button = %WallButton
 @onready var turret_button: Button = %TurretButton
@@ -31,6 +30,7 @@ var touch_mode := false
 @onready var intel_wave: Label = %IntelWave
 @onready var intel_composition: Label = %IntelComposition
 @onready var intel_approaches: Label = %IntelApproaches
+@onready var help_panel: Control = %HelpPanel
 @onready var help_label: Label = %HelpLabel
 @onready var message_panel: Control = %MessagePanel
 @onready var message_label: Label = %MessageLabel
@@ -70,24 +70,27 @@ func set_build_hint(text: String) -> void:
 ## Adapts labels and guidance for touch controls.
 func set_touch_mode(enabled: bool) -> void:
 	touch_mode = enabled
-	help_label.visible = not enabled
+	help_panel.visible = not enabled
 	build_hint_label.visible = not enabled
-	build_title.visible = not enabled
 	if enabled:
 		build_panel.offset_left = -300.0
-		build_panel.offset_top = -114.0
+		build_panel.offset_top = -120.0
 		build_panel.offset_right = 300.0
 		build_content.offset_left = 8.0
+		build_content.offset_top = 8.0
 		build_content.offset_right = -8.0
+		build_content.offset_bottom = -8.0
 		wall_button.custom_minimum_size.x = 120.0
 		turret_button.custom_minimum_size.x = 120.0
 		start_wave_button.custom_minimum_size.x = 220.0
 	else:
 		build_panel.offset_left = -340.0
-		build_panel.offset_top = -138.0
+		build_panel.offset_top = -142.0
 		build_panel.offset_right = 340.0
-		build_content.offset_left = 16.0
-		build_content.offset_right = -16.0
+		build_content.offset_left = 12.0
+		build_content.offset_top = 8.0
+		build_content.offset_right = -12.0
+		build_content.offset_bottom = -8.0
 		wall_button.custom_minimum_size.x = 138.0
 		turret_button.custom_minimum_size.x = 138.0
 		start_wave_button.custom_minimum_size.x = 258.0
@@ -148,8 +151,8 @@ func _process(delta: float) -> void:
 	else:
 		start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
 	help_label.text = help_text()
-	help_label.offset_top = -164.0 if state.phase == GameState.Phase.BUILD else -28.0
-	help_label.offset_bottom = -142.0 if state.phase == GameState.Phase.BUILD else -5.0
+	help_panel.offset_top = -178.0 if state.phase == GameState.Phase.BUILD else -42.0
+	help_panel.offset_bottom = -150.0 if state.phase == GameState.Phase.BUILD else -10.0
 	var finished := state.phase == GameState.Phase.VICTORY or state.phase == GameState.Phase.DEFEAT
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
@@ -157,7 +160,8 @@ func _process(delta: float) -> void:
 	end_background.visible = finished
 	end_backdrop.visible = finished
 	if finished and state.run_summary != null:
-		end_panel.offset_top = 120.0 if state.phase == GameState.Phase.VICTORY else 80.0
+		end_panel.offset_top = 130.0 if state.phase == GameState.Phase.VICTORY else -30.0
+		end_panel.offset_bottom = 250.0 if state.phase == GameState.Phase.VICTORY else 90.0
 		end_background.color = Color("5f5594") if state.phase == GameState.Phase.VICTORY else Color("1c1524")
 		end_backdrop.texture = victory_texture if state.phase == GameState.Phase.VICTORY else defeat_texture
 		var summary := state.run_summary
@@ -169,7 +173,7 @@ func _process(delta: float) -> void:
 			format_score(summary.rush_points),
 			format_score(summary.stock_points),
 		]
-		end_stats.text = "%d rushes cleared  •  %d shoppers turned away\nStock remaining  %d  •  Run seed  %d" % [
+		end_stats.text = "%d rushes  •  %d shoppers  •  Stock %d  •  Seed %d" % [
 			summary.waves_cleared,
 			summary.shoppers_defeated,
 			summary.stock_remaining,
