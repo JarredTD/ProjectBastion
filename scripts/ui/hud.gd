@@ -38,6 +38,7 @@ var touch_mode := false
 @onready var record_label: Label = %RecordLabel
 @onready var continue_button: Button = %ContinueButton
 @onready var restart_button: Button = %RestartButton
+@onready var layout: Control = $Layout
 
 var core_warning_time := 0.0
 
@@ -48,6 +49,7 @@ func _ready() -> void:
 	start_wave_button.pressed.connect(func() -> void: wave_start_requested.emit())
 	continue_button.pressed.connect(func() -> void: endless_requested.emit())
 	restart_button.pressed.connect(func() -> void: run_restart_requested.emit())
+	get_viewport().size_changed.connect(update_safe_area)
 
 ## Supplies the live match state and buildable definitions shown by the HUD.
 func configure(game_state: GameState, definitions: Array) -> void:
@@ -63,6 +65,26 @@ func set_touch_mode(enabled: bool) -> void:
 	touch_mode = enabled
 	help_label.visible = not enabled
 	build_hint_label.visible = not enabled
+	update_safe_area()
+
+## Insets the HUD around mobile display cutouts.
+func update_safe_area() -> void:
+	layout.offset_left = 0.0
+	layout.offset_top = 0.0
+	layout.offset_right = 0.0
+	layout.offset_bottom = 0.0
+	if not touch_mode:
+		return
+	var screen_size := Vector2(DisplayServer.screen_get_size())
+	var safe_area := DisplayServer.get_display_safe_area()
+	var viewport_size := get_viewport().get_visible_rect().size
+	if screen_size.x <= 0.0 or screen_size.y <= 0.0 or safe_area.size == Vector2i.ZERO:
+		return
+	var scale := viewport_size / screen_size
+	layout.offset_left = maxf(0.0, safe_area.position.x * scale.x)
+	layout.offset_top = maxf(0.0, safe_area.position.y * scale.y)
+	layout.offset_right = -maxf(0.0, (screen_size.x - safe_area.end.x) * scale.x)
+	layout.offset_bottom = -maxf(0.0, (screen_size.y - safe_area.end.y) * scale.y)
 
 ## Briefly warns the player when the core is attacked offscreen.
 func show_core_warning() -> void:

@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/orientation_guard.gd" id="1_guard"]
+[ext_resource type="Theme" path="res://data/ui/interface_theme.tres" id="2_theme"]
+
+[node name="OrientationGuard" type="CanvasLayer"]
+layer = 200
+script = ExtResource("1_guard")
+
+[node name="Overlay" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0196078, 0.0352941, 0.054902, 1)
+theme = ExtResource("2_theme")
+
+[node name="Message" type="VBoxContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -92.0
+offset_right = 210.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Overlay/Message"]
+layout_mode = 2
+theme_type_variation = &"ScreenTitle"
+text = "ROTATE YOUR DEVICE"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="Overlay/Message"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "Project Bastion is designed for landscape play."
+horizontal_alignment = 1
+autowrap_mode = 2
+

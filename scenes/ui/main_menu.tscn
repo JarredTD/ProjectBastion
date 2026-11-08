@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="2_settings"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/ui/menu_backdrop.gd" id="4_backdrop"]
 [ext_resource type="Script" path="res://scripts/ui/accent_panel.gd" id="5_accent"]
 [ext_resource type="Texture2D" path="res://assets/sprites/core/store.png" id="6_store"]
+[ext_resource type="PackedScene" path="res://scenes/ui/orientation_guard.tscn" id="7_orientation"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -114,6 +115,8 @@ theme_override_font_sizes/font_size = 17
 text = "SETTINGS"
 
 [node name="SettingsPanel" parent="." instance=ExtResource("2_settings")]
+
+[node name="OrientationGuard" parent="." instance=ExtResource("7_orientation")]
 
 [connection signal="pressed" from="Menu/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Menu/SettingsButton" to="." method="_on_settings_pressed"]
