@@ -1,4 +1,51 @@
-[gd_resource type="Theme" load_steps=11 format=3]
+[gd_resource type="Theme" load_steps=18 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/button_frames.png" id="1_button_frames"]
+
+[sub_resource type="AtlasTexture" id="AtlasStoreButtonNormal"]
+atlas = ExtResource("1_button_frames")
+region = Rect2(238, 95, 162, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasStoreButtonHover"]
+atlas = ExtResource("1_button_frames")
+region = Rect2(238, 194, 162, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasStoreButtonPressed"]
+atlas = ExtResource("1_button_frames")
+region = Rect2(238, 300, 164, 85)
+
+[sub_resource type="StyleBoxTexture" id="StoreButtonNormal"]
+texture = SubResource("AtlasStoreButtonNormal")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StoreButtonHover"]
+texture = SubResource("AtlasStoreButtonHover")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StoreButtonPressed"]
+texture = SubResource("AtlasStoreButtonPressed")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxFlat" id="ButtonNormal"]
 content_margin_left = 16.0
@@ -195,3 +242,15 @@ CurrencyLabel/font_sizes/font_size = 20
 BodyStrong/base_type = &"Label"
 BodyStrong/colors/font_color = Color(0.913725, 0.94902, 1, 1)
 BodyStrong/font_sizes/font_size = 17
+StoreButton/base_type = &"Button"
+StoreButton/colors/font_color = Color(0.11, 0.08, 0.12, 1)
+StoreButton/colors/font_hover_color = Color(0.04, 0.08, 0.12, 1)
+StoreButton/colors/font_pressed_color = Color(0.12, 0.04, 0.08, 1)
+StoreButton/colors/font_focus_color = Color(0.11, 0.08, 0.12, 1)
+StoreButton/colors/font_disabled_color = Color(0.38, 0.34, 0.38, 1)
+StoreButton/styles/normal = SubResource("StoreButtonNormal")
+StoreButton/styles/hover = SubResource("StoreButtonHover")
+StoreButton/styles/pressed = SubResource("StoreButtonPressed")
+StoreButton/styles/hover_pressed = SubResource("StoreButtonPressed")
+StoreButton/styles/disabled = SubResource("StoreButtonNormal")
+StoreButton/styles/focus = SubResource("ButtonFocus")
