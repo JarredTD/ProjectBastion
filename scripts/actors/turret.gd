@@ -1,6 +1,8 @@
 extends "res://scripts/actors/structure.gd"
 
 @export_range(0.0, 1000.0, 1.0) var damage := 19.0
+@export var normal_texture: Texture2D
+@export var damaged_texture: Texture2D
 
 var targets: Array[Node2D] = []
 
@@ -8,6 +10,7 @@ var targets: Array[Node2D] = []
 @onready var flash_timer: Timer = %FlashTimer
 @onready var muzzle_flash: Line2D = %MuzzleFlash
 @onready var visuals: Node2D = $Visuals
+@onready var sprite: Sprite2D = %Sprite
 
 ## Connects detection and firing timers after base structure setup.
 func _ready() -> void:
@@ -41,3 +44,10 @@ func fire() -> void:
 	muzzle_flash.points = PackedVector2Array([Vector2.ZERO, to_local(selected_target.global_position)])
 	muzzle_flash.visible = true
 	flash_timer.start()
+
+## Swaps to the damaged turret art below half health.
+func update_health_bar() -> void:
+	super()
+	if sprite == null:
+		return
+	sprite.texture = damaged_texture if health <= max_health * 0.5 else normal_texture
