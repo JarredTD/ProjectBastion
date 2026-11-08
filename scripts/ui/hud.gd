@@ -74,8 +74,9 @@ func set_touch_mode(enabled: bool) -> void:
 	build_hint_label.visible = not enabled
 	build_title.visible = not enabled
 	if enabled:
-		build_panel.offset_left = -320.0
-		build_panel.offset_right = 320.0
+		build_panel.offset_left = -300.0
+		build_panel.offset_top = -114.0
+		build_panel.offset_right = 300.0
 		build_content.offset_left = 8.0
 		build_content.offset_right = -8.0
 		wall_button.custom_minimum_size.x = 120.0
@@ -83,6 +84,7 @@ func set_touch_mode(enabled: bool) -> void:
 		start_wave_button.custom_minimum_size.x = 220.0
 	else:
 		build_panel.offset_left = -340.0
+		build_panel.offset_top = -138.0
 		build_panel.offset_right = 340.0
 		build_content.offset_left = 16.0
 		build_content.offset_right = -16.0
@@ -146,8 +148,8 @@ func _process(delta: float) -> void:
 	else:
 		start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
 	help_label.text = help_text()
-	help_label.offset_top = -160.0 if state.phase == GameState.Phase.BUILD else -28.0
-	help_label.offset_bottom = -138.0 if state.phase == GameState.Phase.BUILD else -5.0
+	help_label.offset_top = -164.0 if state.phase == GameState.Phase.BUILD else -28.0
+	help_label.offset_bottom = -142.0 if state.phase == GameState.Phase.BUILD else -5.0
 	var finished := state.phase == GameState.Phase.VICTORY or state.phase == GameState.Phase.DEFEAT
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
