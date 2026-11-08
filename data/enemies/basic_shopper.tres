@@ -1,7 +1,24 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/enemy_definition.gd" id="1_definition"]
 [ext_resource type="PackedScene" path="res://scenes/actors/enemy.tscn" id="2_scene"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/shopper_red_active.png" id="3_red_active"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/shopper_red_defeated.png" id="4_red_defeated"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/shopper_blue_active.png" id="5_blue_active"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/shopper_blue_defeated.png" id="6_blue_defeated"]
+[ext_resource type="Script" path="res://scripts/resources/enemy_appearance.gd" id="7_appearance"]
+
+[sub_resource type="Resource" id="EnemyAppearance_red"]
+script = ExtResource("7_appearance")
+active_texture = ExtResource("3_red_active")
+defeated_texture = ExtResource("4_red_defeated")
+visual_scale = 0.2
+
+[sub_resource type="Resource" id="EnemyAppearance_blue"]
+script = ExtResource("7_appearance")
+active_texture = ExtResource("5_blue_active")
+defeated_texture = ExtResource("6_blue_defeated")
+visual_scale = 0.2
 
 [resource]
 script = ExtResource("1_definition")
@@ -10,6 +27,7 @@ plural_name = "Shoppers"
 scene = ExtResource("2_scene")
 behavior_id = &"direct"
 accent_color = Color(0.929412, 0.356863, 0.407843, 1)
+appearances = Array[ExtResource("7_appearance")]([SubResource("EnemyAppearance_red"), SubResource("EnemyAppearance_blue")])
 max_health = 72.0
 speed = 58.0
 structure_damage = 13.0

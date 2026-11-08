@@ -4,6 +4,7 @@ signal defeated(reward: float, score_value: int)
 signal core_hit(damage: float)
 
 var definition: EnemyDefinition
+var appearance: EnemyAppearance
 var health: float
 var attack_cooldown := 0.0
 var active := true
@@ -11,18 +12,23 @@ var target_position := Vector2.ZERO
 
 @onready var health_fill: ColorRect = %HealthFill
 @onready var health_bar: Node2D = %HealthBar
-@onready var body: Polygon2D = %Body
+@onready var visual_sprite: Sprite2D = %VisualSprite
+@onready var defeat_timer: Timer = %DefeatTimer
 
 ## Hides the health bar until the enemy is configured.
 func _ready() -> void:
 	health_bar.hide()
+	defeat_timer.timeout.connect(queue_free)
 
 ## Applies this enemy's stats and objective.
-func configure(enemy_definition: EnemyDefinition, core_position: Vector2) -> void:
+func configure(enemy_definition: EnemyDefinition, core_position: Vector2, appearance_index: int) -> void:
 	definition = enemy_definition
 	target_position = core_position
 	health = maxf(1.0, definition.max_health)
-	body.color = definition.accent_color
+	appearance = definition.appearances[clampi(appearance_index, 0, definition.appearances.size() - 1)]
+	visual_sprite.texture = appearance.active_texture
+	visual_sprite.scale = Vector2.ONE * appearance.visual_scale
+	visual_sprite.position = appearance.offset
 	health_fill.color = definition.accent_color
 	update_health_bar()
 
@@ -59,8 +65,13 @@ func take_damage(amount: float) -> void:
 	if health <= 0.0:
 		Audio.play_sfx(&"enemy_defeat", -2.0, randf_range(0.92, 1.08))
 		active = false
+		velocity = Vector2.ZERO
+		health_bar.hide()
+		visual_sprite.texture = appearance.defeated_texture
+		set_deferred("collision_layer", 0)
+		set_deferred("collision_mask", 0)
 		defeated.emit(definition.reward, definition.score_value)
-		queue_free()
+		defeat_timer.start()
 	else:
 		Audio.play_sfx(&"hit", -5.0, randf_range(0.9, 1.1))
 

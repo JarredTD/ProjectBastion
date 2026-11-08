@@ -12,27 +12,15 @@ script = ExtResource("1_enemy")
 
 [node name="Visuals" type="Node2D" parent="."]
 
-[node name="Body" type="Polygon2D" parent="Visuals"]
+[node name="VisualSprite" type="Sprite2D" parent="Visuals"]
 unique_name_in_owner = true
-polygon = PackedVector2Array(12, 0, 8.49, 8.49, 0, 12, -8.49, 8.49, -12, 0, -8.49, -8.49, 0, -12, 8.49, -8.49)
-color = Color(0.929412, 0.356863, 0.407843, 1)
-
-[node name="LeftEye" type="Polygon2D" parent="Visuals"]
-position = Vector2(-4, -2)
-polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
-color = Color(0.152941, 0.101961, 0.137255, 1)
-
-[node name="RightEye" type="Polygon2D" parent="Visuals"]
-position = Vector2(4, -2)
-polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
-color = Color(0.152941, 0.101961, 0.137255, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_enemy")
 
 [node name="HealthBar" type="Node2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-12, -19)
+position = Vector2(-12, -25)
 
 [node name="Background" type="ColorRect" parent="HealthBar"]
 offset_right = 24.0
@@ -50,3 +38,8 @@ color = Color(0.929412, 0.356863, 0.407843, 1)
 [node name="Effects" type="Node2D" parent="."]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="DefeatTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.28
+one_shot = true
