@@ -12,11 +12,15 @@ var state: GameState
 var build_definitions: Array
 var touch_mode := false
 
+@export var victory_texture: Texture2D
+@export var defeat_texture: Texture2D
+
 @onready var phase_label: Label = %PhaseLabel
 @onready var score_label: Label = %ScoreLabel
 @onready var coin_label: Label = %CoinLabel
 @onready var core_label: Label = %CoreLabel
 @onready var build_panel: Control = %BuildPanel
+@onready var build_panel_art: Control = %BuildPanelArt
 @onready var wall_button: Button = %WallButton
 @onready var turret_button: Button = %TurretButton
 @onready var start_wave_button: Button = %StartWaveButton
@@ -31,6 +35,7 @@ var touch_mode := false
 @onready var message_label: Label = %MessageLabel
 @onready var core_warning_panel: Control = %CoreWarningPanel
 @onready var end_panel: Control = %EndPanel
+@onready var end_backdrop: TextureRect = %EndBackdrop
 @onready var end_title: Label = %EndTitle
 @onready var end_score: Label = %EndScore
 @onready var end_breakdown: Label = %EndBreakdown
@@ -97,11 +102,12 @@ func _process(delta: float) -> void:
 	if state == null:
 		return
 	phase_label.text = phase_text()
-	score_label.text = "SCORE  %s" % format_score(state.score)
-	coin_label.text = "COINS  %03d" % floori(state.coins)
-	core_label.text = "STOCK  %03d" % ceili(state.base_hp)
+	score_label.text = format_score(state.score)
+	coin_label.text = "%03d" % floori(state.coins)
+	core_label.text = "%03d" % ceili(state.base_hp)
 	core_label.modulate = Color("ed5b68") if state.base_hp <= GameConfig.MAX_BASE_HP * 0.3 else Color.WHITE
 	build_panel.visible = state.phase == GameState.Phase.BUILD
+	build_panel_art.visible = build_panel.visible
 	wave_intel_panel.visible = state.phase == GameState.Phase.BUILD or state.phase == GameState.Phase.DEFEND
 	if wave_intel_panel.visible:
 		intel_title.text = "NEXT RUSH" if state.phase == GameState.Phase.BUILD else "CURRENT RUSH"
@@ -128,7 +134,9 @@ func _process(delta: float) -> void:
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
 	end_panel.visible = finished
+	end_backdrop.visible = finished
 	if finished and state.run_summary != null:
+		end_backdrop.texture = victory_texture if state.phase == GameState.Phase.VICTORY else defeat_texture
 		var summary := state.run_summary
 		end_title.text = "STORE SECURED" if state.phase == GameState.Phase.VICTORY else "STOCK LOST"
 		end_title.modulate = Color("78ead2") if state.phase == GameState.Phase.VICTORY else Color("ed5b68")
