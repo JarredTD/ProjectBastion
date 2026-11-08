@@ -2,6 +2,9 @@ extends Node2D
 
 const GameConfig = preload("res://scripts/game_config.gd")
 const GameState = preload("res://scripts/game_state.gd")
+const REPAIR_COST_PER_SECOND := 6.0
+const STRUCTURE_REPAIR_PER_SECOND := 24.0
+const STOREFRONT_REPAIR_PER_SECOND := 18.0
 
 var state := GameState.new()
 var repair_sound_cooldown := 0.0
@@ -98,15 +101,18 @@ func start_defense() -> void:
 func repair_nearby(delta: float) -> void:
 	if state.coins <= 0.0:
 		return
+	var affordable_time := minf(delta, state.coins / REPAIR_COST_PER_SECOND)
 	var target: Node2D = player.find_repair_target()
-	var repaired := false
+	var repaired_amount := 0.0
+	var repair_rate := STRUCTURE_REPAIR_PER_SECOND
 	if target != null:
-		repaired = target.repair(24.0 * delta)
+		repaired_amount = target.repair(repair_rate * affordable_time)
 	elif player.global_position.distance_to(world.core_position()) < world.core_repair_range() and state.base_hp < GameConfig.MAX_BASE_HP:
-		state.base_hp = minf(GameConfig.MAX_BASE_HP, state.base_hp + 18.0 * delta)
-		repaired = true
-	if repaired:
-		state.coins = maxf(0.0, state.coins - 6.0 * delta)
+		repair_rate = STOREFRONT_REPAIR_PER_SECOND
+		repaired_amount = minf(repair_rate * affordable_time, GameConfig.MAX_BASE_HP - state.base_hp)
+		state.base_hp += repaired_amount
+	if repaired_amount > 0.0:
+		state.coins = maxf(0.0, state.coins - repaired_amount / repair_rate * REPAIR_COST_PER_SECOND)
 		if repair_sound_cooldown <= 0.0:
 			Audio.play_sfx(&"repair", -5.0, randf_range(0.96, 1.04))
 			repair_sound_cooldown = 0.24

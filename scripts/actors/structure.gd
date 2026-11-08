@@ -33,13 +33,14 @@ func take_damage(amount: float) -> void:
 	else:
 		Audio.play_sfx(&"hit", -7.0, randf_range(0.85, 0.98))
 
-## Restores health and returns whether any repair was actually needed.
-func repair(amount: float) -> bool:
+## Restores health and returns the amount actually repaired.
+func repair(amount: float) -> float:
 	if health <= 0.0 or health >= max_health or amount <= 0.0:
-		return false
+		return 0.0
+	var previous_health := health
 	health = minf(max_health, health + amount)
 	update_health_bar()
-	return true
+	return health - previous_health
 
 ## Reports whether this structure has health left to restore.
 func is_damaged() -> bool:
