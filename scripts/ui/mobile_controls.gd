@@ -11,6 +11,7 @@ const GameState = preload("res://scripts/game_state.gd")
 var state: GameState
 var native_touch := false
 var desktop_preview := false
+var repair_held := false
 
 @onready var controls: Control = %Controls
 @onready var joystick: Control = %VirtualJoystick
@@ -22,8 +23,8 @@ func _ready() -> void:
 	native_touch = DisplayServer.is_touchscreen_available()
 	desktop_preview = OS.get_cmdline_user_args().has("--touch-ui") or OS.get_environment("BASTION_TOUCH_PREVIEW") == "1"
 	joystick.connect(&"direction_changed", func(direction: Vector2) -> void: movement_changed.emit(direction))
-	repair_button.button_down.connect(func() -> void: repair_held_changed.emit(true))
-	repair_button.button_up.connect(func() -> void: repair_held_changed.emit(false))
+	repair_button.button_down.connect(set_repair_held.bind(true))
+	repair_button.button_up.connect(set_repair_held.bind(false))
 	pause_button.pressed.connect(func() -> void: pause_requested.emit())
 	get_viewport().size_changed.connect(update_safe_area)
 	apply_touch_mode()
@@ -43,6 +44,8 @@ func _process(_delta: float) -> void:
 	repair_button.visible = state.phase == GameState.Phase.DEFEND
 	if not remove_button.visible:
 		remove_button.button_pressed = false
+	if not repair_button.visible:
+		set_repair_held(false)
 
 ## Converts otherwise-unhandled touches into world actions.
 func _unhandled_input(event: InputEvent) -> void:
@@ -72,9 +75,15 @@ func apply_touch_mode() -> void:
 	Input.emulate_touch_from_mouse = desktop_preview
 	if not enabled:
 		joystick.call(&"release")
-		repair_held_changed.emit(false)
+		set_repair_held(false)
 	update_safe_area()
 	touch_mode_changed.emit(enabled)
+
+func set_repair_held(held: bool) -> void:
+	if repair_held == held:
+		return
+	repair_held = held
+	repair_held_changed.emit(held)
 
 ## Keeps controls clear of notches and system gesture areas.
 func update_safe_area() -> void:
