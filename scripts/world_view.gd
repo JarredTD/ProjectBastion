@@ -13,6 +13,8 @@ var state: GameState
 
 @onready var core_health_bar: Node2D = %CoreHealthBar
 @onready var core_health_fill: ColorRect = %CoreHealthFill
+@onready var parking_lot: TextureRect = %ParkingLot
+@onready var endless_parking_lot: TextureRect = %EndlessParkingLot
 
 ## Validates the storefront footprint and points each approach toward the stock.
 func _ready() -> void:
@@ -54,6 +56,8 @@ func configure(game_state: GameState) -> void:
 func _process(_delta: float) -> void:
 	if state == null:
 		return
+	parking_lot.visible = not state.endless
+	endless_parking_lot.visible = state.endless
 	var health_ratio: float = clampf(state.base_hp / GameConfig.MAX_BASE_HP, 0.0, 1.0)
 	core_health_fill.size.x = 76.0 * health_ratio
 	core_health_bar.visible = health_ratio < 1.0
