@@ -5,7 +5,6 @@ extends Resource
 @export var display_name := "Enemy"
 @export var plural_name := "Enemies"
 @export var scene: PackedScene
-@export var behavior_id: StringName = &"direct"
 @export var accent_color := Color("ed5b68")
 
 @export_category("Presentation")
@@ -29,8 +28,6 @@ func validation_errors() -> PackedStringArray:
 		errors.append("Plural name cannot be empty.")
 	if scene == null:
 		errors.append("Enemy scene is missing.")
-	if behavior_id.is_empty():
-		errors.append("Behavior identifier cannot be empty.")
 	if appearances.is_empty():
 		errors.append("At least one appearance is required.")
 	for index in appearances.size():

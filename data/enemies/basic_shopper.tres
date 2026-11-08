@@ -25,7 +25,6 @@ script = ExtResource("1_definition")
 display_name = "Shopper"
 plural_name = "Shoppers"
 scene = ExtResource("2_scene")
-behavior_id = &"direct"
 accent_color = Color(0.929412, 0.356863, 0.407843, 1)
 appearances = Array[ExtResource("7_appearance")]([SubResource("EnemyAppearance_red"), SubResource("EnemyAppearance_blue")])
 max_health = 72.0
