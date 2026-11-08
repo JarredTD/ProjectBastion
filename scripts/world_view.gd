@@ -1,34 +1,44 @@
 extends Node2D
 
 const GameConfig = preload("res://scripts/game_config.gd")
+const GameState = preload("res://scripts/game_state.gd")
 
 @export_category("Storefront footprint")
-@export_range(1.0, 256.0, 1.0) var core_collision_radius := 48.0
 @export_range(1.0, 256.0, 1.0) var core_attack_radius := 68.0
 @export_range(1.0, 256.0, 1.0) var core_repair_radius := 76.0
 @export_range(1.0, 256.0, 1.0) var core_build_radius := 96.0
 
-@onready var game: Node2D = get_parent()
+var state: GameState
+
 @onready var core_health_bar: Node2D = %CoreHealthBar
 @onready var core_health_fill: ColorRect = %CoreHealthFill
 @onready var core_collision_shape: CollisionShape2D = %CoreCollisionShape
 
-## Points each approach warning toward the stock.
+## Validates the storefront footprint and points each approach toward the stock.
 func _ready() -> void:
 	var core_shape := core_collision_shape.shape as CircleShape2D
-	core_shape.radius = core_collision_radius
-	if core_attack_radius < core_collision_radius + GameConfig.GRID_SIZE * 0.5:
-		push_warning("Storefront attack radius needs enough room for a shopper at the edge.")
-	if core_repair_radius <= core_collision_radius:
-		push_warning("Storefront repair radius should extend beyond its collision radius.")
-	if core_build_radius < core_collision_radius + GameConfig.GRID_SIZE * 0.5:
-		push_warning("Storefront build radius is too small for the building grid.")
+	if core_shape == null:
+		push_warning("Storefront collision must use a circle shape.")
+	else:
+		if core_attack_radius < core_shape.radius + GameConfig.GRID_SIZE * 0.5:
+			push_warning("Storefront attack radius needs enough room for a shopper at the edge.")
+		if core_repair_radius <= core_shape.radius:
+			push_warning("Storefront repair radius should extend beyond its collision radius.")
+		if core_build_radius < core_shape.radius + GameConfig.GRID_SIZE * 0.5:
+			push_warning("Storefront build radius is too small for the building grid.")
+	core_health_bar.hide()
 	for point in approach_points():
 		point.set_target_position(core_position())
 
+## Supplies the live match state while keeping the world usable on its own.
+func configure(game_state: GameState) -> void:
+	state = game_state
+
 ## Keeps the core health bar in step with the current match state.
 func _process(_delta: float) -> void:
-	var health_ratio: float = clampf(game.state.base_hp / GameConfig.MAX_BASE_HP, 0.0, 1.0)
+	if state == null:
+		return
+	var health_ratio: float = clampf(state.base_hp / GameConfig.MAX_BASE_HP, 0.0, 1.0)
 	core_health_fill.size.x = 76.0 * health_ratio
 	core_health_bar.visible = health_ratio < 1.0
 

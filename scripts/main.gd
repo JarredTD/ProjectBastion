@@ -22,6 +22,7 @@ func _ready() -> void:
 		push_warning("Score rules are missing; using default values.")
 		score_rules = ScoreRules.new()
 	Audio.play_music(Audio.MusicState.BUILD)
+	world.configure(state)
 	player.configure(world.arena_rect(), world.player_start_position())
 	camera_rig.configure(player, world.arena_rect())
 	hud.configure(state, build_manager.definitions)
