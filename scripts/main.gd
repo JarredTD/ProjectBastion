@@ -8,6 +8,7 @@ const STOREFRONT_REPAIR_PER_SECOND := 18.0
 
 var state := GameState.new()
 var repair_sound_cooldown := 0.0
+var touch_repair_held := false
 
 @export var score_rules: ScoreRules
 
@@ -50,7 +51,7 @@ func _process(delta: float) -> void:
 		state.phase_time -= delta
 		if state.phase_time <= 0.0:
 			start_defense()
-	elif state.phase == GameState.Phase.DEFEND and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+	elif state.phase == GameState.Phase.DEFEND and (Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) or touch_repair_held):
 		repair_nearby(delta)
 
 ## Routes discrete keyboard and mouse actions for the current phase.
@@ -60,12 +61,25 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton and event.pressed:
 		var mouse_position := get_global_mouse_position()
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			if state.phase == GameState.Phase.BUILD:
-				build_manager.try_place(mouse_position)
-			elif state.phase == GameState.Phase.DEFEND:
-				player.try_attack(mouse_position)
+			primary_action(mouse_position)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and state.phase == GameState.Phase.BUILD:
-			build_manager.try_remove(mouse_position)
+			remove_action(mouse_position)
+
+## Uses the current phase to interpret the primary world action.
+func primary_action(world_position: Vector2) -> void:
+	if state.phase == GameState.Phase.BUILD:
+		build_manager.try_place(world_position)
+	elif state.phase == GameState.Phase.DEFEND:
+		player.try_attack(world_position)
+
+## Removes a structure when demolition is available.
+func remove_action(world_position: Vector2) -> void:
+	if state.phase == GameState.Phase.BUILD:
+		build_manager.try_remove(world_position)
+
+## Tracks the held repair action supplied by touch controls.
+func set_touch_repair_held(value: bool) -> void:
+	touch_repair_held = value
 
 ## Handles shortcuts that should work alongside the clickable HUD controls.
 func handle_key(keycode: Key) -> void:
@@ -123,6 +137,7 @@ func reset_game(seed := 0) -> void:
 	build_manager.reset()
 	state.reset(wave_director.objective_wave_count(), wave_director.begin_run(seed))
 	player.reset()
+	touch_repair_held = false
 	camera_rig.snap_to_target()
 	repair_sound_cooldown = 0.0
 	Audio.play_music(Audio.MusicState.BUILD)

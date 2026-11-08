@@ -8,6 +8,7 @@ var controls_enabled := true
 var combat_enabled := false
 var movement_bounds := Rect2()
 var start_position := Vector2.ZERO
+var touch_movement := Vector2.ZERO
 
 @onready var attack_timer: Timer = %AttackTimer
 @onready var flash_timer: Timer = %FlashTimer
@@ -28,7 +29,7 @@ func _physics_process(_delta: float) -> void:
 	if not controls_enabled:
 		velocity = Vector2.ZERO
 		return
-	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down") + touch_movement
 	if Input.is_key_pressed(KEY_LEFT): direction.x -= 1.0
 	if Input.is_key_pressed(KEY_RIGHT): direction.x += 1.0
 	if Input.is_key_pressed(KEY_UP): direction.y -= 1.0
@@ -40,6 +41,10 @@ func _physics_process(_delta: float) -> void:
 	global_position.y = clampf(global_position.y, movement_bounds.position.y + 12.0, movement_bounds.end.y - 12.0)
 	if direction != Vector2.ZERO:
 		rotation = direction.angle() + PI * 0.5
+
+## Applies movement supplied by the on-screen joystick.
+func set_touch_movement(direction: Vector2) -> void:
+	touch_movement = direction.limit_length(1.0)
 
 ## Attacks the enemy nearest the click when it is within reach.
 func try_attack(mouse_position: Vector2) -> void:
@@ -76,6 +81,7 @@ func reset() -> void:
 	global_position = start_position
 	rotation = 0.0
 	velocity = Vector2.ZERO
+	touch_movement = Vector2.ZERO
 	controls_enabled = true
 	combat_enabled = false
 	attack_timer.stop()
