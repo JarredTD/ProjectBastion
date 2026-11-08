@@ -133,6 +133,8 @@ custom_minimum_size = Vector2(138, 60)
 layout_mode = 2
 tooltip_text = "Blocks shoppers and takes a beating"
 toggle_mode = true
+expand_icon = true
+icon_max_width = 30
 theme_override_font_sizes/font_size = 16
 text = "[1] WALL\n15 coins"
 
@@ -142,6 +144,8 @@ custom_minimum_size = Vector2(138, 60)
 layout_mode = 2
 tooltip_text = "Stops any shopper in range"
 toggle_mode = true
+expand_icon = true
+icon_max_width = 30
 theme_override_font_sizes/font_size = 16
 text = "[2] TURRET\n45 coins"
 
