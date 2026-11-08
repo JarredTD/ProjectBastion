@@ -10,7 +10,7 @@ extends Resource
 
 ## Returns the escalating bonus for completing a rush.
 func rush_clear_bonus(wave_number: int) -> int:
-	return rush_clear_base + maxi(1, wave_number) * rush_clear_growth
+	return rush_clear_base + maxi(0, wave_number - 1) * rush_clear_growth
 
 ## Converts remaining stock into the objective-completion bonus.
 func stock_bonus(stock: float, maximum_stock: float) -> int:
