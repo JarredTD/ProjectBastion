@@ -97,13 +97,13 @@ func start_wave() -> void:
 	set_approaches_highlighted(false)
 	active = true
 	for enemy in enemies.get_children():
-		enemy.active = true
+		enemy.set_active(true)
 
 ## Pauses spawning and every living enemy.
 func stop_wave() -> void:
 	active = false
 	for enemy in enemies.get_children():
-		enemy.active = false
+		enemy.set_active(false)
 
 ## Removes active enemies and clears the prepared wave.
 func reset() -> void:
@@ -149,6 +149,7 @@ func enemy_scenes_are_valid() -> bool:
 		var instance := definition.scene.instantiate()
 		var valid := instance is CharacterBody2D
 		valid = valid and instance.has_method("configure")
+		valid = valid and instance.has_method("set_active")
 		valid = valid and instance.has_signal("defeated")
 		valid = valid and instance.has_signal("core_hit")
 		instance.free()

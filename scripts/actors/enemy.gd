@@ -34,6 +34,12 @@ func configure(enemy_definition: EnemyDefinition, core_position: Vector2, object
 	health_fill.color = definition.accent_color
 	update_health_bar()
 
+## Enables or pauses this enemy without exposing its internal state.
+func set_active(value: bool) -> void:
+	active = value and health > 0.0
+	if not active:
+		velocity = Vector2.ZERO
+
 ## Moves toward the objective and attacks anything that blocks the way.
 func _physics_process(delta: float) -> void:
 	if not active:
@@ -66,8 +72,7 @@ func take_damage(amount: float) -> void:
 	update_health_bar()
 	if health <= 0.0:
 		Audio.play_sfx(&"enemy_defeat", -2.0, randf_range(0.92, 1.08))
-		active = false
-		velocity = Vector2.ZERO
+		set_active(false)
 		health_bar.hide()
 		visual_sprite.texture = appearance.defeated_texture
 		set_deferred("collision_layer", 0)
