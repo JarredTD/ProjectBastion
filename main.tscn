@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ewyrlboceii2"]
+[gd_scene load_steps=15 format=3 uid="uid://ewyrlboceii2"]
 
 [ext_resource type="Script" uid="uid://dhdkqaf1g121j" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
@@ -12,6 +12,8 @@
 [ext_resource type="Resource" path="res://data/scoring/default_score_rules.tres" id="10_score"]
 [ext_resource type="PackedScene" path="res://scenes/ui/mobile_controls.tscn" id="11_mobile"]
 [ext_resource type="PackedScene" path="res://scenes/ui/orientation_guard.tscn" id="12_orientation"]
+[ext_resource type="Script" path="res://scripts/managers/upgrade_manager.gd" id="13_upgrades"]
+[ext_resource type="PackedScene" path="res://scenes/ui/upgrade_panel.tscn" id="14_upgrade_panel"]
 
 [node name="ProjectBastion" type="Node2D" unique_id=170590304]
 script = ExtResource("1_main")
@@ -52,9 +54,16 @@ enemies_path = NodePath("../Actors/Enemies")
 world_path = NodePath("../World")
 run_definition = ExtResource("9_run")
 
+[node name="UpgradeManager" type="Node" parent="."]
+script = ExtResource("13_upgrades")
+player_path = NodePath("../Actors/Player")
+structures_path = NodePath("../Actors/Structures")
+
 [node name="Hud" parent="." unique_id=1723289964 instance=ExtResource("2_hud")]
 
 [node name="MobileControls" parent="." instance=ExtResource("11_mobile")]
+
+[node name="UpgradePanel" parent="." instance=ExtResource("14_upgrade_panel")]
 
 [node name="PauseMenu" parent="." unique_id=1479893818 instance=ExtResource("7_pause")]
 

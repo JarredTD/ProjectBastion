@@ -4,6 +4,7 @@ signal world_action_requested(screen_position: Vector2, removing: bool)
 signal movement_changed(direction: Vector2)
 signal repair_held_changed(held: bool)
 signal pause_requested
+signal upgrades_requested
 signal touch_mode_changed(enabled: bool)
 
 const GameState = preload("res://scripts/game_state.gd")
@@ -18,6 +19,7 @@ var repair_held := false
 @onready var remove_button: Button = %RemoveButton
 @onready var repair_button: Button = %RepairButton
 @onready var pause_button: Button = %PauseButton
+@onready var upgrades_button: Button = %UpgradesButton
 
 func _ready() -> void:
 	native_touch = OS.get_name() in ["Web", "Android", "iOS"] and DisplayServer.is_touchscreen_available()
@@ -26,6 +28,7 @@ func _ready() -> void:
 	repair_button.button_down.connect(set_repair_held.bind(true))
 	repair_button.button_up.connect(set_repair_held.bind(false))
 	pause_button.pressed.connect(func() -> void: pause_requested.emit())
+	upgrades_button.pressed.connect(func() -> void: upgrades_requested.emit())
 	get_viewport().size_changed.connect(update_safe_area)
 	apply_touch_mode()
 	update_safe_area()
@@ -40,6 +43,7 @@ func _process(_delta: float) -> void:
 	var playing := state.phase == GameState.Phase.BUILD or state.phase == GameState.Phase.DEFEND
 	joystick.visible = playing
 	pause_button.visible = playing
+	upgrades_button.visible = state.phase == GameState.Phase.BUILD
 	remove_button.visible = state.phase == GameState.Phase.BUILD
 	repair_button.visible = state.phase == GameState.Phase.DEFEND
 	if not remove_button.visible:

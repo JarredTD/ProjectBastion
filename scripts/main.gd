@@ -17,8 +17,10 @@ var touch_repair_held := false
 @onready var camera_rig: Node2D = $CameraRig
 @onready var build_manager: Node2D = $BuildManager
 @onready var wave_director: Node = $WaveDirector
+@onready var upgrade_manager: UpgradeManager = $UpgradeManager
 @onready var hud: CanvasLayer = $Hud
 @onready var mobile_controls: CanvasLayer = $MobileControls
+@onready var upgrade_panel: CanvasLayer = $UpgradePanel
 @onready var pause_menu: CanvasLayer = $PauseMenu
 
 ## Wires the scene together once every child is ready.
@@ -32,16 +34,20 @@ func _ready() -> void:
 	camera_rig.configure(player, world.arena_rect())
 	hud.configure(state, build_manager.definitions)
 	mobile_controls.configure(state)
+	upgrade_manager.configure(state)
+	upgrade_panel.configure(upgrade_manager, state)
 	hud.build_selected.connect(select_building)
 	hud.wave_start_requested.connect(start_defense)
 	hud.run_restart_requested.connect(reset_game)
 	hud.endless_requested.connect(continue_endless)
+	hud.upgrades_requested.connect(upgrade_panel.open)
 	pause_menu.restart_requested.connect(reset_game)
 	pause_menu.main_menu_requested.connect(_on_pause_main_menu_requested)
 	mobile_controls.world_action_requested.connect(_on_touch_world_action)
 	mobile_controls.movement_changed.connect(player.set_touch_movement)
 	mobile_controls.repair_held_changed.connect(set_touch_repair_held)
 	mobile_controls.pause_requested.connect(pause_menu.toggle)
+	mobile_controls.upgrades_requested.connect(upgrade_panel.open)
 	mobile_controls.touch_mode_changed.connect(hud.set_touch_mode)
 	hud.set_touch_mode(mobile_controls.is_touch_mode())
 	build_manager.hover_hint_changed.connect(hud.set_build_hint)
@@ -158,6 +164,7 @@ func reset_game(seed := 0) -> void:
 	build_manager.reset()
 	state.reset(wave_director.objective_wave_count(), wave_director.begin_run(seed))
 	player.reset()
+	upgrade_manager.reset()
 	touch_repair_held = false
 	camera_rig.snap_to_target()
 	repair_sound_cooldown = 0.0
@@ -186,7 +193,10 @@ func prepare_current_wave() -> void:
 	state.wave_composition = wave_director.enemy_summary()
 	state.wave_approaches = wave_director.approach_summary()
 	player.combat_enabled = false
-	state.show_message("Approaches marked. Build before the rush.", 4.0)
+	if upgrade_manager.has_unlocks_for_wave(state.wave_number):
+		state.show_message("New upgrades available. Spend coins before the rush.", 4.0)
+	else:
+		state.show_message("Approaches marked. Build before the rush.", 4.0)
 
 ## Freezes active play and presents the final result.
 func finish_run(result: GameState.Phase, message: String) -> void:

@@ -4,6 +4,7 @@ signal build_selected(index: int)
 signal wave_start_requested
 signal run_restart_requested
 signal endless_requested
+signal upgrades_requested
 
 const GameConfig = preload("res://scripts/game_config.gd")
 const GameState = preload("res://scripts/game_state.gd")
@@ -32,6 +33,7 @@ var touch_mode := false
 @onready var intel_approaches: Label = %IntelApproaches
 @onready var help_panel: Control = %HelpPanel
 @onready var help_label: Label = %HelpLabel
+@onready var upgrade_button: Button = %UpgradeButton
 @onready var message_panel: Control = %MessagePanel
 @onready var message_label: Label = %MessageLabel
 @onready var core_warning_panel: Control = %CoreWarningPanel
@@ -57,6 +59,7 @@ func _ready() -> void:
 	wall_button.pressed.connect(func() -> void: build_selected.emit(GameState.BuildKind.WALL))
 	turret_button.pressed.connect(func() -> void: build_selected.emit(GameState.BuildKind.TURRET))
 	start_wave_button.pressed.connect(func() -> void: wave_start_requested.emit())
+	upgrade_button.pressed.connect(func() -> void: upgrades_requested.emit())
 	continue_button.pressed.connect(func() -> void: endless_requested.emit())
 	restart_button.pressed.connect(func() -> void: run_restart_requested.emit())
 	get_viewport().size_changed.connect(update_safe_area)
@@ -77,7 +80,7 @@ func set_touch_mode(enabled: bool) -> void:
 	build_hint_label.visible = not enabled
 	if enabled:
 		build_panel.offset_left = -280.0
-		build_panel.offset_top = -110.0
+		build_panel.offset_top = -82.0
 		build_panel.offset_right = 280.0
 		build_content.offset_left = 8.0
 		build_content.offset_top = 8.0
@@ -88,7 +91,7 @@ func set_touch_mode(enabled: bool) -> void:
 		start_wave_button.custom_minimum_size.x = 200.0
 	else:
 		build_panel.offset_left = -320.0
-		build_panel.offset_top = -130.0
+		build_panel.offset_top = -105.0
 		build_panel.offset_right = 320.0
 		build_content.offset_left = 12.0
 		build_content.offset_top = 8.0
@@ -154,8 +157,9 @@ func _process(delta: float) -> void:
 	else:
 		start_wave_button.text = "START ENDLESS  %d  [SPACE]" % (state.wave_number - state.objective_wave_count) if state.endless else "START WAVE  %d  [SPACE]" % state.wave_number
 	help_label.text = help_text()
-	help_panel.offset_top = -166.0 if state.phase == GameState.Phase.BUILD else -36.0
-	help_panel.offset_bottom = -140.0 if state.phase == GameState.Phase.BUILD else -10.0
+	help_panel.offset_top = -148.0 if state.phase == GameState.Phase.BUILD else -36.0
+	help_panel.offset_bottom = -114.0 if state.phase == GameState.Phase.BUILD else -10.0
+	upgrade_button.visible = state.phase == GameState.Phase.BUILD
 	var finished := state.phase == GameState.Phase.VICTORY or state.phase == GameState.Phase.DEFEAT
 	message_panel.visible = state.message_time > 0.0 and not finished
 	message_label.text = state.message
