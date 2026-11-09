@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/upgrade_card.gd" id="1_card"]
+
+[node name="UpgradeCard" type="Panel"]
+custom_minimum_size = Vector2(197, 184)
+size_flags_horizontal = 3
+script = ExtResource("1_card")
+
+[node name="Body" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = -14.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 7
+
+[node name="TitleLabel" type="Label" parent="Body"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+theme_override_font_sizes/font_size = 13
+text = "UPGRADE"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="Body"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 13
+text = "Improves the night shift."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="SaleLabel" type="Label" parent="Body"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+theme_override_colors/font_color = Color(1, 0.294118, 0.505882, 1)
+theme_override_font_sizes/font_size = 11
+text = "25% OFF THIS RUSH"
+horizontal_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="Body"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyStrong"
+theme_override_font_sizes/font_size = 13
+text = "LEVEL 0 / 3"
+horizontal_alignment = 1
+
+[node name="BuyButton" type="Button" parent="Body"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 14
+text = "BUY  60"

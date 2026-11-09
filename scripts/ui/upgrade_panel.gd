@@ -4,26 +4,22 @@ const GameState = preload("res://scripts/game_state.gd")
 
 var upgrade_manager: UpgradeManager
 var state: GameState
+var cards: Array[UpgradeCard] = []
+
+@export var card_scene: PackedScene
 
 @onready var overlay: Control = %Overlay
 @onready var coins_label: Label = %CoinsLabel
 @onready var close_button: Button = %CloseButton
 @onready var subtitle: Label = %Subtitle
 @onready var sale_badge: TextureRect = %SaleBadge
-@onready var cards: Array[Control] = [%UpgradeCard0, %UpgradeCard1, %UpgradeCard2]
-@onready var titles: Array[Label] = [%UpgradeTitle0, %UpgradeTitle1, %UpgradeTitle2]
-@onready var sale_labels: Array[Label] = [%UpgradeSale0, %UpgradeSale1, %UpgradeSale2]
-@onready var descriptions: Array[Label] = [%UpgradeDescription0, %UpgradeDescription1, %UpgradeDescription2]
-@onready var levels: Array[Label] = [%UpgradeLevel0, %UpgradeLevel1, %UpgradeLevel2]
-@onready var buy_buttons: Array[Button] = [%UpgradeBuy0, %UpgradeBuy1, %UpgradeBuy2]
+@onready var cards_container: GridContainer = %Cards
 
 
-## Starts hidden and connects the fixed set of shop buttons.
+## Starts hidden until the player opens the shop.
 func _ready() -> void:
 	overlay.hide()
 	close_button.pressed.connect(close)
-	for index in buy_buttons.size():
-		buy_buttons[index].pressed.connect(purchase.bind(index))
 
 
 ## Supplies the run systems used to price and apply purchases.
@@ -31,7 +27,28 @@ func configure(manager: UpgradeManager, game_state: GameState) -> void:
 	upgrade_manager = manager
 	state = game_state
 	upgrade_manager.changed.connect(refresh)
+	rebuild_cards()
 	refresh()
+
+
+## Creates one reusable card for every authored upgrade definition.
+func rebuild_cards() -> void:
+	for child in cards_container.get_children():
+		cards_container.remove_child(child)
+		child.queue_free()
+	cards.clear()
+	if card_scene == null:
+		push_error("Upgrade panel requires a card scene.")
+		return
+	for index in upgrade_manager.definitions.size():
+		var card := card_scene.instantiate() as UpgradeCard
+		if card == null:
+			push_error("Upgrade card scene must use UpgradeCard.")
+			return
+		cards_container.add_child(card)
+		card.configure(index, upgrade_manager.definitions[index])
+		card.purchase_requested.connect(purchase)
+		cards.append(card)
 
 
 ## Opens the shop during a build phase and pauses the countdown.
@@ -71,31 +88,7 @@ func refresh() -> void:
 		return
 	coins_label.text = "%d COINS AVAILABLE" % floori(state.coins)
 	var active_sale := upgrade_manager.sale_index()
-	sale_badge.visible = active_sale >= 0
+	sale_badge.modulate.a = 1.0 if active_sale >= 0 else 0.0
 	subtitle.text = "One upgrade is discounted for this rush." if active_sale >= 0 else "Spend coins between rushes. Purchases last for this run."
-	for index in cards.size():
-		var visible_card := index < upgrade_manager.definitions.size()
-		cards[index].visible = visible_card
-		if not visible_card:
-			continue
-		var definition: UpgradeDefinition = upgrade_manager.definitions[index]
-		var current_level: int = upgrade_manager.level_for(index)
-		titles[index].text = definition.display_name
-		var on_sale := upgrade_manager.is_on_sale(index)
-		sale_labels[index].visible = on_sale
-		sale_labels[index].text = "%d%% OFF THIS RUSH" % upgrade_manager.sale_percent()
-		descriptions[index].text = definition.description
-		levels[index].text = "LEVEL %d / %d" % [current_level, definition.max_level]
-		if not upgrade_manager.is_unlocked(index):
-			buy_buttons[index].text = "AFTER RUSH %d" % (definition.available_from_wave - 1)
-			buy_buttons[index].disabled = true
-		elif current_level >= definition.max_level:
-			buy_buttons[index].text = "MAXED"
-			buy_buttons[index].disabled = true
-		else:
-			var cost: int = upgrade_manager.next_cost(index)
-			if on_sale:
-				buy_buttons[index].text = "SALE  %d  •  WAS %d" % [cost, upgrade_manager.regular_cost(index)]
-			else:
-				buy_buttons[index].text = "BUY  %d" % cost
-			buy_buttons[index].disabled = state.coins < cost
+	for card in cards:
+		card.refresh(upgrade_manager, state.coins)
