@@ -15,6 +15,8 @@ var touch_mode := false
 
 @export var victory_texture: Texture2D
 @export var defeat_texture: Texture2D
+@export var victory_results_style: StyleBox
+@export var defeat_results_style: StyleBox
 
 @onready var phase_label: Label = %PhaseLabel
 @onready var score_label: Label = %ScoreLabel
@@ -39,6 +41,10 @@ var touch_mode := false
 @onready var end_panel: Control = %EndPanel
 @onready var end_background: ColorRect = %EndBackground
 @onready var end_backdrop: TextureRect = %EndBackdrop
+@onready var end_summary: HBoxContainer = %Summary
+@onready var score_group: VBoxContainer = %ScoreGroup
+@onready var run_group: VBoxContainer = %RunGroup
+@onready var end_captions: Array[Label] = [%ScoreCaption, %PointsCaption, %RunCaption]
 @onready var end_score: Label = %EndScore
 @onready var end_breakdown: Label = %EndBreakdown
 @onready var rushes_metric: Label = %RushesMetric
@@ -164,22 +170,30 @@ func _process(delta: float) -> void:
 	end_background.visible = finished
 	end_backdrop.visible = finished
 	if finished and state.run_summary != null:
-		end_panel.offset_left = -390.0 if state.phase == GameState.Phase.VICTORY else -310.0
+		var victory := state.phase == GameState.Phase.VICTORY
+		end_panel.offset_left = -390.0 if victory else -260.0
 		end_panel.offset_top = 150.0 if state.phase == GameState.Phase.VICTORY else -42.0
-		end_panel.offset_right = 390.0 if state.phase == GameState.Phase.VICTORY else 310.0
+		end_panel.offset_right = 390.0 if victory else 260.0
 		end_panel.offset_bottom = 260.0 if state.phase == GameState.Phase.VICTORY else 78.0
+		end_panel.add_theme_stylebox_override("panel", victory_results_style if victory else defeat_results_style)
+		end_summary.add_theme_constant_override("separation", 16 if victory else 10)
+		score_group.custom_minimum_size.x = 112.0 if victory else 96.0
+		run_group.custom_minimum_size.x = 218.0 if victory else 165.0
 		end_background.color = Color("5f5594") if state.phase == GameState.Phase.VICTORY else Color("1c1524")
 		end_backdrop.texture = victory_texture if state.phase == GameState.Phase.VICTORY else defeat_texture
 		var summary := state.run_summary
+		apply_end_colors(victory)
 		end_score.text = format_score(summary.score)
-		end_breakdown.text = "SHOPPERS  %s  •  RUSH  %s  •  STOCK  %s" % [
-			format_score(summary.shopper_points),
-			format_score(summary.rush_points),
-			format_score(summary.stock_points),
-		]
-		rushes_metric.text = "%d RUSHES" % summary.waves_cleared
-		shoppers_metric.text = "%d SHOPPERS" % summary.shoppers_defeated
-		stock_metric.text = "%d STOCK" % summary.stock_remaining
+		if victory:
+			end_breakdown.text = "SHOPPERS  %s  •  RUSH  %s  •  STOCK  %s" % [format_score(summary.shopper_points), format_score(summary.rush_points), format_score(summary.stock_points)]
+			rushes_metric.text = "%d RUSHES" % summary.waves_cleared
+			shoppers_metric.text = "%d SHOPPERS" % summary.shoppers_defeated
+			stock_metric.text = "%d STOCK" % summary.stock_remaining
+		else:
+			end_breakdown.text = "SHOPPERS  %s  •  RUSH  %s\nSTOCK  %s" % [format_score(summary.shopper_points), format_score(summary.rush_points), format_score(summary.stock_points)]
+			rushes_metric.text = "%d RUSH" % summary.waves_cleared
+			shoppers_metric.text = "%d OUT" % summary.shoppers_defeated
+			stock_metric.text = "%d LEFT" % summary.stock_remaining
 		seed_label.text = "RUN %d" % summary.run_seed
 		var mode_name := "ENDLESS" if summary.mode == &"endless" else "OBJECTIVE"
 		var record_kind := "LOCAL BEST" if summary.persistent_record else "SESSION BEST"
@@ -189,6 +203,22 @@ func _process(delta: float) -> void:
 			format_score(summary.best_score),
 		]
 		continue_button.visible = state.phase == GameState.Phase.VICTORY
+
+
+## Matches result text to the dark victory card or the printed defeat receipt.
+func apply_end_colors(victory: bool) -> void:
+	var caption_color := Color("91a3b8") if victory else Color("8f4b5d")
+	var value_color := Color("e9f2ff") if victory else Color("541d32")
+	var accent_color := Color("ffd27a") if victory else Color("d31346")
+	for caption in end_captions:
+		caption.add_theme_color_override("font_color", caption_color)
+	end_score.add_theme_color_override("font_color", accent_color)
+	end_breakdown.add_theme_color_override("font_color", value_color)
+	rushes_metric.add_theme_color_override("font_color", value_color)
+	shoppers_metric.add_theme_color_override("font_color", value_color)
+	stock_metric.add_theme_color_override("font_color", value_color)
+	record_label.add_theme_color_override("font_color", accent_color)
+	seed_label.add_theme_color_override("font_color", caption_color)
 
 ## Adds thousands separators to score values without locale-dependent output.
 func format_score(value: int) -> String:
