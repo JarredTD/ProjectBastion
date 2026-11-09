@@ -132,7 +132,14 @@ func sale_index() -> int:
 	if state == null:
 		return -1
 	if cached_sale_wave == state.wave_number:
-		return cached_sale_index
+		if (
+			cached_sale_index >= 0
+			and cached_sale_index < definitions.size()
+			and definitions[cached_sale_index] != null
+			and level_for(cached_sale_index) < definitions[cached_sale_index].max_level
+		):
+			return cached_sale_index
+		return -1
 	cached_sale_wave = state.wave_number
 	cached_sale_index = -1
 	if state.wave_number < sale_start_wave or (state.wave_number - sale_start_wave) % sale_interval != 0:
