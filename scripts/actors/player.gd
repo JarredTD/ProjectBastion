@@ -9,6 +9,7 @@ var combat_enabled := false
 var movement_bounds := Rect2()
 var start_position := Vector2.ZERO
 var touch_movement := Vector2.ZERO
+var base_attack_damage := 0.0
 
 @onready var attack_timer: Timer = %AttackTimer
 @onready var flash_timer: Timer = %FlashTimer
@@ -16,7 +17,14 @@ var touch_movement := Vector2.ZERO
 
 ## Connects the short-lived attack effect.
 func _ready() -> void:
+	base_attack_damage = attack_damage
 	flash_timer.timeout.connect(func() -> void: attack_flash.visible = false)
+
+## Applies the current staff upgrade without compounding it.
+func set_attack_damage_multiplier(multiplier: float) -> void:
+	if base_attack_damage <= 0.0:
+		base_attack_damage = maxf(0.0, attack_damage)
+	attack_damage = base_attack_damage * maxf(1.0, multiplier)
 
 ## Gives the player their movement bounds and authored starting point.
 func configure(arena_bounds: Rect2, spawn_position: Vector2) -> void:

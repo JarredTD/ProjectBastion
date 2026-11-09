@@ -5,6 +5,7 @@ extends "res://scripts/actors/structure.gd"
 @export var damaged_texture: Texture2D
 
 var targets: Array[Node2D] = []
+var base_damage := 0.0
 
 @onready var fire_timer: Timer = %FireTimer
 @onready var flash_timer: Timer = %FlashTimer
@@ -15,10 +16,17 @@ var targets: Array[Node2D] = []
 ## Connects detection and firing timers after base structure setup.
 func _ready() -> void:
 	super()
+	base_damage = damage
 	%DetectionArea.body_entered.connect(_on_body_entered)
 	%DetectionArea.body_exited.connect(_on_body_exited)
 	fire_timer.timeout.connect(fire)
 	flash_timer.timeout.connect(func() -> void: muzzle_flash.visible = false)
+
+## Applies the current turret-damage upgrade without compounding it.
+func set_damage_multiplier(multiplier: float) -> void:
+	if base_damage <= 0.0:
+		base_damage = maxf(0.0, damage)
+	damage = base_damage * maxf(1.0, multiplier)
 
 ## Tracks an enemy when it enters firing range.
 func _on_body_entered(body: Node2D) -> void:

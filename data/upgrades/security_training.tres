@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/upgrade_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+id = &"security_training"
+display_name = "SECURITY TRAINING"
+description = "Turrets deal 20% more damage per level."
+effect = 1
+amount = 0.2
+base_cost = 90
+cost_step = 60
+max_level = 3
+available_from_wave = 2

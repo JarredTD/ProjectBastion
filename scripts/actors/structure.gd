@@ -6,6 +6,7 @@ signal destroyed(cell: Vector2i)
 
 var health: float
 var cell := Vector2i.ZERO
+var base_max_health := 0.0
 
 @onready var health_fill: ColorRect = %HealthFill
 @onready var health_bar: Node2D = %HealthBar
@@ -13,6 +14,7 @@ var cell := Vector2i.ZERO
 ## Starts each placed structure at full health.
 func _ready() -> void:
 	max_health = maxf(1.0, max_health)
+	base_max_health = max_health
 	health = max_health
 	update_health_bar()
 
@@ -45,6 +47,15 @@ func repair(amount: float) -> float:
 ## Reports whether this structure has health left to restore.
 func is_damaged() -> bool:
 	return health < max_health
+
+## Applies a run upgrade while preserving the structure's health percentage.
+func set_health_multiplier(multiplier: float) -> void:
+	if base_max_health <= 0.0:
+		base_max_health = maxf(1.0, max_health)
+	var health_ratio := health / maxf(1.0, max_health)
+	max_health = base_max_health * maxf(1.0, multiplier)
+	health = max_health * health_ratio
+	update_health_bar()
 
 ## Resizes the health bar and hides it while health is full.
 func update_health_bar() -> void:

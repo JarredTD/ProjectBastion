@@ -19,6 +19,7 @@ enum PlacementIssue { NONE, OCCUPIED, PLAYER, STOREFRONT, COINS }
 @onready var structures: Node2D = get_node(structures_path)
 @onready var player: CharacterBody2D = get_node(player_path)
 @onready var preview: Polygon2D = $Preview
+@onready var upgrade_manager: UpgradeManager = game.get_node_or_null("UpgradeManager")
 
 var placed_definitions: Dictionary = {}
 var last_hover_hint := ""
@@ -79,6 +80,8 @@ func try_place(mouse_position: Vector2) -> void:
 	structures.add_child(structure)
 	structure.global_position = place_pos
 	structure.configure(cell)
+	if upgrade_manager != null:
+		upgrade_manager.apply_to_structure(structure)
 	structure.destroyed.connect(_on_structure_destroyed)
 	state.occupied[cell] = true
 	placed_definitions[cell] = definition
