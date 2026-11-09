@@ -392,10 +392,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -230.0
-offset_top = 114.0
-offset_right = 230.0
-offset_bottom = 250.0
+offset_left = -390.0
+offset_top = 150.0
+offset_right = 390.0
+offset_bottom = 260.0
 modulate = Color(1, 1, 1, 1)
 
 [node name="Content" type="VBoxContainer" parent="Layout/EndPanel"]
@@ -403,105 +403,139 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 6.0
-offset_right = -20.0
-offset_bottom = -8.0
+offset_left = 16.0
+offset_top = 7.0
+offset_right = -16.0
+offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 4
 
-[node name="EndTitle" type="Label" parent="Layout/EndPanel/Content"]
-unique_name_in_owner = true
-visible = false
+[node name="Summary" type="HBoxContainer" parent="Layout/EndPanel/Content"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-theme_type_variation = &"ScreenTitle"
-text = "STORE SECURED"
-horizontal_alignment = 1
+size_flags_vertical = 3
+theme_override_constants/separation = 16
 
-[node name="EndScore" type="Label" parent="Layout/EndPanel/Content"]
+[node name="ScoreGroup" type="VBoxContainer" parent="Layout/EndPanel/Content/Summary"]
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Caption" type="Label" parent="Layout/EndPanel/Content/Summary/ScoreGroup"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 10
+text = "FINAL SCORE"
+
+[node name="EndScore" type="Label" parent="Layout/EndPanel/Content/Summary/ScoreGroup"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"CurrencyLabel"
 theme_override_font_sizes/font_size = 22
-text = "SCORE  12,840"
-horizontal_alignment = 1
+text = "12,840"
 
-[node name="EndBreakdown" type="Label" parent="Layout/EndPanel/Content"]
+[node name="PointsGroup" type="VBoxContainer" parent="Layout/EndPanel/Content/Summary"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Caption" type="Label" parent="Layout/EndPanel/Content/Summary/PointsGroup"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 10
+text = "POINTS EARNED"
+
+[node name="EndBreakdown" type="Label" parent="Layout/EndPanel/Content/Summary/PointsGroup"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_type_variation = &"BodyStrong"
-text = "Shopper points  7,200\nRush bonuses  4,000\nStock secured  1,640"
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+text = "SHOPPERS  7,200  •  RUSH  4,000  •  STOCK  1,640"
 
-[node name="EndMetrics" type="HBoxContainer" parent="Layout/EndPanel/Content"]
+[node name="RunGroup" type="VBoxContainer" parent="Layout/EndPanel/Content/Summary"]
+custom_minimum_size = Vector2(218, 0)
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 2
 
-[node name="RushesMetric" type="Label" parent="Layout/EndPanel/Content/EndMetrics"]
+[node name="Caption" type="Label" parent="Layout/EndPanel/Content/Summary/RunGroup"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 10
+text = "RUN RESULTS"
+
+[node name="EndMetrics" type="HBoxContainer" parent="Layout/EndPanel/Content/Summary/RunGroup"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RushesMetric" type="Label" parent="Layout/EndPanel/Content/Summary/RunGroup/EndMetrics"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"BodyStrong"
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 11
 text = "5 RUSHES"
-horizontal_alignment = 1
 
-[node name="ShoppersMetric" type="Label" parent="Layout/EndPanel/Content/EndMetrics"]
+[node name="ShoppersMetric" type="Label" parent="Layout/EndPanel/Content/Summary/RunGroup/EndMetrics"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"BodyStrong"
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 11
 text = "70 SHOPPERS"
 horizontal_alignment = 1
 
-[node name="StockMetric" type="Label" parent="Layout/EndPanel/Content/EndMetrics"]
+[node name="StockMetric" type="Label" parent="Layout/EndPanel/Content/Summary/RunGroup/EndMetrics"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"BodyStrong"
-theme_override_font_sizes/font_size = 13
-text = "164 STOCK"
-horizontal_alignment = 1
-
-[node name="SeedLabel" type="Label" parent="Layout/EndPanel/Content"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_type_variation = &"MutedLabel"
 theme_override_font_sizes/font_size = 11
-text = "RUN 123456789"
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "164 STOCK"
 
-[node name="RecordLabel" type="Label" parent="Layout/EndPanel/Content"]
+[node name="Footer" type="HBoxContainer" parent="Layout/EndPanel/Content"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Meta" type="VBoxContainer" parent="Layout/EndPanel/Content/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 0
+
+[node name="RecordLabel" type="Label" parent="Layout/EndPanel/Content/Footer/Meta"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SectionLabel"
 theme_override_font_sizes/font_size = 11
 text = "NEW OBJECTIVE BEST  •  12,840"
-horizontal_alignment = 1
 
-[node name="EndActions" type="HBoxContainer" parent="Layout/EndPanel/Content"]
+[node name="SeedLabel" type="Label" parent="Layout/EndPanel/Content/Footer/Meta"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 10
+text = "RUN 123456789"
+
+[node name="EndActions" type="HBoxContainer" parent="Layout/EndPanel/Content/Footer"]
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="ContinueButton" type="Button" parent="Layout/EndPanel/Content/EndActions"]
+[node name="ContinueButton" type="Button" parent="Layout/EndPanel/Content/Footer/EndActions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(172, 32)
+custom_minimum_size = Vector2(160, 32)
 layout_mode = 2
 tooltip_text = "Keep playing with rapidly growing rushes"
 theme_type_variation = &"PrimaryButton"
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "CONTINUE ENDLESS"
 
-[node name="RestartButton" type="Button" parent="Layout/EndPanel/Content/EndActions"]
+[node name="RestartButton" type="Button" parent="Layout/EndPanel/Content/Footer/EndActions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(172, 32)
+custom_minimum_size = Vector2(160, 32)
 layout_mode = 2
 tooltip_text = "Try a new layout"
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "PLAY AGAIN  [R]"

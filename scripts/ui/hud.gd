@@ -40,7 +40,6 @@ var touch_mode := false
 @onready var end_panel: Control = %EndPanel
 @onready var end_background: ColorRect = %EndBackground
 @onready var end_backdrop: TextureRect = %EndBackdrop
-@onready var end_title: Label = %EndTitle
 @onready var end_score: Label = %EndScore
 @onready var end_breakdown: Label = %EndBreakdown
 @onready var rushes_metric: Label = %RushesMetric
@@ -167,15 +166,15 @@ func _process(delta: float) -> void:
 	end_background.visible = finished
 	end_backdrop.visible = finished
 	if finished and state.run_summary != null:
-		end_panel.offset_top = 114.0 if state.phase == GameState.Phase.VICTORY else -40.0
-		end_panel.offset_bottom = 250.0 if state.phase == GameState.Phase.VICTORY else 96.0
+		end_panel.offset_left = -390.0 if state.phase == GameState.Phase.VICTORY else -310.0
+		end_panel.offset_top = 150.0 if state.phase == GameState.Phase.VICTORY else -42.0
+		end_panel.offset_right = 390.0 if state.phase == GameState.Phase.VICTORY else 310.0
+		end_panel.offset_bottom = 260.0 if state.phase == GameState.Phase.VICTORY else 78.0
 		end_background.color = Color("5f5594") if state.phase == GameState.Phase.VICTORY else Color("1c1524")
 		end_backdrop.texture = victory_texture if state.phase == GameState.Phase.VICTORY else defeat_texture
 		var summary := state.run_summary
-		end_title.text = "STORE SECURED" if state.phase == GameState.Phase.VICTORY else "STOCK LOST"
-		end_title.modulate = Color("78ead2") if state.phase == GameState.Phase.VICTORY else Color("ed5b68")
-		end_score.text = "SCORE  %s" % format_score(summary.score)
-		end_breakdown.text = "Shopper points  %s\nRush bonuses  %s\nStock secured  %s" % [
+		end_score.text = format_score(summary.score)
+		end_breakdown.text = "SHOPPERS  %s  •  RUSH  %s  •  STOCK  %s" % [
 			format_score(summary.shopper_points),
 			format_score(summary.rush_points),
 			format_score(summary.stock_points),
