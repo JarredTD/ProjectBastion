@@ -5,6 +5,7 @@ signal core_hit(damage: float)
 
 var definition: EnemyDefinition
 var appearance: EnemyAppearance
+var max_health := 1.0
 var health: float
 var attack_cooldown := 0.0
 var active := true
@@ -23,11 +24,18 @@ func _ready() -> void:
 	defeat_timer.timeout.connect(queue_free)
 
 ## Applies this enemy's stats and objective.
-func configure(enemy_definition: EnemyDefinition, core_position: Vector2, objective_range: float, appearance_index: int) -> void:
+func configure(
+	enemy_definition: EnemyDefinition,
+	core_position: Vector2,
+	objective_range: float,
+	appearance_index: int,
+	health_multiplier: float,
+) -> void:
 	definition = enemy_definition
 	target_position = core_position
 	target_range = objective_range
-	health = maxf(1.0, definition.max_health)
+	max_health = maxf(1.0, definition.max_health * maxf(0.1, health_multiplier))
+	health = max_health
 	appearance = definition.appearances[clampi(appearance_index, 0, definition.appearances.size() - 1)]
 	visual_sprite.sprite_frames = appearance.sprite_frames
 	visual_sprite.scale = Vector2.ONE * appearance.visual_scale
@@ -92,5 +100,5 @@ func take_damage(amount: float) -> void:
 
 ## Resizes the health bar and hides it while health is full.
 func update_health_bar() -> void:
-	health_fill.size.x = definition.health_bar_width * health / definition.max_health
-	health_bar.visible = health < definition.max_health
+	health_fill.size.x = definition.health_bar_width * health / max_health
+	health_bar.visible = health < max_health

@@ -18,6 +18,7 @@ count = 6
 [resource]
 script = ExtResource("1_wave")
 enemies = Array[ExtResource("2_entry")]([SubResource("EnemyWaveEntry_shoppers"), SubResource("EnemyWaveEntry_heavy")])
+enemy_health_multiplier = 1.6
 spawn_interval = 0.8
 approach_count = 3
 build_duration = 25.0
