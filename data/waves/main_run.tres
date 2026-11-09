@@ -32,6 +32,7 @@ script = ExtResource("1_run")
 objective_waves = Array[ExtResource("2_wave")]([ExtResource("3_wave_1"), ExtResource("4_wave_2"), ExtResource("5_wave_3"), ExtResource("6_wave_4"), ExtResource("7_wave_5")])
 endless_enemies = Array[ExtResource("8_entry")]([SubResource("EnemyWaveEntry_endless"), SubResource("EnemyWaveEntry_endless_heavy"), SubResource("EnemyWaveEntry_endless_boss")])
 endless_enemy_growth = 2.1
+endless_maximum_enemies = 600
 endless_starting_health_multiplier = 2.2
 endless_health_growth = 1.2
 endless_starting_interval = 0.7
