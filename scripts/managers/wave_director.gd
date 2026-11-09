@@ -197,13 +197,6 @@ func enemy_summary() -> String:
 func build_duration() -> float:
 	return current_wave.build_duration if current_wave != null else 0.0
 
-## Names the pressure points selected for the current wave.
-func approach_summary() -> String:
-	var names := PackedStringArray()
-	for point in approach_points:
-		names.append(point.display_label())
-	return ", ".join(names)
-
 ## Returns the number of waves in the completable objective.
 func objective_wave_count() -> int:
 	return run_definition.objective_waves.size() if run_definition != null else 0

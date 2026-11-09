@@ -2,8 +2,6 @@
 class_name ApproachPoint
 extends Marker2D
 
-@export var display_name := "Approach"
-@export var direction_icon := "→"
 @export var spawn_enabled := true
 @export_range(0.0, 100.0, 0.1) var spawn_weight := 1.0
 @export var tags: Array[StringName] = []
@@ -21,10 +19,6 @@ func _ready() -> void:
 func set_target_position(value: Vector2) -> void:
 	target_position = value
 	queue_redraw()
-
-## Formats this approach for the HUD.
-func display_label() -> String:
-	return "%s %s" % [direction_icon, display_name]
 
 ## Shows or hides the build-phase warning drawn at this approach.
 func set_highlighted(value: bool) -> void:
@@ -73,10 +67,6 @@ func draw_approach_arrow(pulse: float) -> void:
 ## Warns about missing approach settings in the inspector.
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
-	if display_name.strip_edges().is_empty():
-		warnings.append("Display name cannot be empty.")
-	if direction_icon.strip_edges().is_empty():
-		warnings.append("Direction icon cannot be empty.")
 	if spawn_enabled and spawn_weight <= 0.0:
 		warnings.append("An enabled approach needs a positive spawn weight.")
 	return warnings

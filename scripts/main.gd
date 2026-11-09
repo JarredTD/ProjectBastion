@@ -191,7 +191,6 @@ func prepare_current_wave() -> void:
 	state.wave_enemies = wave_director.enemy_count()
 	state.wave_enemies_defeated = 0
 	state.wave_composition = wave_director.enemy_summary()
-	state.wave_approaches = wave_director.approach_summary()
 	player.combat_enabled = false
 	var has_new_upgrades := upgrade_manager.has_unlocks_for_wave(state.wave_number)
 	var has_sale := upgrade_manager.sale_index() >= 0
@@ -202,7 +201,7 @@ func prepare_current_wave() -> void:
 	elif has_sale:
 		state.show_message("A flash sale is open for this build phase.", 4.0)
 	else:
-		state.show_message("Approaches marked. Build before the rush.", 4.0)
+		state.show_message("Build before the rush.", 4.0)
 
 ## Freezes active play and presents the final result.
 func finish_run(result: GameState.Phase, message: String) -> void:

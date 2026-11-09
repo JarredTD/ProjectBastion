@@ -240,7 +240,7 @@ anchor_right = 1.0
 offset_left = -292.0
 offset_top = 72.0
 offset_right = -20.0
-offset_bottom = 240.0
+offset_bottom = 190.0
 mouse_filter = 2
 script = ExtResource("3_accent")
 accent_color = Color(1, 0.780392, 0.419608, 0.95)
@@ -285,23 +285,6 @@ layout_mode = 2
 theme_type_variation = &"BodyStrong"
 theme_override_font_sizes/font_size = 15
 text = "10 Shoppers"
-autowrap_mode = 2
-
-[node name="ApproachTitle" type="Label" parent="Layout/WaveIntelPanel/Content"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-theme_type_variation = &"MutedLabel"
-text = "APPROACHES"
-
-[node name="IntelApproaches" type="Label" parent="Layout/WaveIntelPanel/Content"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 36)
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 14
-theme_type_variation = &"SectionLabel"
-text = "↖ North West  •  → East Lower"
-vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="HelpPanel" type="Panel" parent="Layout"]

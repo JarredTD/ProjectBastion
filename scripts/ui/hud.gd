@@ -30,7 +30,6 @@ var touch_mode := false
 @onready var intel_title: Label = %IntelTitle
 @onready var intel_wave: Label = %IntelWave
 @onready var intel_composition: Label = %IntelComposition
-@onready var intel_approaches: Label = %IntelApproaches
 @onready var help_panel: Control = %HelpPanel
 @onready var help_label: Label = %HelpLabel
 @onready var upgrade_button: Button = %UpgradeButton
@@ -141,7 +140,6 @@ func _process(delta: float) -> void:
 		intel_title.text = "NEXT RUSH" if state.phase == GameState.Phase.BUILD else "CURRENT RUSH"
 		intel_wave.text = wave_title()
 		intel_composition.text = state.wave_composition
-		intel_approaches.text = state.wave_approaches.replace(", ", "  •  ")
 	if build_definitions.size() >= 2:
 		wall_button.text = "%s\n%d coins" % [build_definitions[0].display_name, build_definitions[0].cost] if touch_mode else "[1] %s\n%d coins" % [build_definitions[0].display_name, build_definitions[0].cost]
 		turret_button.text = "%s\n%d coins" % [build_definitions[1].display_name, build_definitions[1].cost] if touch_mode else "[2] %s\n%d coins" % [build_definitions[1].display_name, build_definitions[1].cost]

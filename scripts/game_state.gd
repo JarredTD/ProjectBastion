@@ -20,7 +20,6 @@ var waves_cleared: int
 var wave_enemies: int
 var wave_enemies_defeated: int
 var wave_composition: String
-var wave_approaches: String
 var objective_wave_count: int
 var endless: bool
 var run_seed: int
@@ -50,7 +49,6 @@ func reset(objective_waves: int, seed: int) -> void:
 	wave_enemies = 0
 	wave_enemies_defeated = 0
 	wave_composition = ""
-	wave_approaches = ""
 	objective_wave_count = objective_waves
 	endless = false
 	run_seed = seed
