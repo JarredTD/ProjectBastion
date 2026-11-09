@@ -193,8 +193,14 @@ func prepare_current_wave() -> void:
 	state.wave_composition = wave_director.enemy_summary()
 	state.wave_approaches = wave_director.approach_summary()
 	player.combat_enabled = false
-	if upgrade_manager.has_unlocks_for_wave(state.wave_number):
+	var has_new_upgrades := upgrade_manager.has_unlocks_for_wave(state.wave_number)
+	var has_sale := upgrade_manager.sale_index() >= 0
+	if has_new_upgrades and has_sale:
+		state.show_message("New upgrades are available, including a flash sale.", 4.0)
+	elif has_new_upgrades:
 		state.show_message("New upgrades available. Spend coins before the rush.", 4.0)
+	elif has_sale:
+		state.show_message("A flash sale is open for this build phase.", 4.0)
 	else:
 		state.show_message("Approaches marked. Build before the rush.", 4.0)
 

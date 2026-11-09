@@ -8,8 +8,11 @@ var state: GameState
 @onready var overlay: Control = %Overlay
 @onready var coins_label: Label = %CoinsLabel
 @onready var close_button: Button = %CloseButton
+@onready var subtitle: Label = %Subtitle
+@onready var sale_badge: TextureRect = %SaleBadge
 @onready var cards: Array[Control] = [%UpgradeCard0, %UpgradeCard1, %UpgradeCard2]
 @onready var titles: Array[Label] = [%UpgradeTitle0, %UpgradeTitle1, %UpgradeTitle2]
+@onready var sale_labels: Array[Label] = [%UpgradeSale0, %UpgradeSale1, %UpgradeSale2]
 @onready var descriptions: Array[Label] = [%UpgradeDescription0, %UpgradeDescription1, %UpgradeDescription2]
 @onready var levels: Array[Label] = [%UpgradeLevel0, %UpgradeLevel1, %UpgradeLevel2]
 @onready var buy_buttons: Array[Button] = [%UpgradeBuy0, %UpgradeBuy1, %UpgradeBuy2]
@@ -67,6 +70,9 @@ func refresh() -> void:
 	if upgrade_manager == null or state == null:
 		return
 	coins_label.text = "%d COINS AVAILABLE" % floori(state.coins)
+	var active_sale := upgrade_manager.sale_index()
+	sale_badge.visible = active_sale >= 0
+	subtitle.text = "One upgrade is discounted for this rush." if active_sale >= 0 else "Spend coins between rushes. Purchases last for this run."
 	for index in cards.size():
 		var visible_card := index < upgrade_manager.definitions.size()
 		cards[index].visible = visible_card
@@ -75,6 +81,9 @@ func refresh() -> void:
 		var definition: UpgradeDefinition = upgrade_manager.definitions[index]
 		var current_level: int = upgrade_manager.level_for(index)
 		titles[index].text = definition.display_name
+		var on_sale := upgrade_manager.is_on_sale(index)
+		sale_labels[index].visible = on_sale
+		sale_labels[index].text = "%d%% OFF THIS RUSH" % upgrade_manager.sale_percent()
 		descriptions[index].text = definition.description
 		levels[index].text = "LEVEL %d / %d" % [current_level, definition.max_level]
 		if not upgrade_manager.is_unlocked(index):
@@ -85,5 +94,8 @@ func refresh() -> void:
 			buy_buttons[index].disabled = true
 		else:
 			var cost: int = upgrade_manager.next_cost(index)
-			buy_buttons[index].text = "BUY  %d" % cost
+			if on_sale:
+				buy_buttons[index].text = "SALE  %d  •  WAS %d" % [cost, upgrade_manager.regular_cost(index)]
+			else:
+				buy_buttons[index].text = "BUY  %d" % cost
 			buy_buttons[index].disabled = state.coins < cost

@@ -93,11 +93,13 @@ theme_override_font_sizes/font_size = 26
 text = "STAFF UPGRADES"
 
 [node name="Subtitle" type="Label" parent="Overlay/Panel/Content/Header/Titles"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
 text = "Spend coins between rushes. Purchases last for this run."
 
 [node name="SaleBadge" type="TextureRect" parent="Overlay/Panel/Content/Header"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(98, 62)
 layout_mode = 2
 mouse_filter = 2
@@ -147,6 +149,16 @@ text = "Walls gain 25% maximum health per level."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="UpgradeSale0" type="Label" parent="Overlay/Panel/Content/Cards/UpgradeCard0/Body"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+theme_override_colors/font_color = Color(1, 0.294118, 0.505882, 1)
+theme_override_font_sizes/font_size = 11
+text = "25% OFF THIS RUSH"
+horizontal_alignment = 1
 
 [node name="UpgradeLevel0" type="Label" parent="Overlay/Panel/Content/Cards/UpgradeCard0/Body"]
 unique_name_in_owner = true
@@ -201,6 +213,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="UpgradeSale1" type="Label" parent="Overlay/Panel/Content/Cards/UpgradeCard1/Body"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+theme_override_colors/font_color = Color(1, 0.294118, 0.505882, 1)
+theme_override_font_sizes/font_size = 11
+text = "25% OFF THIS RUSH"
+horizontal_alignment = 1
+
 [node name="UpgradeLevel1" type="Label" parent="Overlay/Panel/Content/Cards/UpgradeCard1/Body"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -253,6 +275,16 @@ text = "Your attacks deal 20% more damage per level."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="UpgradeSale2" type="Label" parent="Overlay/Panel/Content/Cards/UpgradeCard2/Body"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+theme_override_colors/font_color = Color(1, 0.294118, 0.505882, 1)
+theme_override_font_sizes/font_size = 11
+text = "25% OFF THIS RUSH"
+horizontal_alignment = 1
 
 [node name="UpgradeLevel2" type="Label" parent="Overlay/Panel/Content/Cards/UpgradeCard2/Body"]
 unique_name_in_owner = true

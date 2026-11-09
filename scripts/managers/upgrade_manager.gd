@@ -12,9 +12,14 @@ const GameState = preload("res://scripts/game_state.gd")
 	preload("res://data/upgrades/security_training.tres"),
 	preload("res://data/upgrades/staff_training.tres"),
 ]
+@export_range(1, 10, 1) var sale_interval := 2
+@export_range(1, 99, 1) var sale_start_wave := 2
+@export_range(0.05, 0.75, 0.05) var sale_discount := 0.25
 
 var state: GameState
 var levels: Dictionary = {}
+var cached_sale_wave := -1
+var cached_sale_index := -1
 
 @onready var player: CharacterBody2D = get_node(player_path)
 @onready var structures: Node2D = get_node(structures_path)
@@ -41,6 +46,8 @@ func configure(game_state: GameState) -> void:
 ## Clears run upgrades and restores authored combat values.
 func reset() -> void:
 	levels.clear()
+	cached_sale_wave = -1
+	cached_sale_index = -1
 	apply_player_upgrades()
 	for structure in structures.get_children():
 		apply_to_structure(structure)
@@ -56,7 +63,7 @@ func purchase(index: int) -> bool:
 	if not is_unlocked(index) or current_level >= definition.max_level:
 		Audio.play_sfx(&"invalid", -3.0)
 		return false
-	var cost := definition.cost_for_level(current_level)
+	var cost := next_cost(index)
 	if state.coins < cost:
 		Audio.play_sfx(&"invalid", -3.0)
 		state.show_message("%d more coins needed for %s." % [ceili(cost - state.coins), definition.display_name.capitalize()], 2.0)
@@ -102,9 +109,49 @@ func has_unlocks_for_wave(wave_number: int) -> bool:
 
 ## Returns the next price, even when the upgrade is currently locked.
 func next_cost(index: int) -> int:
+	var cost := regular_cost(index)
+	if is_on_sale(index):
+		return roundi(cost * (1.0 - sale_discount))
+	return cost
+
+
+## Returns the authored price before a temporary sale is applied.
+func regular_cost(index: int) -> int:
 	if index < 0 or index >= definitions.size():
 		return 0
 	return definitions[index].cost_for_level(level_for(index))
+
+
+## Reports whether this catalog entry owns the current wave's sale.
+func is_on_sale(index: int) -> bool:
+	return index >= 0 and index == sale_index()
+
+
+## Selects one eligible sale deterministically for the current run and wave.
+func sale_index() -> int:
+	if state == null:
+		return -1
+	if cached_sale_wave == state.wave_number:
+		return cached_sale_index
+	cached_sale_wave = state.wave_number
+	cached_sale_index = -1
+	if state.wave_number < sale_start_wave or (state.wave_number - sale_start_wave) % sale_interval != 0:
+		return cached_sale_index
+	var candidates: Array[int] = []
+	for index in definitions.size():
+		if is_unlocked(index) and level_for(index) < definitions[index].max_level:
+			candidates.append(index)
+	if candidates.is_empty():
+		return cached_sale_index
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash([state.run_seed, state.wave_number, &"upgrade_sale"])
+	cached_sale_index = candidates[rng.randi_range(0, candidates.size() - 1)]
+	return cached_sale_index
+
+
+## Returns the current discount as a whole-number percentage for the shop.
+func sale_percent() -> int:
+	return roundi(sale_discount * 100.0)
 
 
 ## Multiplies every purchased level of one effect into its final value.
