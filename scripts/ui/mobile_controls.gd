@@ -103,4 +103,3 @@ func update_safe_area() -> void:
 	controls.offset_top = maxf(0.0, safe_area.position.y * scale.y)
 	controls.offset_right = -maxf(0.0, (screen_size.x - safe_area.end.x) * scale.x)
 	controls.offset_bottom = -maxf(0.0, (screen_size.y - safe_area.end.y) * scale.y)
-

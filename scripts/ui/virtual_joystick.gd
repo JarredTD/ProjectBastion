@@ -63,4 +63,3 @@ func _draw() -> void:
 	draw_circle(center, radius + 12.0, base_color)
 	draw_arc(center, radius, 0.0, TAU, 48, ring_color, 3.0)
 	draw_circle(center + direction * radius, 24.0, knob_color)
-

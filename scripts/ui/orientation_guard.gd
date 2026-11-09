@@ -13,4 +13,3 @@ func update_visibility() -> void:
 	touch_capable = touch_capable or OS.get_environment("BASTION_TOUCH_PREVIEW") == "1"
 	var viewport_size := get_viewport().get_visible_rect().size
 	overlay.visible = touch_capable and viewport_size.y > viewport_size.x
-
