@@ -57,6 +57,7 @@ var touch_mode := false
 @onready var layout: Control = $Layout
 
 var core_warning_time := 0.0
+var displayed_run_summary: RunSummary
 
 ## Connects the clickable controls to the HUD's public signals.
 func _ready() -> void:
@@ -170,39 +171,45 @@ func _process(delta: float) -> void:
 	end_background.visible = finished
 	end_backdrop.visible = finished
 	if finished and state.run_summary != null:
-		var victory := state.phase == GameState.Phase.VICTORY
-		end_panel.offset_left = -390.0 if victory else -260.0
-		end_panel.offset_top = 150.0 if state.phase == GameState.Phase.VICTORY else -42.0
-		end_panel.offset_right = 390.0 if victory else 260.0
-		end_panel.offset_bottom = 260.0 if state.phase == GameState.Phase.VICTORY else 78.0
-		end_panel.add_theme_stylebox_override("panel", victory_results_style if victory else defeat_results_style)
-		end_summary.add_theme_constant_override("separation", 16 if victory else 10)
-		score_group.custom_minimum_size.x = 112.0 if victory else 96.0
-		run_group.custom_minimum_size.x = 218.0 if victory else 165.0
-		end_background.color = Color("5f5594") if state.phase == GameState.Phase.VICTORY else Color("1c1524")
-		end_backdrop.texture = victory_texture if state.phase == GameState.Phase.VICTORY else defeat_texture
-		var summary := state.run_summary
-		apply_end_colors(victory)
-		end_score.text = format_score(summary.score)
-		if victory:
-			end_breakdown.text = "SHOPPERS  %s  •  RUSH  %s  •  STOCK  %s" % [format_score(summary.shopper_points), format_score(summary.rush_points), format_score(summary.stock_points)]
-			rushes_metric.text = "%d RUSHES" % summary.waves_cleared
-			shoppers_metric.text = "%d SHOPPERS" % summary.shoppers_defeated
-			stock_metric.text = "%d STOCK" % summary.stock_remaining
-		else:
-			end_breakdown.text = "SHOPPERS  %s  •  RUSH  %s\nSTOCK  %s" % [format_score(summary.shopper_points), format_score(summary.rush_points), format_score(summary.stock_points)]
-			rushes_metric.text = "%d RUSH" % summary.waves_cleared
-			shoppers_metric.text = "%d OUT" % summary.shoppers_defeated
-			stock_metric.text = "%d LEFT" % summary.stock_remaining
-		seed_label.text = "RUN %d" % summary.run_seed
-		var mode_name := "ENDLESS" if summary.mode == &"endless" else "OBJECTIVE"
-		var record_kind := "LOCAL BEST" if summary.persistent_record else "SESSION BEST"
-		record_label.text = "%s%s  •  %s" % [
-			"NEW " if summary.new_best else "",
-			"%s %s" % [mode_name, record_kind],
-			format_score(summary.best_score),
-		]
-		continue_button.visible = state.phase == GameState.Phase.VICTORY
+		if displayed_run_summary != state.run_summary:
+			displayed_run_summary = state.run_summary
+			present_run_summary(state.phase == GameState.Phase.VICTORY, state.run_summary)
+	else:
+		displayed_run_summary = null
+
+
+## Lays out and styles a completed run once when it first appears.
+func present_run_summary(victory: bool, summary: RunSummary) -> void:
+	end_panel.offset_left = -390.0 if victory else -260.0
+	end_panel.offset_top = 150.0 if victory else -42.0
+	end_panel.offset_right = 390.0 if victory else 260.0
+	end_panel.offset_bottom = 260.0 if victory else 78.0
+	end_panel.add_theme_stylebox_override("panel", victory_results_style if victory else defeat_results_style)
+	end_summary.add_theme_constant_override("separation", 16 if victory else 10)
+	score_group.custom_minimum_size.x = 112.0 if victory else 96.0
+	run_group.custom_minimum_size.x = 218.0 if victory else 165.0
+	end_background.color = Color("5f5594") if victory else Color("1c1524")
+	end_backdrop.texture = victory_texture if victory else defeat_texture
+	apply_end_colors(victory)
+	end_score.text = format_score(summary.score)
+	if victory:
+		end_breakdown.text = "SHOPPERS  %s  •  RUSH  %s  •  STOCK  %s" % [format_score(summary.shopper_points), format_score(summary.rush_points), format_score(summary.stock_points)]
+		shoppers_metric.text = count_text(summary.shoppers_defeated, "SHOPPER", "SHOPPERS")
+		stock_metric.text = "%d STOCK" % summary.stock_remaining
+	else:
+		end_breakdown.text = "SHOPPERS  %s  •  RUSH  %s\nSTOCK  %s" % [format_score(summary.shopper_points), format_score(summary.rush_points), format_score(summary.stock_points)]
+		shoppers_metric.text = "%d OUT" % summary.shoppers_defeated
+		stock_metric.text = "%d LEFT" % summary.stock_remaining
+	rushes_metric.text = count_text(summary.waves_cleared, "RUSH", "RUSHES")
+	seed_label.text = "RUN %d" % summary.run_seed
+	var mode_name := "ENDLESS" if summary.mode == &"endless" else "OBJECTIVE"
+	var record_kind := "LOCAL BEST" if summary.persistent_record else "SESSION BEST"
+	record_label.text = "%s%s  •  %s" % [
+		"NEW " if summary.new_best else "",
+		"%s %s" % [mode_name, record_kind],
+		format_score(summary.best_score),
+	]
+	continue_button.visible = victory
 
 
 ## Matches result text to the dark victory card or the printed defeat receipt.
@@ -228,6 +235,11 @@ func format_score(value: int) -> String:
 		formatted = "," + digits.right(3) + formatted
 		digits = digits.left(digits.length() - 3)
 	return digits + formatted
+
+
+## Formats a count without showing awkward singular labels.
+func count_text(value: int, singular: String, plural: String) -> String:
+	return "%d %s" % [value, singular if value == 1 else plural]
 
 ## Builds the short phase label shown in the top bar.
 func phase_text() -> String:
